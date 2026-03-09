@@ -1,0 +1,62 @@
+[
+  {
+    "area": "Sitabuldi Market",
+    "lat": 21.1458,
+    "lng": 79.0882,
+    "carbon": 70
+  },
+  {
+    "area": "Wardha Road Traffic",
+    "lat": 21.1010,
+    "lng": 79.0465,
+    "carbon": 80
+  },
+  {
+    "area": "Civil Lines",
+    "lat": 21.1510,
+    "lng": 79.0720,
+    "carbon": 35
+  },
+  {
+    "area": "Futala Lake",
+    "lat": 21.1536,
+    "lng": 79.0578,
+    "carbon": 15
+  },
+  {
+    "area": "MIDC Industrial Area",
+    "lat": 21.1082,
+    "lng": 79.0695,
+    "carbon": 90
+  },
+  {
+    "area": "Nagpur Railway Station",
+    "lat": 21.1449,
+    "lng": 79.0818,
+    "carbon": 65
+  },
+  {
+    "area": "Ambazari Garden",
+    "lat": 21.1395,
+    "lng": 79.0442,
+    "carbon": 12
+  },
+  {
+    "area": "Itwari Wholesale Market",
+    "lat": 21.1511,
+    "lng": 79.0971,
+    "carbon": 75
+  },
+  {
+    "area": "Mankapur Chowk",
+    "lat": 21.1260,
+    "lng": 79.0830,
+    "carbon": 50
+  },
+  {
+    "area": "Seminary Hills",
+    "lat": 21.1608,
+    "lng": 79.0682,
+    "carbon": 10
+  }
+]
