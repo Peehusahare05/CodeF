@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LeaderboardPage from "./pages/LeaderboardPage";
+import SuggestionsPage from "./pages/SuggestionsPage";
+import SimulatorPage from "./pages/SimulatorPage";
 import "./App.css";
 
 function App() {
@@ -27,6 +29,22 @@ function App() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/suggestions"
+          element={
+            <ProtectedRoute>
+              <SuggestionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/simulator"
+          element={
+            <ProtectedRoute>
+              <SimulatorPage />
             </ProtectedRoute>
           }
         />
