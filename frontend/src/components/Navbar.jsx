@@ -17,7 +17,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white shadow-md py-4 px-6 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 py-4 px-6 md:px-12 flex items-center justify-between">
       {/* Logo */}
       <Link to="/" className="flex items-center gap-2">
         <span className="inline-block w-8 h-8 bg-gradient-to-tr from-green-500 to-green-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
@@ -29,22 +29,22 @@ const Navbar = () => {
       </Link>
 
       {/* Nav links */}
-      <div className="hidden md:flex gap-8 text-slate-700 font-medium">
-        <a href="#home" className="hover:text-green-600 transition">
+      <div className="hidden md:flex gap-10 text-slate-600 font-semibold text-sm tracking-wide">
+        <a href="/#home" className="hover:text-green-600 transition">
           Home
         </a>
-        <a href="#how" className="hover:text-green-600 transition">
+        <a href="/#how" className="hover:text-green-600 transition">
           How It Works
         </a>
-        <a href="#features" className="hover:text-green-600 transition">
+        <a href="/#features" className="hover:text-green-600 transition">
           Features
         </a>
-        <a href="#leaderboard" className="hover:text-green-600 transition">
+        <a href="/#leaderboard" className="hover:text-green-600 transition">
           Leaderboard
         </a>
-        <a href="#about" className="hover:text-green-600 transition">
+        <Link to="/about" className="hover:text-green-600 transition">
           About
-        </a>
+        </Link>
       </div>
 
       {/* Right side — auth aware */}
@@ -54,24 +54,28 @@ const Navbar = () => {
             {/* Logged in: show avatar + name + logout */}
             <Link
               to="/track"
-              className="hidden md:inline-flex rounded-full border border-green-600 text-green-700 px-4 py-1.5 text-sm font-semibold hover:bg-green-50 transition"
+              className="hidden md:inline-flex items-center justify-center h-10 rounded-full border border-green-600 text-green-700 px-5 text-sm font-semibold hover:bg-green-50 transition"
             >
               Track Now
             </Link>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white font-bold text-sm uppercase">
-                {user.name ? user.name[0] : "U"}
-              </div>
-              <span className="hidden md:block text-slate-700 text-sm font-medium">
-                {user.name || user.email}
-              </span>
+            
+            <div className="flex items-center gap-4 ml-2">
+              <Link to="/profile" className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+                <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-white font-bold text-sm uppercase shadow-sm">
+                  {user.name ? user.name[0] : "U"}
+                </div>
+                <span className="hidden md:block text-slate-700 text-sm font-semibold">
+                  {user.name || user.email}
+                </span>
+              </Link>
+              
+              <button
+                onClick={handleLogout}
+                className="flex items-center justify-center h-10 rounded-full bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 px-5 text-sm font-semibold transition"
+              >
+                Logout
+              </button>
             </div>
-            <button
-              onClick={handleLogout}
-              className="rounded-full bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-500 px-4 py-1.5 text-sm font-semibold transition"
-            >
-              Logout
-            </button>
           </>
         ) : (
           <>
