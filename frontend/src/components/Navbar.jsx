@@ -1,5 +1,6 @@
 // Navbar.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -30,9 +31,12 @@ const Navbar = () => {
         </a>
       </div>
       <div>
-        <button className="rounded-full bg-green-600 hover:bg-green-700 text-white px-6 py-2 font-semibold shadow transition">
+        <Link
+          to="/track"
+          className="rounded-full bg-green-600 hover:bg-green-700 text-white px-6 py-2 font-semibold shadow transition"
+        >
           Start Tracking
-        </button>
+        </Link>
       </div>
     </nav>
   );
