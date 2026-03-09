@@ -34,6 +34,22 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/suggestions"
+          element={
+            <ProtectedRoute>
+              <SuggestionsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/simulator"
+          element={
+            <ProtectedRoute>
+              <SimulatorPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route
           path="/profile"
