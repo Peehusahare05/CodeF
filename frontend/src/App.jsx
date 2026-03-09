@@ -5,16 +5,19 @@ import TrackPage from "./pages/TrackPage";
 import Dashboard from "./pages/Dashboard";
 import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import AIAdvisorPage from "./pages/AIAdvisorPage";
 import SimulatorPage from "./pages/SimulatorPage";
+import SuggestionsPage from "./pages/SuggestionsPage";
 import AboutPage from "./pages/AboutPage";
 import "./App.css";
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<AuthPage />} />
