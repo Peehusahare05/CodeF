@@ -50,7 +50,7 @@ const InputForm = () => {
     setForm((prev) => ({ ...prev, plastic: val }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -78,11 +78,36 @@ const InputForm = () => {
       inputs: { ...form },
     };
 
+    // Save to localStorage for dashboard display
     localStorage.setItem("ecotrack_result", JSON.stringify(payload));
 
-    setTimeout(() => {
-      navigate("/dashboard");
-    }, 600);
+    // Also persist to MongoDB via backend
+    try {
+      const token = localStorage.getItem("ecotrack_token");
+      await fetch("/api/carbon/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          inputs: { ...form },
+          results: {
+            transportCO2: result.transportCO2,
+            electricityCO2: result.electricityCO2,
+            wasteCO2: result.wasteCO2,
+            plasticCO2: result.plasticCO2,
+            totalCO2: result.totalCO2,
+            ecoScore: result.ecoScore,
+          },
+        }),
+      });
+    } catch (err) {
+      // Non-blocking: even if save fails, navigate to dashboard
+      console.warn("Could not save result to backend:", err.message);
+    }
+
+    navigate("/dashboard");
   };
 
   return (
