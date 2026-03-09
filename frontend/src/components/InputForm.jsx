@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { calculateCarbon, generateInsight, generateTrend } from "../utils/carbonCalculator";
 
 const TRANSPORT_OPTIONS = [
@@ -19,6 +19,9 @@ const PLASTIC_OPTIONS = [
 
 const InputForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const requestedFeature = params.get("feature");
   const [form, setForm] = useState({
     transportType: "",
     distance: "",
@@ -107,7 +110,13 @@ const InputForm = () => {
       console.warn("Could not save result to backend:", err.message);
     }
 
-    navigate("/dashboard");
+    if (requestedFeature === "advisor") {
+      navigate("/ai-advisor");
+    } else if (requestedFeature === "simulator") {
+      navigate("/reduction-simulator");
+    } else {
+      navigate("/dashboard");
+    }
   };
 
   return (

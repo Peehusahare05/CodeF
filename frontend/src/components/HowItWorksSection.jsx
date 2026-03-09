@@ -41,23 +41,50 @@ const steps = [
 ];
 
 const HowItWorksSection = () => (
-  <section className="py-20 px-4 bg-green-50" id="how">
-    <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-2">
-      How It Works
-    </h2>
-    <p className="text-center text-slate-600 mb-12">
-      Transforming your lifestyle in four simple steps.
-    </p>
-    <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-      {steps.map((step, i) => (
-        <div key={i} className="flex flex-col items-center text-center">
-          {step.icon}
-          <h3 className="font-semibold text-lg mb-1 text-slate-800">
-            {step.title}
-          </h3>
-          <p className="text-slate-600 text-sm">{step.desc}</p>
-        </div>
-      ))}
+  <section className="py-20 px-4 bg-green-50/50" id="how">
+    <div className="text-center mb-20">
+      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-100 border border-green-200 text-green-700 text-sm font-bold tracking-wide uppercase mb-5 shadow-sm">
+        <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span>
+        Process
+      </div>
+      <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+        How It <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-400">Works</span>
+      </h2>
+      <p className="text-lg text-slate-600 max-w-xl mx-auto">
+        Transforming your lifestyle into measurable impact in four simple steps.
+      </p>
+    </div>
+    <div className="max-w-6xl mx-auto relative">
+      {/* Dashed line connecting steps (visible only on md+) */}
+      <div className="hidden md:block absolute top-[24px] left-[12%] right-[12%] h-0.5 border-t-2 border-dashed border-green-200 -z-10"></div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
+        {steps.map((step, i) => (
+          <div key={i} className="flex flex-col items-center text-center group cursor-default">
+            
+            {/* Step Number Circle */}
+            <div className={`w-14 h-14 bg-white border-4 border-green-50 shadow-md text-slate-800 text-xl font-bold rounded-full flex items-center justify-center mb-6 z-10 group-hover:scale-110 group-hover:border-green-200 transition-all duration-300 relative`}>
+              {i + 1}
+              
+              {/* Arrow pointer to right (hidden on last item and mobile) */}
+              {i < steps.length - 1 && (
+                <div className="hidden md:block absolute -right-[4.5rem] top-1/2 -translate-y-1/2 w-8 text-green-300">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              )}
+            </div>
+
+            <h3 className="font-extrabold text-lg mb-2 text-slate-800 group-hover:text-green-600 transition-colors">
+              {step.title}
+            </h3>
+            <p className="text-slate-500 text-sm leading-relaxed max-w-[200px]">
+              {step.desc}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 );

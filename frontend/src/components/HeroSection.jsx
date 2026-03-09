@@ -8,39 +8,55 @@ const HeroSection = () => {
 
   return (
     <>
-      <section className="w-full bg-gradient-to-br from-green-50 via-green-100 to-white pt-16 pb-20 px-4 md:px-0">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+      <section className="relative w-full bg-slate-50 overflow-hidden pt-20 pb-28 px-6 md:px-12">
+        {/* Background Decorative Blur Blobs */}
+        <div className="absolute top-0 -left-40 w-[500px] h-[500px] bg-green-200/40 rounded-full blur-[100px] opacity-70 pointer-events-none"></div>
+        <div className="absolute top-20 -right-40 w-[600px] h-[600px] bg-emerald-200/30 rounded-full blur-[120px] opacity-60 pointer-events-none"></div>
+        <div className="absolute -bottom-40 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-100/40 rounded-full blur-[120px] opacity-50 pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-10">
 
           {/* Left — text content */}
-          <div className="flex-1 text-center md:text-left">
-            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-4">
-              Track Your Personal{" "}
-              <span className="text-green-600">Environmental</span> Impact
+          <div className="flex-1 text-center lg:text-left z-10">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-green-100 text-green-700 text-sm font-bold tracking-wide mb-6 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              AI-Powered Sustainability
+            </div>
+            
+            <h1 className="text-5xl lg:text-6xl font-extrabold text-slate-900 leading-[1.15] tracking-tight mb-6">
+              Track Your Personal <br className="hidden lg:block"/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-400">
+                Environmental Impact
+              </span>
             </h1>
-            <p className="text-lg text-slate-600 mb-8 max-w-lg">
+            
+            <p className="text-lg lg:text-xl text-slate-600 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               Understand how your daily lifestyle choices affect the planet with
-              our AI-driven sustainability intelligence platform.
+              our intelligent sustainability tracking platform.
             </p>
-            <div className="flex flex-col md:flex-row gap-4 justify-center md:justify-start">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link
                 to="/track"
-                className="rounded-full bg-green-600 hover:bg-green-700 text-white px-7 py-3 font-semibold shadow transition text-center"
+                className="rounded-full bg-green-600 hover:bg-green-700 text-white px-8 py-3.5 text-lg font-bold shadow-lg shadow-green-600/30 hover:shadow-green-600/50 hover:-translate-y-0.5 transition-all text-center"
               >
-                Start Tracking
+                Start Tracking Free
               </Link>
               <a
                 href="#how"
-                className="rounded-full bg-white border border-green-600 text-green-700 px-7 py-3 font-semibold shadow hover:bg-green-50 transition text-center"
+                className="rounded-full bg-white border-2 border-slate-200 text-slate-700 hover:border-green-600 hover:text-green-700 px-8 py-3.5 text-lg font-bold shadow-sm hover:bg-green-50 hover:-translate-y-0.5 transition-all text-center"
               >
-                Learn More
+                See How It Works
               </a>
             </div>
           </div>
 
           {/* Right — Interactive Carbon Hotspot Map (click to expand) */}
-          <div className="flex-1 flex justify-center md:justify-end w-full">
+          <div className="flex-1 flex justify-center lg:justify-end w-full relative z-10 w-full lg:max-w-none max-w-[500px]">
+            {/* Map Decoration Halo */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-green-400 to-emerald-300 rounded-[2rem] blur-2xl opacity-20 transform -rotate-3 scale-105"></div>
+            
             <div
-              className="bg-white rounded-2xl shadow-lg w-full max-w-[440px] h-[320px] relative cursor-pointer group border-2 border-green-400 p-2"
+              className="bg-white rounded-2xl shadow-2xl w-full h-[360px] relative cursor-pointer group border border-white/60 p-2 backdrop-blur-sm"
               onClick={() => setFullscreen(true)}
               title="Click to expand map"
             >

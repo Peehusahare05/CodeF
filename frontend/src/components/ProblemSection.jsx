@@ -25,9 +25,15 @@ const problems = [
 
 const ProblemSection = () => (
   <section className="py-20 px-4 bg-white" id="problem">
-    <h2 className="text-3xl md:text-4xl font-extrabold text-center text-slate-900 mb-12 tracking-tight">
-      Why Personal Sustainability Matters
-    </h2>
+    <div className="text-center mb-16">
+      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-bold tracking-wide uppercase mb-5 shadow-sm">
+        <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+        Global Impact
+      </div>
+      <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
+        Why Personal <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-400">Sustainability</span> Matters
+      </h2>
+    </div>
     <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
       {problems.map((p, i) => (
         <div
