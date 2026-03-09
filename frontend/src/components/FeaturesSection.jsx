@@ -1,77 +1,32 @@
 // FeaturesSection.jsx
 import React from "react";
 import FeatureCard from "./FeatureCard";
+import { Calculator, Brain, BarChart3, Trophy } from "lucide-react";
 
 const features = [
   {
-    icon: (
-      <svg
-        className="w-8 h-8 text-green-600"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
-      </svg>
-    ),
+    icon: <Calculator className="w-7 h-7 text-green-600" strokeWidth={2.2} />,
     title: "Carbon Calculator",
     desc: "See detailed view of your CO₂ output based on lifestyle.",
+    iconBg: "bg-green-50 group-hover:bg-green-100",
   },
   {
-    icon: (
-      <svg
-        className="w-8 h-8 text-blue-400"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M13 16h-1v-4h-1m4 0h-1v-4h-1m4 0h-1v-4h-1"
-        />
-      </svg>
-    ),
+    icon: <Brain className="w-7 h-7 text-blue-500" strokeWidth={2.2} />,
     title: "AI Advisor",
     desc: "Get real-time smart advice for eco-friendly decision making.",
+    iconBg: "bg-blue-50 group-hover:bg-blue-100",
   },
   {
-    icon: (
-      <svg
-        className="w-8 h-8 text-yellow-500"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <rect width="20" height="12" x="2" y="6" rx="2" />
-        <path strokeLinecap="round" strokeLinejoin="round" d="M2 12h20" />
-      </svg>
-    ),
+    icon: <BarChart3 className="w-7 h-7 text-yellow-500" strokeWidth={2.2} />,
     title: "Reduction Simulator",
     desc: "Simulate and compare lifestyle changes to impact your future scores.",
+    iconBg: "bg-yellow-50 group-hover:bg-yellow-100",
   },
   {
-    icon: (
-      <svg
-        className="w-8 h-8 text-green-400"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M8 17l4-4 4 4m0 0V7m0 10H8"
-        />
-      </svg>
-    ),
+    icon: <Trophy className="w-7 h-7 text-green-400" strokeWidth={2.2} />,
     title: "Leaderboard",
     desc: "Compete with friends. See local & global community members.",
+    iconBg: "bg-green-100 group-hover:bg-green-200",
   },
 ];
 
@@ -80,7 +35,13 @@ const FeaturesSection = () => (
     <div className="max-w-6xl mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         {features.map((f, i) => (
-          <FeatureCard key={i} icon={f.icon} title={f.title} desc={f.desc} />
+          <FeatureCard
+            key={i}
+            icon={f.icon}
+            title={f.title}
+            desc={f.desc}
+            iconBg={f.iconBg}
+          />
         ))}
       </div>
     </div>
