@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import { apiFetch } from "../utils/api";
 
 /**
  * Wraps any route that requires authentication.
@@ -8,9 +9,35 @@ import { Navigate, useLocation } from "react-router-dom";
  */
 const ProtectedRoute = ({ children }) => {
   const location = useLocation();
-  const token = localStorage.getItem("ecotrack_token");
+  const [status, setStatus] = useState("checking");
 
-  if (!token) {
+  useEffect(() => {
+    let mounted = true;
+
+    apiFetch("/api/auth/me")
+      .then((res) => {
+        if (!mounted) return;
+        setStatus(res.ok ? "allowed" : "blocked");
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setStatus("blocked");
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (status === "checking") {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-500">
+        Checking session...
+      </div>
+    );
+  }
+
+  if (status !== "allowed") {
     return <Navigate to="/auth" state={{ from: location.pathname }} replace />;
   }
 

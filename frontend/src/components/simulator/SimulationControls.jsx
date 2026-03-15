@@ -16,8 +16,8 @@ const SimulationControls = ({ changes, onChangeUpdate }) => {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 space-y-6">
-      <h2 className="text-xl font-bold text-gray-800 mb-6">
+    <div className="surface-card space-y-6 p-6">
+      <h2 className="mb-6 text-xl font-bold text-slate-900">
         Simulation Controls
       </h2>
 
@@ -32,7 +32,7 @@ const SimulationControls = ({ changes, onChangeUpdate }) => {
         <select
           value={changes.transport}
           onChange={(e) => onChangeUpdate("transport", e.target.value)}
-          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+          className="input-control"
         >
           {transportOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -55,11 +55,10 @@ const SimulationControls = ({ changes, onChangeUpdate }) => {
             <button
               key={option.value}
               onClick={() => onChangeUpdate("frequency", option.value)}
-              className={`flex-1 px-4 py-3 rounded-xl font-medium transition-all ${
-                changes.frequency === option.value
-                  ? "bg-blue-600 text-white shadow-md"
+              className={`flex-1 rounded-xl px-4 py-3 font-medium transition-colors ${changes.frequency === option.value
+                  ? "bg-blue-600 text-white"
                   : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-              }`}
+                }`}
             >
               {option.label}
             </button>
@@ -108,11 +107,10 @@ const SimulationControls = ({ changes, onChangeUpdate }) => {
         </div>
         <button
           onClick={() => onChangeUpdate("waste", !changes.waste)}
-          className={`w-full px-4 py-3 rounded-xl font-medium transition-all ${
-            changes.waste
-              ? "bg-green-600 text-white shadow-md"
+          className={`w-full rounded-xl px-4 py-3 font-medium transition-colors ${changes.waste
+              ? "bg-green-600 text-white"
               : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-          }`}
+            }`}
         >
           {changes.waste ? "✓ Enabled (Composting + Recycling)" : "Disabled"}
         </button>
@@ -134,11 +132,10 @@ const SimulationControls = ({ changes, onChangeUpdate }) => {
         </div>
         <button
           onClick={() => onChangeUpdate("renewable", !changes.renewable)}
-          className={`w-full px-4 py-3 rounded-xl font-medium transition-all ${
-            changes.renewable
-              ? "bg-orange-600 text-white shadow-md"
+          className={`w-full rounded-xl px-4 py-3 font-medium transition-colors ${changes.renewable
+              ? "bg-orange-600 text-white"
               : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-          }`}
+            }`}
         >
           {changes.renewable ? "✓ Switch to Solar/Wind" : "Disabled"}
         </button>

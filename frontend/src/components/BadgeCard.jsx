@@ -1,11 +1,9 @@
 import React from "react";
 
 const BadgeCard = ({ icon, title, desc, bg }) => (
-  <div
-    className={`bg-white rounded-2xl shadow-md p-6 flex flex-col items-center text-center min-h-[140px]`}
-  >
+  <div className="surface-card flex min-h-[140px] flex-col items-center p-6 text-center">
     <div
-      className={`w-12 h-12 flex items-center justify-center rounded-full mb-3 ${bg} shadow-inner`}
+      className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${bg}`}
     >
       {icon}
     </div>

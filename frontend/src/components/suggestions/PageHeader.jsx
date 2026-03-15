@@ -18,7 +18,7 @@ const PageHeader = ({ onRecalculate }) => (
     </div>
     <button
       onClick={onRecalculate}
-      className="inline-flex items-center gap-2 rounded-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 shadow-md hover:shadow-lg transition-all duration-300 font-semibold"
+      className="btn-primary gap-2 px-6 py-3"
     >
       <RotateCcw className="w-4 h-4" />
       Recalculate Insights

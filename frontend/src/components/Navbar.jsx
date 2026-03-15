@@ -1,100 +1,185 @@
 // Navbar.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Leaf, Menu, X } from "lucide-react";
+import { apiFetch } from "../utils/api";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(() => {
     const stored = localStorage.getItem("ecotrack_user");
     return stored ? JSON.parse(stored) : null;
   });
 
   const handleLogout = () => {
-    localStorage.removeItem("ecotrack_token");
-    localStorage.removeItem("ecotrack_user");
-    setUser(null);
-    navigate("/");
+    apiFetch("/api/auth/logout", {
+      method: "POST",
+    }).finally(() => {
+      localStorage.removeItem("ecotrack_user");
+      setUser(null);
+      setMobileMenuOpen(false);
+      navigate("/");
+    });
   };
 
+  const closeMenu = () => setMobileMenuOpen(false);
+
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-100 py-4 px-6 md:px-12 flex items-center justify-between">
-      {/* Logo */}
-      <Link to="/" className="flex items-center gap-2">
-        <span className="inline-block w-8 h-8 bg-gradient-to-tr from-green-500 to-green-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
-          🌱
-        </span>
-        <span className="font-extrabold text-2xl text-green-700 tracking-tight">
-          EcoTrack
-        </span>
-      </Link>
-
-      {/* Nav links */}
-      <div className="hidden md:flex gap-10 text-slate-600 font-semibold text-sm tracking-wide">
-        <a href="/#home" className="hover:text-green-600 transition">
-          Home
-        </a>
-        <a href="/#how" className="hover:text-green-600 transition">
-          How It Works
-        </a>
-        <a href="/#features" className="hover:text-green-600 transition">
-          Features
-        </a>
-        <a href="/#leaderboard" className="hover:text-green-600 transition">
-          Leaderboard
-        </a>
-        <Link to="/about" className="hover:text-green-600 transition">
-          About
+    <nav className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 px-4 py-3 md:px-6">
+      <div className="section-wrap flex items-center justify-between px-0">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2" onClick={closeMenu}>
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-700">
+            <Leaf className="icon-glyph-sm" />
+          </span>
+          <span className="text-lg font-bold tracking-tight text-green-700 sm:text-xl">
+            EcoTrack
+          </span>
         </Link>
+
+        {/* Nav links */}
+        <div className="hidden gap-8 text-sm font-medium text-slate-600 md:flex">
+          <a href="/#home" className="transition-colors hover:text-green-600">
+            Home
+          </a>
+          <a href="/#how" className="transition-colors hover:text-green-600">
+            How It Works
+          </a>
+          <a
+            href="/#features"
+            className="transition-colors hover:text-green-600"
+          >
+            Features
+          </a>
+          <a
+            href="/#leaderboard"
+            className="transition-colors hover:text-green-600"
+          >
+            Leaderboard
+          </a>
+          <Link to="/about" className="transition-colors hover:text-green-600">
+            About
+          </Link>
+        </div>
+
+        {/* Right side — auth aware */}
+        <div className="hidden items-center gap-3 md:flex">
+          {user ? (
+            <>
+              <Link
+                to="/track"
+                className="hidden rounded-full border border-green-600 px-5 py-2 text-sm font-semibold text-green-700 transition-colors hover:bg-green-50 md:inline-flex"
+              >
+                Track Now
+              </Link>
+
+              <div className="ml-2 flex items-center gap-4">
+                <Link
+                  to="/profile"
+                  className="flex cursor-pointer items-center gap-2"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-sm font-bold uppercase text-white">
+                    {user.name ? user.name[0] : "U"}
+                  </div>
+                  <span className="hidden text-sm font-semibold text-slate-700 md:block">
+                    {user.name || user.email}
+                  </span>
+                </Link>
+
+                <button
+                  onClick={handleLogout}
+                  className="rounded-full bg-gray-100 px-5 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-gray-200"
+                >
+                  Logout
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/auth"
+                className="text-sm font-semibold text-slate-600 transition-colors hover:text-green-600"
+              >
+                Sign In
+              </Link>
+              <Link to="/auth" className="btn-primary">
+                Start Tracking
+              </Link>
+            </>
+          )}
+        </div>
+
+        <button
+          type="button"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 text-slate-600 md:hidden"
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
+          aria-label="Toggle navigation menu"
+          aria-expanded={mobileMenuOpen}
+        >
+          {mobileMenuOpen ? <X className="icon-glyph" /> : <Menu className="icon-glyph" />}
+        </button>
       </div>
 
-      {/* Right side — auth aware */}
-      <div className="flex items-center gap-3">
-        {user ? (
-          <>
-            {/* Logged in: show avatar + name + logout */}
-            <Link
-              to="/track"
-              className="hidden md:inline-flex items-center justify-center h-10 rounded-full border border-green-600 text-green-700 px-5 text-sm font-semibold hover:bg-green-50 transition"
-            >
-              Track Now
+      {mobileMenuOpen && (
+        <div className="section-wrap mt-3 rounded-2xl border border-gray-200 bg-white p-4 md:hidden">
+          <div className="flex flex-col gap-3 text-sm font-medium text-slate-700">
+            <a href="/#home" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-gray-50">
+              Home
+            </a>
+            <a href="/#how" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-gray-50">
+              How It Works
+            </a>
+            <a href="/#features" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-gray-50">
+              Features
+            </a>
+            <a href="/#leaderboard" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-gray-50">
+              Leaderboard
+            </a>
+            <Link to="/about" onClick={closeMenu} className="rounded-lg px-2 py-1 hover:bg-gray-50">
+              About
             </Link>
-            
-            <div className="flex items-center gap-4 ml-2">
-              <Link to="/profile" className="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-                <div className="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-white font-bold text-sm uppercase shadow-sm">
-                  {user.name ? user.name[0] : "U"}
-                </div>
-                <span className="hidden md:block text-slate-700 text-sm font-semibold">
-                  {user.name || user.email}
-                </span>
-              </Link>
-              
-              <button
-                onClick={handleLogout}
-                className="flex items-center justify-center h-10 rounded-full bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-600 px-5 text-sm font-semibold transition"
-              >
-                Logout
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Not logged in: Sign In + Start Tracking */}
-            <Link
-              to="/auth"
-              className="text-slate-600 hover:text-green-600 font-semibold text-sm transition"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/auth"
-              className="rounded-full bg-green-600 hover:bg-green-700 text-white px-6 py-2 font-semibold shadow transition"
-            >
-              Start Tracking
-            </Link>
-          </>
-        )}
-      </div>
+          </div>
+
+          <div className="mt-4 border-t border-gray-100 pt-4">
+            {user ? (
+              <div className="flex flex-col gap-3">
+                <Link
+                  to="/profile"
+                  onClick={closeMenu}
+                  className="inline-flex items-center gap-2 rounded-lg px-2 py-1"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-600 text-xs font-bold uppercase text-white">
+                    {user.name ? user.name[0] : "U"}
+                  </div>
+                  <span className="truncate text-sm font-semibold text-slate-700">
+                    {user.name || user.email}
+                  </span>
+                </Link>
+                <Link
+                  to="/track"
+                  onClick={closeMenu}
+                  className="btn-secondary w-full"
+                >
+                  Track Now
+                </Link>
+                <button onClick={handleLogout} className="btn-primary w-full">
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <Link to="/auth" onClick={closeMenu} className="btn-secondary w-full">
+                  Sign In
+                </Link>
+                <Link to="/auth" onClick={closeMenu} className="btn-primary w-full">
+                  Start Tracking
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

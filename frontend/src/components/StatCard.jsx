@@ -1,9 +1,9 @@
 import React from "react";
 
 const StatCard = ({ icon, title, value, iconBg }) => (
-  <div className="bg-white rounded-xl shadow-md p-6 flex items-center gap-4">
+  <div className="surface-card flex items-center gap-4 p-6">
     <div
-      className={`w-12 h-12 flex items-center justify-center rounded-full ${iconBg} shadow-inner`}
+      className={`flex h-12 w-12 items-center justify-center rounded-full ${iconBg}`}
     >
       {icon}
     </div>

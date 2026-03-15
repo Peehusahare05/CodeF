@@ -2,17 +2,17 @@ import { Calculator, RefreshCw } from "lucide-react";
 
 const PageHeader = ({ onReset }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
+    <div className="surface-card mb-6 p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <div className="bg-blue-100 p-3 rounded-xl">
-            <Calculator className="w-8 h-8 text-blue-600" />
+          <div className="rounded-xl bg-blue-100 p-3">
+            <Calculator className="h-7 w-7 text-blue-600" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-slate-900">
               Carbon Reduction Simulator
             </h1>
-            <p className="text-gray-600 mt-1">
+            <p className="mt-1 text-slate-600">
               Simulate lifestyle changes and see their impact on your carbon
               footprint
             </p>
@@ -20,7 +20,7 @@ const PageHeader = ({ onReset }) => {
         </div>
         <button
           onClick={onReset}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-all duration-300"
+          className="inline-flex items-center gap-2 rounded-xl bg-slate-100 px-4 py-2 text-slate-700 transition-colors hover:bg-slate-200"
         >
           <RefreshCw className="w-4 h-4" />
           Reset

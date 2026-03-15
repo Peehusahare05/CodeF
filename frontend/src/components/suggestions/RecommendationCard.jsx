@@ -13,9 +13,9 @@ const RecommendationCard = ({
   description,
   reduction,
 }) => (
-  <article className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 p-5">
+  <article className="surface-card p-5 transition-colors hover:bg-gray-50">
     <div className="flex items-center justify-between mb-4">
-      <span className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
         {icon}
       </span>
       <span
@@ -24,9 +24,9 @@ const RecommendationCard = ({
         {impact} impact
       </span>
     </div>
-    <h4 className="text-2xl font-bold text-slate-900 mb-2">{title}</h4>
+    <h4 className="mb-2 text-xl font-semibold text-slate-900">{title}</h4>
     <p className="text-slate-500 text-sm mb-5">{description}</p>
-    <button className="rounded-full bg-green-100 text-green-700 px-4 py-2 text-xs font-bold">
+    <button className="rounded-full border border-green-200 bg-green-50 px-4 py-2 text-xs font-semibold text-green-700">
       {reduction}
     </button>
   </article>

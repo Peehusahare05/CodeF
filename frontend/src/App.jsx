@@ -1,85 +1,94 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import LandingPage from "./pages/LandingPage";
-import TrackPage from "./pages/TrackPage";
-import Dashboard from "./pages/Dashboard";
-import AuthPage from "./pages/AuthPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
-import LeaderboardPage from "./pages/LeaderboardPage";
-import ProfilePage from "./pages/ProfilePage";
-import AIAdvisorPage from "./pages/AIAdvisorPage";
-import SimulatorPage from "./pages/SimulatorPage";
-import SuggestionsPage from "./pages/SuggestionsPage";
-import AboutPage from "./pages/AboutPage";
 import "./App.css";
+
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const TrackPage = lazy(() => import("./pages/TrackPage"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const AuthPage = lazy(() => import("./pages/AuthPage"));
+const LeaderboardPage = lazy(() => import("./pages/LeaderboardPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const AIAdvisorPage = lazy(() => import("./pages/AIAdvisorPage"));
+const SimulatorPage = lazy(() => import("./pages/SimulatorPage"));
+const SuggestionsPage = lazy(() => import("./pages/SuggestionsPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
 
 function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/auth" element={<AuthPage />} />
-        <Route
-          path="/track"
-          element={
-            <ProtectedRoute>
-              <TrackPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/suggestions"
-          element={
-            <ProtectedRoute>
-              <SuggestionsPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/simulator"
-          element={
-            <ProtectedRoute>
-              <SimulatorPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/leaderboard" element={<LeaderboardPage />} />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/ai-advisor"
-          element={
-            <ProtectedRoute>
-              <AIAdvisorPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/reduction-simulator"
-          element={
-            <ProtectedRoute>
-              <SimulatorPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/about" element={<AboutPage />} />
-      </Routes>
+      <Suspense
+        fallback={
+          <div className="min-h-screen flex items-center justify-center text-slate-500">
+            Loading...
+          </div>
+        }
+      >
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route
+            path="/track"
+            element={
+              <ProtectedRoute>
+                <TrackPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/suggestions"
+            element={
+              <ProtectedRoute>
+                <SuggestionsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/simulator"
+            element={
+              <ProtectedRoute>
+                <SimulatorPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/leaderboard" element={<LeaderboardPage />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ai-advisor"
+            element={
+              <ProtectedRoute>
+                <AIAdvisorPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reduction-simulator"
+            element={
+              <ProtectedRoute>
+                <SimulatorPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/about" element={<AboutPage />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

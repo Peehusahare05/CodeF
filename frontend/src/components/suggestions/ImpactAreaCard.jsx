@@ -2,7 +2,7 @@ import React from "react";
 import { CarFront } from "lucide-react";
 
 const ImpactAreaCard = ({ category = "Transportation", share = 45 }) => (
-  <div className="bg-white rounded-2xl shadow-md p-6">
+  <div className="surface-card p-6">
     <h3 className="text-xl font-bold text-slate-900 mb-5">
       Your Highest Impact Area
     </h3>
@@ -20,9 +20,9 @@ const ImpactAreaCard = ({ category = "Transportation", share = 45 }) => (
       <span className="text-slate-500">Footprint Share</span>
       <span className="font-semibold text-green-600">{share}%</span>
     </div>
-    <div className="h-2 bg-slate-100 rounded-full overflow-hidden mb-4">
+    <div className="mb-4 h-2 overflow-hidden rounded-full bg-slate-100">
       <div
-        className="h-full bg-gradient-to-r from-green-600 to-green-400 rounded-full"
+        className="h-full rounded-full bg-green-600"
         style={{ width: `${share}%` }}
       />
     </div>

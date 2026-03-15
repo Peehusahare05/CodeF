@@ -1,104 +1,158 @@
 // Footer.jsx
 import React from "react";
+import {
+  ArrowRight,
+  Github,
+  Leaf,
+  Linkedin,
+  Mail,
+  Twitter,
+} from "lucide-react";
 
 const Footer = () => (
-  <footer className="bg-slate-50 pt-16 pb-6 px-4 mt-20 border-t border-slate-100">
-    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-8">
-      {/* Col 1 */}
-      <div>
-        <div className="font-extrabold text-2xl text-green-700 mb-2">
-          EcoTrack
+  <footer className="mt-20 border-t border-gray-200 bg-gray-50 px-4 py-12">
+    <div className="mx-auto max-w-7xl">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Column 1: Brand */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-green-600">
+            <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600">
+              <Leaf className="h-5 w-5" strokeWidth={2} />
+            </span>
+            <span className="text-2xl font-bold tracking-tight text-green-700">
+              EcoTrack
+            </span>
+          </div>
+          <p className="max-w-sm text-sm leading-relaxed text-gray-600">
+            Empowering individuals to make data-driven decisions for a greener
+            world through AI-powered sustainability insights.
+          </p>
+          <div className="flex items-center gap-3 pt-1">
+            <a
+              href="#"
+              aria-label="GitHub"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition duration-200 hover:scale-110 hover:text-green-600"
+            >
+              <Github className="h-5 w-5" strokeWidth={2} />
+            </a>
+            <a
+              href="#"
+              aria-label="LinkedIn"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition duration-200 hover:scale-110 hover:text-green-600"
+            >
+              <Linkedin className="h-5 w-5" strokeWidth={2} />
+            </a>
+            <a
+              href="#"
+              aria-label="Twitter"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition duration-200 hover:scale-110 hover:text-green-600"
+            >
+              <Twitter className="h-5 w-5" strokeWidth={2} />
+            </a>
+          </div>
         </div>
-        <p className="text-slate-600 text-sm">
-          Empowering individuals to make data-driven choices for a greener
-          world. Through AI and insights, we help you track and reduce your
-          impact.
-        </p>
+        {/* Column 2: Platform Links */}
+        <div className="space-y-4">
+          <h4 className="text-base font-semibold text-gray-900">Platform</h4>
+          <ul className="space-y-2 text-sm text-gray-600">
+            <li>
+              <a href="#how" className="transition-colors hover:text-green-600">
+                How It Works
+              </a>
+            </li>
+            <li>
+              <a href="#" className="transition-colors hover:text-green-600">
+                Pricing
+              </a>
+            </li>
+            <li>
+              <a
+                href="#leaderboard"
+                className="transition-colors hover:text-green-600"
+              >
+                Leaderboard
+              </a>
+            </li>
+            <li>
+              <a href="#" className="transition-colors hover:text-green-600">
+                Mobile App
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 3: Resources */}
+        <div className="space-y-4">
+          <h4 className="text-base font-semibold text-gray-900">Resources</h4>
+          <ul className="space-y-2 text-sm text-gray-600">
+            <li>
+              <a href="#" className="transition-colors hover:text-green-600">
+                Sustainability Blog
+              </a>
+            </li>
+            <li>
+              <a href="#" className="transition-colors hover:text-green-600">
+                Help Center
+              </a>
+            </li>
+            <li>
+              <a href="#" className="transition-colors hover:text-green-600">
+                API Docs
+              </a>
+            </li>
+            <li>
+              <a href="#" className="transition-colors hover:text-green-600">
+                Partnerships
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 4: Newsletter */}
+        <div className="space-y-4">
+          <h4 className="text-base font-semibold text-gray-900">Newsletter</h4>
+          <p className="text-sm text-gray-600">
+            Get weekly tips for a low-carbon lifestyle.
+          </p>
+          <form className="space-y-3">
+            <label className="sr-only" htmlFor="newsletter-email">
+              Email address
+            </label>
+            <div className="flex items-center gap-2">
+              <div className="flex flex-1 items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 shadow-sm focus-within:ring-2 focus-within:ring-green-200">
+                <Mail className="h-5 w-5 text-gray-400" strokeWidth={2} />
+                <input
+                  id="newsletter-email"
+                  type="email"
+                  placeholder="Email"
+                  className="w-full bg-transparent text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none"
+                />
+              </div>
+              <button
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-white shadow-sm transition hover:shadow-lg"
+                type="submit"
+                aria-label="Subscribe to newsletter"
+              >
+                <ArrowRight className="h-5 w-5" strokeWidth={2} />
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      {/* Col 2 */}
-      <div>
-        <div className="font-bold text-slate-800 mb-2">Platform</div>
-        <ul className="space-y-1 text-slate-600 text-sm">
-          <li>
-            <a href="#how" className="hover:text-green-600">
-              How it Works
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-green-600">
-              Pricing
-            </a>
-          </li>
-          <li>
-            <a href="#leaderboard" className="hover:text-green-600">
-              Leaderboard
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-green-600">
-              Mobile App
-            </a>
-          </li>
-        </ul>
-      </div>
-      {/* Col 3 */}
-      <div>
-        <div className="font-bold text-slate-800 mb-2">Resources</div>
-        <ul className="space-y-1 text-slate-600 text-sm">
-          <li>
-            <a href="#" className="hover:text-green-600">
-              Sustainability Blog
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-green-600">
-              Help Center
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-green-600">
-              API Docs
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-green-600">
-              Partnerships
-            </a>
-          </li>
-        </ul>
-      </div>
-      {/* Col 4 */}
-      <div>
-        <div className="font-bold text-slate-800 mb-2">Newsletter</div>
-        <form className="flex gap-2 mt-2">
-          <input
-            type="email"
-            placeholder="Email"
-            className="rounded-full px-4 py-2 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-green-200 bg-white text-slate-700"
-          />
-          <button
-            className="rounded-full bg-green-600 hover:bg-green-700 text-white px-5 py-2 font-semibold shadow transition"
-            type="submit"
-          >
-            →
-          </button>
-        </form>
-      </div>
-    </div>
-    <div className="flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 border-t border-slate-100 pt-4">
-      <div className="mb-2 md:mb-0">
-        © 2026 EcoTrack Systems. All rights reserved.
-      </div>
-      <div className="flex gap-4">
-        <a href="#" className="hover:text-green-600">
-          Privacy Policy
-        </a>
-        <a href="#" className="hover:text-green-600">
-          Terms of Service
-        </a>
-        <a href="#" className="hover:text-green-600">
-          Cookie Settings
-        </a>
+
+      <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-gray-200 pt-5 text-xs text-gray-500 md:flex-row md:items-center">
+        <p>© 2026 EcoTrack Systems. All rights reserved.</p>
+        <div className="flex flex-wrap items-center gap-5">
+          <a href="#" className="transition-colors hover:text-green-600">
+            Privacy Policy
+          </a>
+          <a href="#" className="transition-colors hover:text-green-600">
+            Terms of Service
+          </a>
+          <a href="#" className="transition-colors hover:text-green-600">
+            Cookie Settings
+          </a>
+        </div>
       </div>
     </div>
   </footer>

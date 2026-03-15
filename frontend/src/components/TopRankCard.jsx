@@ -23,15 +23,15 @@ const TopRankCard = ({ rank, name, score, badge, large }) => {
   const { dicebear, fallback } = getAvatarUrl(name);
   return (
     <div
-      className={`flex flex-col items-center bg-white rounded-2xl shadow-lg p-6 ${large ? "scale-110 z-10" : ""} relative min-w-[180px] min-h-[260px] transition-all`}
+      className={`surface-card relative z-10 flex w-full min-h-[220px] flex-col items-center p-5 sm:min-h-[240px] sm:p-6 md:w-auto ${large ? "md:-mt-2" : ""}`}
     >
       <div
-        className={`absolute -top-4 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border ${badgeColors[badge]} shadow ${large ? "text-base" : ""}`}
+        className={`absolute -top-4 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full border px-3 py-1 text-xs font-bold ${badgeColors[badge]} ${large ? "text-sm" : ""}`}
       >
         <Medal className="w-4 h-4 mr-1" />#{rank} {badge && badge.toUpperCase()}
       </div>
       <div
-        className={`${size} rounded-full bg-slate-200 mt-6 mb-3 overflow-hidden ${border} shadow hover:scale-105 transition-transform duration-200`}
+        className={`${size} ${border} mt-6 mb-3 overflow-hidden rounded-full bg-slate-200`}
       >
         <img
           src={dicebear}
@@ -46,7 +46,7 @@ const TopRankCard = ({ rank, name, score, badge, large }) => {
       <div className="font-bold text-lg text-slate-900 mb-1 text-center">
         {name}
       </div>
-      <div className="bg-yellow-50 text-yellow-700 font-bold rounded-full px-4 py-1 text-lg mt-2 shadow-inner">
+      <div className="mt-2 rounded-full bg-yellow-50 px-4 py-1 text-base font-bold text-yellow-700">
         ECO SCORE {score}
       </div>
     </div>

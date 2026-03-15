@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Bot, Send, X, Sparkles } from "lucide-react";
+import { apiFetch } from "../utils/api";
 
 const SUGGESTIONS = [
   "How can I reduce electricity emissions?",
@@ -13,12 +14,6 @@ const WELCOME = {
   content: `Hello! I’m Eco AI, your sustainability assistant. I can help you reduce your carbon footprint and improve your Eco Score. Ask me about energy usage, transport emissions, or eco-friendly habits.`,
 };
 
-const INSIGHT_EXAMPLE = {
-  suggestion: "Switch to LED lighting",
-  impact: "Reduce 8 kg CO₂ per month",
-  tip: "Turn off appliances when not in use.",
-};
-
 function Message({ type, content, insight }) {
   return (
     <div
@@ -30,7 +25,7 @@ function Message({ type, content, insight }) {
         </span>
       )}
       <div
-        className={`max-w-[75%] ${type === "user" ? "bg-gray-100 text-slate-800" : "bg-green-50 text-green-900"} px-4 py-2 rounded-2xl shadow-sm ${type === "user" ? "rounded-br-md" : "rounded-bl-md"} animate-slideup`}
+        className={`max-w-[85%] sm:max-w-[75%] ${type === "user" ? "bg-gray-100 text-slate-800" : "bg-green-50 text-green-900"} px-3 py-2 text-sm sm:px-4 rounded-2xl shadow-sm ${type === "user" ? "rounded-br-md" : "rounded-bl-md"} animate-slideup`}
       >
         {content}
         {insight && (
@@ -64,23 +59,49 @@ const EcoAIChatbot = () => {
     }
   }, [messages, open]);
 
-  const sendMessage = (msg) => {
+  const sendMessage = async (msg) => {
     if (!msg.trim()) return;
     setMessages((prev) => [...prev, { type: "user", content: msg }]);
     setInput("");
     setLoading(true);
-    setTimeout(() => {
-      // Simulate AI response
+
+    try {
+      // Build optional context from localStorage
+      const stored = localStorage.getItem("ecotrack_result");
+      const result = stored ? JSON.parse(stored) : {};
+      const context = {
+        ecoScore: result.ecoScore,
+        totalCO2: result.totalCO2,
+        transportType: result.inputs?.transportType,
+      };
+
+      const res = await apiFetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg, context }),
+      });
+
+      const data = await res.json();
+
       setMessages((prev) => [
         ...prev,
         {
           type: "ai",
-          content: "Here’s a sustainability tip for you!",
-          insight: INSIGHT_EXAMPLE,
+          content: data.reply || "Here's a sustainability tip for you!",
+          insight: data.insight || null,
         },
       ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          type: "ai",
+          content: "Sorry, I couldn't connect to the server. Make sure the backend is running.",
+        },
+      ]);
+    } finally {
       setLoading(false);
-    }, 1200);
+    }
   };
 
   return (
@@ -88,7 +109,7 @@ const EcoAIChatbot = () => {
       {/* Floating Button */}
       {!open && (
         <button
-          className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-tr from-green-500 to-green-400 shadow-lg flex items-center justify-center hover:scale-105 hover:shadow-2xl transition-all group"
+          className="fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-tr from-green-500 to-green-400 shadow-lg transition-all hover:scale-105 hover:shadow-2xl sm:bottom-6 sm:right-6 sm:h-16 sm:w-16 group"
           onClick={() => setOpen(true)}
           title="Ask Eco AI"
         >
@@ -100,7 +121,7 @@ const EcoAIChatbot = () => {
       )}
       {/* Chat Panel */}
       {open && (
-        <div className="fixed bottom-6 right-6 z-50 w-[350px] max-w-[95vw] rounded-2xl bg-white border border-slate-100 shadow-2xl flex flex-col animate-chatopen">
+        <div className="fixed bottom-4 left-3 right-3 z-50 flex max-h-[80vh] flex-col rounded-2xl border border-slate-100 bg-white shadow-2xl animate-chatopen sm:bottom-6 sm:left-auto sm:right-6 sm:w-[350px] sm:max-w-[95vw]">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 rounded-t-2xl bg-gradient-to-tr from-green-100 via-green-50 to-white border-b border-green-200">
             <div className="flex items-center gap-3">
@@ -126,7 +147,7 @@ const EcoAIChatbot = () => {
           {/* Messages */}
           <div
             className="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-white"
-            style={{ minHeight: 220, maxHeight: 340 }}
+            style={{ minHeight: 200, maxHeight: 340 }}
           >
             {messages.map((msg, i) => (
               <Message key={i} {...msg} />

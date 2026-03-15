@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: ./backend
+    container_name: ecotrack-api
+    env_file:
+      - ./backend/.env
+    ports:
+      - "5001:5001"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./frontend
+    container_name: ecotrack-web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    restart: unless-stopped

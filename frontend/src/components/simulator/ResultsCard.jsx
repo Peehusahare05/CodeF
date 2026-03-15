@@ -2,17 +2,17 @@ import { Sparkles, DollarSign, Calendar } from "lucide-react";
 
 const ResultsCard = ({ savings }) => {
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl shadow-md p-6">
+    <div className="surface-card bg-slate-50 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="bg-white p-2 rounded-lg shadow-sm">
+        <div className="rounded-lg bg-white p-2">
           <Sparkles className="w-6 h-6 text-purple-600" />
         </div>
-        <h2 className="text-xl font-bold text-gray-800">Impact Results</h2>
+        <h2 className="text-xl font-bold text-slate-900">Impact Results</h2>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
         {/* Monthly Savings */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
+        <div className="rounded-xl border border-slate-100 bg-white p-4">
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-green-100 p-2 rounded-lg">
               <Calendar className="w-5 h-5 text-green-600" />
@@ -36,7 +36,7 @@ const ResultsCard = ({ savings }) => {
         </div>
 
         {/* Yearly Savings */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
+        <div className="rounded-xl border border-slate-100 bg-white p-4">
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-blue-100 p-2 rounded-lg">
               <Calendar className="w-5 h-5 text-blue-600" />
@@ -60,7 +60,7 @@ const ResultsCard = ({ savings }) => {
         </div>
 
         {/* Cost Savings */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
+        <div className="rounded-xl border border-slate-100 bg-white p-4">
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-yellow-100 p-2 rounded-lg">
               <DollarSign className="w-5 h-5 text-yellow-600" />

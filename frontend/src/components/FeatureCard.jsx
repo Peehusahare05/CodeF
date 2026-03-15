@@ -5,16 +5,16 @@ import { useNavigate } from "react-router-dom";
 const FeatureCard = ({ icon, title, desc, iconBg, targetRoute }) => {
   const navigate = useNavigate();
   return (
-    <div 
+    <div
       onClick={() => navigate(targetRoute)}
-      className="bg-white rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-8 flex flex-col items-center text-center cursor-pointer group"
+      className="surface-card group cursor-pointer p-6 text-center transition-colors hover:bg-gray-50"
     >
       <div
-        className={`mb-4 flex items-center justify-center w-14 h-14 rounded-full ${iconBg} shadow-inner backdrop-blur group-hover:scale-105 transition-all duration-300`}
+        className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full ${iconBg}`}
       >
         {icon}
       </div>
-      <h3 className="font-bold text-lg mb-2 text-slate-800">{title}</h3>
+      <h3 className="mb-2 text-lg font-semibold text-slate-800">{title}</h3>
       <p className="text-slate-600 text-sm">{desc}</p>
     </div>
   );

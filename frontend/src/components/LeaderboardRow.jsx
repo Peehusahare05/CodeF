@@ -17,10 +17,14 @@ const getAvatarUrl = (name) => {
 const LeaderboardRow = ({ rank, name, score, badges }) => {
   const { dicebear, fallback } = getAvatarUrl(name);
   return (
-    <div className="grid grid-cols-12 gap-2 px-6 py-4 items-center hover:bg-gray-50 transition-all">
-      <div className="col-span-1 font-bold text-slate-500">#{rank}</div>
-      <div className="col-span-4 flex items-center gap-3">
-        <span className="w-10 h-10 rounded-full border-2 border-green-400 shadow overflow-hidden flex items-center justify-center hover:scale-105 transition-transform duration-200 bg-white">
+    <div className="grid grid-cols-1 gap-3 px-4 py-4 transition-colors hover:bg-gray-50 sm:grid-cols-12 sm:items-center sm:gap-2 sm:px-6">
+      <div className="sm:col-span-1">
+        <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs font-bold text-slate-600 sm:bg-transparent sm:px-0 sm:py-0 sm:text-base sm:text-slate-500">
+          #{rank}
+        </span>
+      </div>
+      <div className="sm:col-span-4 flex items-center gap-3">
+        <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-green-200 bg-white">
           <img
             src={dicebear}
             alt={name}
@@ -33,18 +37,18 @@ const LeaderboardRow = ({ rank, name, score, badges }) => {
         </span>
         <span className="font-medium text-slate-800">{name}</span>
       </div>
-      <div className="col-span-4 flex gap-2">
+      <div className="sm:col-span-4 flex flex-wrap gap-2">
         {badges &&
           badges.map((b, i) => (
             <span
               key={i}
-              className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 shadow-inner"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-slate-100"
             >
               {badgeIcons[b]}
             </span>
           ))}
       </div>
-      <div className="col-span-3 text-right font-bold text-green-700 text-lg">
+      <div className="sm:col-span-3 text-left sm:text-right font-bold text-green-700 text-lg">
         {score}
       </div>
     </div>

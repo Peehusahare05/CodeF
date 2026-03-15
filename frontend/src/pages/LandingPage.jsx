@@ -10,9 +10,9 @@ import FinalCTASection from "../components/FinalCTASection";
 import Footer from "../components/Footer";
 
 const LandingPage = () => (
-  <div className="bg-[#f8fafc] min-h-screen font-sans">
+  <div className="page-shell font-sans">
     <Navbar />
-    <main>
+    <main className="page-main">
       <HeroSection />
       <ProblemSection />
       <HowItWorksSection />

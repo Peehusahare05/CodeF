@@ -35,22 +35,22 @@ const features = [
 ];
 
 const FeaturesSection = () => (
-  <section className="py-20 px-4 bg-white" id="features">
-    <div className="max-w-6xl mx-auto">
-      <div className="text-center mb-16">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-50 border border-green-100 text-green-700 text-sm font-bold tracking-wide uppercase mb-5 shadow-sm">
-          <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+  <section className="bg-white py-16" id="features">
+    <div className="section-wrap">
+      <div className="mb-12 text-center">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-100 bg-green-50 px-3 py-1 text-xs font-semibold tracking-wide text-green-700">
+          <span className="h-1.5 w-1.5 rounded-full bg-green-500"></span>
           Core Features
         </div>
-        <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-          Powerful <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-400">Sustainability</span> Tools
+        <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+          Powerful <span className="text-green-700">Sustainability</span> Tools
         </h2>
-        <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto">
+        <p className="mx-auto max-w-2xl text-base text-slate-500 md:text-lg">
           Explore intelligent tools designed to help you measure, analyze, and improve your environmental impact.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
         {features.map((f, i) => (
           <FeatureCard
             key={i}

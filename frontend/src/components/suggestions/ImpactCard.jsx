@@ -2,7 +2,7 @@ import React from "react";
 import { AlertCircle } from "lucide-react";
 
 const ImpactCard = ({ weekly = 42, ecoScore = 72, insight }) => (
-  <div className="bg-white rounded-2xl shadow-md border-l-4 border-green-600 p-6">
+  <div className="surface-card border-l-4 border-l-green-600 p-6">
     <h2 className="text-xl font-bold text-slate-900 mb-5">
       Your Current Environmental Impact
     </h2>
@@ -28,7 +28,7 @@ const ImpactCard = ({ weekly = 42, ecoScore = 72, insight }) => (
         </p>
       </div>
     </div>
-    <div className="rounded-xl bg-slate-50 border border-slate-100 px-4 py-3 flex items-center gap-3">
+    <div className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
       <AlertCircle className="w-4 h-4 text-amber-500" />
       <p className="text-sm text-slate-700">{insight}</p>
     </div>

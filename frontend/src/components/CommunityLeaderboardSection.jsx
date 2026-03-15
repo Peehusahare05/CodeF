@@ -9,12 +9,12 @@ const users = [
 ];
 
 const CommunityLeaderboardSection = () => (
-  <section className="py-20 px-4 bg-white" id="leaderboard">
-    <div className="max-w-3xl mx-auto">
-      <h2 className="text-2xl md:text-3xl font-bold text-center text-slate-900 mb-8">
+  <section className="bg-white py-16" id="leaderboard">
+    <div className="section-wrap max-w-3xl">
+      <h2 className="mb-8 text-center text-2xl font-bold text-slate-900 md:text-3xl">
         Join a Community Driving Sustainable Change
       </h2>
-      <div className="bg-slate-50 rounded-xl shadow p-8">
+      <div className="surface-card bg-gray-50 p-6">
         {users.map((u) => (
           <LeaderboardCard
             key={u.rank}

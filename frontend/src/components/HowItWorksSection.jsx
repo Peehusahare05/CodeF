@@ -41,49 +41,48 @@ const steps = [
 ];
 
 const HowItWorksSection = () => (
-  <section className="py-20 px-4 bg-green-50/50" id="how">
-    <div className="text-center mb-20">
-      <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-green-100 border border-green-200 text-green-700 text-sm font-bold tracking-wide uppercase mb-5 shadow-sm">
-        <span className="w-2 h-2 rounded-full bg-green-600 animate-pulse"></span>
-        Process
+  <section className="bg-green-50/50 py-16" id="how">
+    <div className="section-wrap">
+      <div className="mb-10 text-center md:mb-14">
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-green-200 bg-green-100 px-3 py-1 text-xs font-semibold tracking-wide text-green-700">
+          <span className="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+          Process
+        </div>
+        <h2 className="mb-4 text-2xl font-bold tracking-tight text-slate-900 md:text-4xl">
+          How It <span className="text-green-700">Works</span>
+        </h2>
+        <p className="mx-auto max-w-xl text-base text-slate-600 md:text-lg">
+          Transforming your lifestyle into measurable impact in four simple steps.
+        </p>
       </div>
-      <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
-        How It <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-400">Works</span>
-      </h2>
-      <p className="text-lg text-slate-600 max-w-xl mx-auto">
-        Transforming your lifestyle into measurable impact in four simple steps.
-      </p>
-    </div>
-    <div className="max-w-6xl mx-auto relative">
-      {/* Dashed line connecting steps (visible only on md+) */}
-      <div className="hidden md:block absolute top-[24px] left-[12%] right-[12%] h-0.5 border-t-2 border-dashed border-green-200 -z-10"></div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
-        {steps.map((step, i) => (
-          <div key={i} className="flex flex-col items-center text-center group cursor-default">
-            
-            {/* Step Number Circle */}
-            <div className={`w-14 h-14 bg-white border-4 border-green-50 shadow-md text-slate-800 text-xl font-bold rounded-full flex items-center justify-center mb-6 z-10 group-hover:scale-110 group-hover:border-green-200 transition-all duration-300 relative`}>
-              {i + 1}
-              
-              {/* Arrow pointer to right (hidden on last item and mobile) */}
-              {i < steps.length - 1 && (
-                <div className="hidden md:block absolute -right-[4.5rem] top-1/2 -translate-y-1/2 w-8 text-green-300">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-              )}
-            </div>
+      <div className="relative max-w-6xl mx-auto">
+        <div className="absolute left-[12%] right-[12%] top-[24px] -z-10 hidden h-0.5 border-t border-dashed border-green-200 md:block"></div>
 
-            <h3 className="font-extrabold text-lg mb-2 text-slate-800 group-hover:text-green-600 transition-colors">
-              {step.title}
-            </h3>
-            <p className="text-slate-500 text-sm leading-relaxed max-w-[200px]">
-              {step.desc}
-            </p>
-          </div>
-        ))}
+        <div className="relative z-10 grid grid-cols-1 gap-10 md:grid-cols-4">
+          {steps.map((step, i) => (
+            <div key={i} className="flex flex-col items-center text-center">
+
+              <div className="relative z-10 mb-5 flex h-12 w-12 items-center justify-center rounded-full border border-green-100 bg-white text-lg font-semibold text-slate-800">
+                {i + 1}
+
+                {i < steps.length - 1 && (
+                  <div className="absolute -right-[4.5rem] top-1/2 hidden w-8 -translate-y-1/2 text-green-300 md:block">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+
+              <h3 className="mb-2 text-lg font-semibold text-slate-800">
+                {step.title}
+              </h3>
+              <p className="w-full max-w-xs text-slate-500 text-sm leading-relaxed">
+                {step.desc}
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>

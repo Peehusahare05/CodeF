@@ -2,23 +2,23 @@
 import React from "react";
 
 const DashboardPreviewSection = () => (
-  <section className="py-20 px-4 bg-green-50" id="dashboard">
-    <div className="max-w-5xl mx-auto">
-      <div className="flex flex-col md:flex-row items-center justify-between mb-8">
+  <section className="bg-green-50/60 py-16" id="dashboard">
+    <div className="section-wrap max-w-5xl">
+      <div className="mb-8 flex flex-col items-start justify-between gap-3 md:flex-row md:items-center">
         <h2 className="text-2xl md:text-3xl font-bold text-slate-900">
           Smart Environmental Insights
         </h2>
         <a
           href="#"
-          className="text-green-600 font-semibold hover:underline mt-2 md:mt-0"
+          className="text-sm font-semibold text-green-700 transition-colors hover:text-green-600"
         >
-          View Detailed Dashboard →
+          View Detailed Dashboard
         </a>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
         {/* Daily Footprint Card */}
-        <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center">
-          <div className="text-xs text-slate-500 mb-1">DAILY FOOTPRINT</div>
+        <div className="surface-card flex flex-col items-center p-6 text-center">
+          <div className="mb-1 text-xs text-slate-500">DAILY FOOTPRINT</div>
           <div className="text-4xl font-extrabold text-green-600 mb-1">
             42{" "}
             <span className="text-lg font-normal text-slate-500">kg CO₂</span>
@@ -26,7 +26,7 @@ const DashboardPreviewSection = () => (
           <div className="text-xs text-green-500">+12% from last week</div>
         </div>
         {/* Eco Score Gauge */}
-        <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center">
+        <div className="surface-card flex flex-col items-center p-6 text-center">
           <div className="text-xs text-slate-500 mb-1">ECO SCORE GUIDE</div>
           <div className="relative w-24 h-24 flex items-center justify-center mb-2">
             <svg
@@ -60,7 +60,7 @@ const DashboardPreviewSection = () => (
           <div className="text-xs text-slate-500">/ 100</div>
         </div>
         {/* Bar Chart Card */}
-        <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center text-center">
+        <div className="surface-card flex flex-col items-center p-6 text-center">
           <div className="text-xs text-slate-500 mb-2">
             Carbon Sources Breakdown
           </div>

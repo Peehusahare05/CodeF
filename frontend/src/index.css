@@ -2,9 +2,139 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --page-bg: #f8faf9;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --brand: #15803d;
+  --brand-soft: #f0fdf4;
+}
+
+@layer components {
+  .page-shell {
+    @apply min-h-screen flex flex-col bg-gray-50 text-slate-900;
+  }
+
+  .page-main {
+    @apply flex-1;
+  }
+
+  .section-wrap {
+    @apply mx-auto w-full max-w-7xl px-4 md:px-6 lg:px-8 xl:px-10;
+  }
+
+  .surface-card {
+    @apply rounded-2xl border border-gray-200 bg-white shadow-sm;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-green-600 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-green-700;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-gray-200 bg-white px-6 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-gray-50;
+  }
+
+  .input-control {
+    @apply w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition-colors focus:border-green-400;
+  }
+
+  .icon-shell {
+    @apply inline-flex items-center justify-center rounded-lg shrink-0;
+  }
+
+  .icon-shell-sm {
+    @apply w-8 h-8;
+  }
+
+  .icon-shell-md {
+    @apply w-10 h-10;
+  }
+
+  .icon-shell-lg {
+    @apply w-12 h-12;
+  }
+
+  .icon-tone-green {
+    @apply bg-green-100 text-green-600;
+  }
+
+  .icon-tone-blue {
+    @apply bg-blue-100 text-blue-600;
+  }
+
+  .icon-tone-yellow {
+    @apply bg-yellow-100 text-yellow-600;
+  }
+
+  .icon-tone-red {
+    @apply bg-red-100 text-red-600;
+  }
+
+  .icon-tone-emerald {
+    @apply bg-emerald-100 text-emerald-600;
+  }
+
+  .icon-tone-purple {
+    @apply bg-purple-100 text-purple-600;
+  }
+
+  .icon-tone-slate {
+    @apply bg-slate-100 text-slate-600;
+  }
+
+  .icon-tone-white {
+    @apply bg-white text-slate-700;
+  }
+
+  .icon-glyph-sm {
+    @apply w-4 h-4;
+    stroke-width: 2;
+  }
+
+  .icon-glyph {
+    @apply w-5 h-5;
+    stroke-width: 2;
+  }
+
+  .icon-glyph-lg {
+    @apply w-6 h-6;
+    stroke-width: 2;
+  }
+}
+
 /* Optional global reset */
 body {
-  @apply bg-slate-100 text-slate-800;
+  @apply bg-gray-50 text-slate-800 antialiased;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+* {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+img,
+svg,
+canvas,
+video,
+iframe {
+  max-width: 100%;
+  height: auto;
 }
 
 /* Custom range slider styles */
@@ -20,7 +150,6 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 input[type="range"]::-webkit-slider-thumb:hover {
-  transform: scale(1.1);
   box-shadow: 0 3px 8px rgba(59, 130, 246, 0.6);
 }
 
@@ -36,6 +165,5 @@ input[type="range"]::-moz-range-thumb {
 }
 
 input[type="range"]::-moz-range-thumb:hover {
-  transform: scale(1.1);
   box-shadow: 0 3px 8px rgba(59, 130, 246, 0.6);
 }

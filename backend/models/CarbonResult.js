@@ -22,8 +22,13 @@ const carbonResultSchema = new mongoose.Schema(
       totalCO2: Number,
       ecoScore: Number,
     },
+    insight: { type: String, default: "" },
+    trend: [{ week: String, value: Number }],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
+
+carbonResultSchema.index({ user: 1, createdAt: -1 });
+carbonResultSchema.index({ "results.ecoScore": -1 });
 
 module.exports = mongoose.model("CarbonResult", carbonResultSchema);

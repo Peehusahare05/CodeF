@@ -2,7 +2,7 @@ import { Leaf, Info, HelpCircle, Shield } from "lucide-react";
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t border-gray-200 mt-8">
+    <footer className="mt-8 border-t border-gray-200 bg-white">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
@@ -15,21 +15,21 @@ const Footer = () => {
           <div className="flex items-center gap-6">
             <a
               href="#"
-              className="flex items-center gap-1 text-gray-600 hover:text-green-600 transition-colors text-sm"
+              className="flex items-center gap-1 text-sm text-gray-600 transition-colors hover:text-green-600"
             >
               <Info className="w-4 h-4" />
               About
             </a>
             <a
               href="#"
-              className="flex items-center gap-1 text-gray-600 hover:text-green-600 transition-colors text-sm"
+              className="flex items-center gap-1 text-sm text-gray-600 transition-colors hover:text-green-600"
             >
               <HelpCircle className="w-4 h-4" />
               Help
             </a>
             <a
               href="#"
-              className="flex items-center gap-1 text-gray-600 hover:text-green-600 transition-colors text-sm"
+              className="flex items-center gap-1 text-sm text-gray-600 transition-colors hover:text-green-600"
             >
               <Shield className="w-4 h-4" />
               Privacy

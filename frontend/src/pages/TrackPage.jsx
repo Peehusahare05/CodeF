@@ -4,9 +4,11 @@ import InputForm from "../components/InputForm";
 import Footer from "../components/Footer";
 
 const TrackPage = () => (
-  <div className="bg-[#f0fdf4] min-h-screen font-sans">
+  <div className="page-shell bg-[#f0fdf4] font-sans">
     <Navbar />
-    <InputForm />
+    <main className="page-main">
+      <InputForm />
+    </main>
     <Footer />
   </div>
 );
