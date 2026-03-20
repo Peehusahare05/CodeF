@@ -1,149 +1,164 @@
-import { Car, Zap, Trash2, Home } from "lucide-react";
+﻿import React from "react";
+import { Car, Zap, Trash2, ShoppingBag } from "lucide-react";
 
 const SimulationControls = ({ changes, onChangeUpdate }) => {
-  const transportOptions = [
-    { value: "none", label: "No Change", reduction: 0 },
-    { value: "carpool", label: "Carpool 2x/week", reduction: 20 },
-    { value: "public", label: "Public Transport", reduction: 40 },
-    { value: "bike", label: "Bike/Walk", reduction: 60 },
-    { value: "ev", label: "Electric Vehicle", reduction: 50 },
+  const categories = [
+    {
+      key: "transportation",
+      label: "Transportation",
+      icon: Car,
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
+      description: "Reduce km usage through public transit, carpooling, or biking",
+      unit: "% reduction",
+    },
+    {
+      key: "electricity",
+      label: "Electricity",
+      icon: Zap,
+      color: "text-amber-600",
+      bgColor: "bg-amber-50",
+      description: "Reduce kWh consumption with efficient habits and devices",
+      unit: "% reduction",
+    },
+    {
+      key: "waste",
+      label: "Waste",
+      icon: Trash2,
+      color: "text-green-600",
+      bgColor: "bg-green-50",
+      description: "Reduce landfill waste through better segregation and composting",
+      unit: "% reduction",
+    },
   ];
 
-  const frequencyOptions = [
-    { value: "daily", label: "Daily", multiplier: 1 },
-    { value: "weekly", label: "2-3x/Week", multiplier: 0.4 },
-    { value: "occasional", label: "Occasional", multiplier: 0.2 },
+  const plasticOptions = [
+    { value: "current", label: "No Change", reduction: 0 },
+    { value: "medium", label: "Reduce by 30%", reduction: 30 },
+    { value: "low", label: "Reduce by 60%", reduction: 60 },
   ];
 
   return (
-    <div className="surface-card space-y-6 p-6">
+    <div className="surface-card p-6">
       <h2 className="mb-6 text-xl font-bold text-slate-900">
-        Simulation Controls
+        Adjust Your Lifestyle
       </h2>
 
-      {/* Transportation */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Car className="w-5 h-5 text-blue-600" />
-          <label className="font-semibold text-gray-700">
-            Transportation Change
-          </label>
-        </div>
-        <select
-          value={changes.transport}
-          onChange={(e) => onChangeUpdate("transport", e.target.value)}
-          className="input-control"
-        >
-          {transportOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label} {option.reduction > 0 && `(-${option.reduction}%)`}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="space-y-6">
+        {/* Slider Controls */}
+        {categories.map((category) => {
+          const Icon = category.icon;
+          const value = changes[category.key];
 
-      {/* Frequency Selector */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Home className="w-5 h-5 text-purple-600" />
-          <label className="font-semibold text-gray-700">
-            Commute Frequency
-          </label>
-        </div>
-        <div className="flex gap-2">
-          {frequencyOptions.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => onChangeUpdate("frequency", option.value)}
-              className={`flex-1 rounded-xl px-4 py-3 font-medium transition-colors ${changes.frequency === option.value
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-                }`}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
-      </div>
+          return (
+            <div key={category.key} className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className={`${category.bgColor} rounded-lg p-2.5`}>
+                    <Icon className={`w-5 h-5 ${category.color}`} />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-900">
+                      {category.label}
+                    </label>
+                    <p className="text-xs text-slate-500 mt-0.5">
+                      {category.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span className="block text-2xl font-bold text-slate-900">
+                    {value}
+                  </span>
+                  <span className="text-xs text-slate-500">{category.unit}</span>
+                </div>
+              </div>
 
-      {/* Energy Reduction Slider */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-yellow-600" />
-            <label className="font-semibold text-gray-700">
-              Energy Reduction
-            </label>
+              {/* Slider */}
+              <div className="px-2">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={value}
+                  onChange={(e) =>
+                    onChangeUpdate(category.key, parseInt(e.target.value, 10))
+                  }
+                  className="slider-thumb w-full h-2 rounded-lg appearance-none cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, ${category.color} 0%, ${category.color} ${value}%, rgba(226, 232, 240, 0.4) ${value}%, rgba(226, 232, 240, 0.4) 100%)`,
+                  }}
+                />
+              </div>
+
+              {/* Quick Controls */}
+              <div className="flex gap-2 flex-wrap">
+                {[
+                  { label: "0%", val: 0 },
+                  { label: "25%", val: 25 },
+                  { label: "50%", val: 50 },
+                  { label: "Max", val: 100 },
+                ].map((preset) => (
+                  <button
+                    key={preset.val}
+                    onClick={() => onChangeUpdate(category.key, preset.val)}
+                    className={`rounded-full border text-xs font-medium px-3 py-1.5 transition-all ${value === preset.val
+                      ? `${category.bgColor} border-current ${category.color} shadow-sm`
+                      : "border-slate-200 text-slate-600 hover:border-slate-300"
+                      }`}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Plastic Toggle */}
+        <div className="border-t border-slate-100 pt-6 space-y-3">
+          <div className="flex items-center gap-3">
+            <div className="bg-sky-50 rounded-lg p-2.5">
+              <ShoppingBag className="w-5 h-5 text-sky-600" />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-slate-900">
+                Plastic Usage
+              </label>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Switch to reusables and reduce single-use packaging
+              </p>
+            </div>
           </div>
-          <span className="text-lg font-bold text-blue-600">
-            {changes.energy}%
-          </span>
-        </div>
-        <input
-          type="range"
-          min="0"
-          max="50"
-          value={changes.energy}
-          onChange={(e) => onChangeUpdate("energy", parseInt(e.target.value))}
-          className="w-full h-3 bg-gray-200 rounded-full appearance-none cursor-pointer slider-thumb"
-          style={{
-            background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${changes.energy * 2}%, #e5e7eb ${changes.energy * 2}%, #e5e7eb 100%)`,
-          }}
-        />
-        <div className="flex justify-between text-xs text-gray-500">
-          <span>No Change</span>
-          <span>Moderate</span>
-          <span>Aggressive</span>
+
+          {/* Toggle Buttons */}
+          <div className="flex gap-2 flex-wrap">
+            {plasticOptions.map((option) => (
+              <button
+                key={option.value}
+                onClick={() => onChangeUpdate("plastic", option.value)}
+                className={`flex-1 rounded-lg border text-sm font-medium px-4 py-2.5 transition-all ${changes.plastic === option.value
+                  ? "bg-sky-100 border-sky-300 text-sky-700 shadow-sm"
+                  : "border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                  }`}
+              >
+                {option.label}
+                {option.reduction > 0 && (
+                  <span className="ml-1 text-xs opacity-75">
+                    (-{option.reduction}%)
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Waste Policy Toggle */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Trash2 className="w-5 h-5 text-green-600" />
-          <label className="font-semibold text-gray-700">
-            Zero-Waste Policy
-          </label>
-        </div>
-        <button
-          onClick={() => onChangeUpdate("waste", !changes.waste)}
-          className={`w-full rounded-xl px-4 py-3 font-medium transition-colors ${changes.waste
-              ? "bg-green-600 text-white"
-              : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-            }`}
-        >
-          {changes.waste ? "✓ Enabled (Composting + Recycling)" : "Disabled"}
-        </button>
-        {changes.waste && (
-          <p className="text-sm text-green-600 bg-green-50 rounded-lg p-3">
-            Reduces waste emissions by ~30% through composting and strict
-            recycling
-          </p>
-        )}
-      </div>
-
-      {/* Renewable Energy Toggle */}
-      <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Zap className="w-5 h-5 text-orange-600" />
-          <label className="font-semibold text-gray-700">
-            Renewable Energy
-          </label>
-        </div>
-        <button
-          onClick={() => onChangeUpdate("renewable", !changes.renewable)}
-          className={`w-full rounded-xl px-4 py-3 font-medium transition-colors ${changes.renewable
-              ? "bg-orange-600 text-white"
-              : "bg-gray-50 text-gray-600 hover:bg-gray-100"
-            }`}
-        >
-          {changes.renewable ? "✓ Switch to Solar/Wind" : "Disabled"}
-        </button>
-        {changes.renewable && (
-          <p className="text-sm text-orange-600 bg-orange-50 rounded-lg p-3">
-            Reduces electricity emissions by ~70% with clean energy sources
-          </p>
-        )}
+      {/* Info Box */}
+      <div className="mt-6 rounded-lg bg-blue-50 border border-blue-100 p-4">
+        <p className="text-sm text-blue-900">
+          💡 Tip: Start with one category to see how manageable changes can make a real difference.
+        </p>
       </div>
     </div>
   );

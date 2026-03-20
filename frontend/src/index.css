@@ -103,6 +103,10 @@
     @apply w-6 h-6;
     stroke-width: 2;
   }
+
+  .slider-thumb {
+    @apply accent-blue-600 transition-all duration-150;
+  }
 }
 
 /* Optional global reset */
