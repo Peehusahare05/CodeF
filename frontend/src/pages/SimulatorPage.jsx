@@ -1,15 +1,12 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Car, Zap, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import { getCarbonHistory } from "../services/carbonService";
 import { calculateSimulation } from "../services/simulatorService";
-import PageHeader from "../components/simulator/PageHeader";
-import FootprintCard from "../components/simulator/FootprintCard";
-import ChartCard from "../components/simulator/ChartCard";
-import ResultsCard from "../components/simulator/ResultsCard";
-import InsightCard from "../components/simulator/InsightCard";
-import SimulationControls from "../components/simulator/SimulationControls";
+import SimulatorHeader from "../components/simulator/SimulatorHeader";
 import ComparisonCard from "../components/simulator/ComparisonCard";
-import CTASection from "../components/simulator/CTASection";
+import SliderRow from "../components/simulator/SliderRow";
+import ResultCard from "../components/simulator/ResultCard";
 
 const FALLBACK_BASELINE = {
   transportCO2: 18.9,
@@ -26,7 +23,7 @@ const toSimulationPayload = (baseline, changes) => ({
     transportationPct: Number(changes.transportation || 0),
     electricityPct: Number(changes.electricity || 0),
     wastePct: Number(changes.waste || 0),
-    plasticPct: changes.plastic === "low" ? 60 : changes.plastic === "medium" ? 30 : 0,
+    plasticPct: Number(changes.plastic || 0),
   },
 });
 
@@ -43,7 +40,7 @@ const SimulatorPage = () => {
     transportation: 0, // percentage reduction 0-100%
     electricity: 0,
     waste: 0,
-    plastic: "current", // current, medium, low
+    plastic: 0,
   });
 
   useEffect(() => {
@@ -178,14 +175,11 @@ const SimulatorPage = () => {
   // Generate dynamic insights
   const insights = useMemo(() => {
     if (calculations.totalReduction === 0) {
-      return {
-        text: "Adjust the sliders to see your potential carbon savings. Even small changes add up!",
-        recommendations: [
-          "Start with just one category to see immediate impact",
-          "Focus on transportation for the biggest reduction",
-          "Track your progress weekly for motivation",
-        ],
-      };
+      return [
+        "Start with one category to see immediate impact.",
+        "Transportation and electricity usually drive the biggest reductions.",
+        "Small weekly changes compound quickly over time.",
+      ];
     }
 
     const reductions = Object.values(calculations.breakdown)
@@ -193,41 +187,36 @@ const SimulatorPage = () => {
       .sort((a, b) => b.reduction - a.reduction);
 
     const topImpact = reductions[0];
-    const primaryFactor =
-      topImpact.name === "Transportation"
-        ? "commute changes"
-        : topImpact.name === "Electricity"
-          ? "reducing energy"
-          : topImpact.name === "Waste"
-            ? "composting"
-            : "using reusables";
-
     const recommendations = [];
     if (calculations.reductionPercent >= 50) {
       recommendations.push(
-        `Excellent target! Reducing ${calculations.reductionPercent}% will require significant lifestyle changes.`
+        `Aggressive target: ${calculations.reductionPercent.toFixed(1)}% reduction is possible with consistent execution.`
       );
     } else if (calculations.reductionPercent >= 20) {
       recommendations.push(
-        `Great goal! A ${calculations.reductionPercent}% reduction is achievable with consistent effort.`
+        `Strong target: ${calculations.reductionPercent.toFixed(1)}% reduction is practical and realistic.`
       );
     }
 
     recommendations.push(
-      `${topImpact.name} is your highest impact area (${reductions[0].percent.toFixed(0)}% of total reduction).`
+      `${topImpact.name} contributes ${reductions[0].percent.toFixed(0)}% of your projected reduction.`
     );
     recommendations.push(
-      `Your eco score can improve from ${calculations.baselineEcoScore} → ${calculations.newEcoScore} (+${calculations.scoreImprovement} points).`
+      `Eco score can improve ${calculations.baselineEcoScore} -> ${calculations.newEcoScore} (+${calculations.scoreImprovement}).`
     );
     recommendations.push(
-      `This equates to saving ${calculations.yearlySavings.toFixed(0)} kg CO₂ per year — that's like planting ${Math.round(calculations.yearlySavings / 21)} trees!`
+      `Projected annual reduction: ${calculations.yearlySavings.toFixed(0)} kg CO2.`
     );
 
-    return {
-      text: `Smart strategies! By focusing on ${primaryFactor}, you can reduce your carbon footprint by ${calculations.reductionPercent}%. Your biggest impact comes from ${topImpact.name.toLowerCase()}. Start with one change and build from there.`,
-      recommendations,
-    };
+    return recommendations;
   }, [calculations]);
+
+  const categoryControls = [
+    { key: "transportation", label: "Transportation", icon: Car, max: 100 },
+    { key: "electricity", label: "Electricity", icon: Zap, max: 100 },
+    { key: "waste", label: "Waste", icon: Trash2, max: 100 },
+    { key: "plastic", label: "Plastic", icon: ShoppingBag, max: 60 },
+  ];
 
   const handleChangeUpdate = (category, value) => {
     setChanges((prev) => ({ ...prev, [category]: value }));
@@ -238,12 +227,12 @@ const SimulatorPage = () => {
       transportation: 0,
       electricity: 0,
       waste: 0,
-      plastic: "current",
+      plastic: 0,
     });
   };
 
   const handleApply = () => {
-    navigate("/dashboard");
+    navigate("/track");
   };
 
   if (loadingBaseline) {
@@ -258,7 +247,7 @@ const SimulatorPage = () => {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <PageHeader onReset={handleReset} />
+      <SimulatorHeader onReset={handleReset} />
 
       {error && (
         <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
@@ -266,71 +255,104 @@ const SimulatorPage = () => {
         </div>
       )}
 
-      {/* Content Grid */}
-      <div className="space-y-8">
-        {/* Top Row: Current Stats & Controls */}
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-1">
-            <FootprintCard
-              current={calculations.baselineWeekly}
-              reduction={calculations.totalReduction}
-              percentage={calculations.reductionPercent}
-            />
-          </div>
-          <div className="lg:col-span-2">
-            <SimulationControls
-              changes={changes}
-              onChangeUpdate={handleChangeUpdate}
-            />
-          </div>
-        </div>
-
-        {/* Comparison Cards: Before/After */}
-        <div className="grid gap-6 md:grid-cols-2">
-          <ComparisonCard
-            label="Current Weekly Footprint"
-            value={calculations.baselineWeekly}
-            ecoScore={calculations.baselineEcoScore}
-            type="current"
-          />
-          <ComparisonCard
-            label="Projected After Changes"
-            value={calculations.newWeekly}
-            ecoScore={calculations.newEcoScore}
-            type="projected"
-          />
-        </div>
-
-        {/* Chart & Insights Row */}
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <ChartCard categories={Object.values(calculations.breakdown)} />
-          </div>
-          <div>
-            <InsightCard
-              insight={insights.text}
-              recommendations={insights.recommendations}
-            />
-          </div>
-        </div>
-
-        {/* Results Summary */}
-        <ResultsCard
-          savings={{
-            monthly: calculations.monthlySavings,
-            yearly: calculations.yearlySavings,
-            cost: calculations.costSavings,
-          }}
+      <div className="space-y-6">
+        {/* A. Current vs Projected */}
+        <ComparisonCard
+          currentCO2={calculations.baselineWeekly}
+          projectedCO2={calculations.newWeekly}
+          currentScore={calculations.baselineEcoScore}
+          projectedScore={calculations.newEcoScore}
+          reductionPercent={calculations.reductionPercent}
         />
+
+        {/* B. Interactive Controls + Compact Category Impact */}
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_-24px_rgba(15,23,42,0.7)] sm:p-6">
+          <h2 className="text-base font-semibold text-slate-900 sm:text-lg">Adjust Reductions</h2>
+          <p className="mt-1 text-sm text-slate-500">One slider per category. Move right to increase reduction.</p>
+
+          <div className="mt-4 space-y-3">
+            {categoryControls.map((item) => (
+              <SliderRow
+                key={item.key}
+                icon={item.icon}
+                label={item.label}
+                value={changes[item.key]}
+                max={item.max}
+                onChange={(value) => handleChangeUpdate(item.key, value)}
+              />
+            ))}
+          </div>
+
+          <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.1em] text-slate-500">Category Impact (Current vs After)</p>
+            <div className="space-y-3">
+              {Object.values(calculations.breakdown).map((cat) => {
+                const ratio = cat.current > 0 ? Math.max(0, Math.min(100, (cat.after / cat.current) * 100)) : 0;
+                return (
+                  <div key={cat.name}>
+                    <div className="mb-1.5 flex items-center justify-between text-xs">
+                      <span className="font-medium text-slate-700">{cat.name}</span>
+                      <span className="text-slate-500">{cat.current.toFixed(1)} kg {"->"} {cat.after.toFixed(1)} kg</span>
+                    </div>
+                    <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200">
+                      <div className="h-full rounded-full bg-slate-700" style={{ width: `${ratio}%` }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* C. Results + Insights + CTA */}
+        <section className="grid gap-4 lg:grid-cols-3 lg:items-start">
+          <div className="lg:col-span-2">
+            <ResultCard
+              monthly={calculations.monthlySavings}
+              yearly={calculations.yearlySavings}
+              cost={calculations.costSavings}
+            />
+          </div>
+
+          <div className="space-y-4">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_-24px_rgba(15,23,42,0.7)]">
+              <h3 className="text-sm font-semibold text-slate-900">AI Insights</h3>
+              <ul className="mt-3 space-y-2">
+                {insights.slice(0, 3).map((insight, index) => (
+                  <li key={`${insight}-${index}`} className="flex items-start gap-2 text-xs text-slate-600">
+                    <ArrowRight className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-slate-500" />
+                    <span>{insight}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_10px_28px_-24px_rgba(15,23,42,0.7)]">
+              <div className="flex flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={handleApply}
+                  className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+                >
+                  Apply Changes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate("/dashboard")}
+                  className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+                >
+                  Back to Dashboard
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {simulating && (
           <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-500">
             Recalculating simulation...
           </div>
         )}
-
-        {/* CTA Section */}
-        <CTASection onApply={handleApply} onViewDashboard={() => navigate("/dashboard")} />
       </div>
     </div>
   );

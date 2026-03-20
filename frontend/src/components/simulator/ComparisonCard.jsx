@@ -1,66 +1,56 @@
 import React from "react";
-import { TrendingUp, TrendingDown, Circle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-const ComparisonCard = ({ label, value, ecoScore, type = "current" }) => {
-    const isProjected = type === "projected";
-    const borderColor = isProjected ? "border-green-200" : "border-slate-200";
-    const bgColor = isProjected ? "bg-green-50" : "bg-white";
-    const badgeBg = isProjected ? "bg-green-100" : "bg-slate-100";
-    const badgeText = isProjected ? "text-green-700" : "text-slate-700";
-    const icon = isProjected ? (
-        <TrendingDown className="w-6 h-6 text-green-600" />
-    ) : (
-        <TrendingUp className="w-6 h-6 text-slate-400" />
-    );
+const ComparisonCard = ({
+    currentCO2,
+    projectedCO2,
+    currentScore,
+    projectedScore,
+    reductionPercent,
+}) => {
+    const co2Delta = Math.max(0, currentCO2 - projectedCO2);
+    const ecoDelta = Math.max(0, projectedScore - currentScore);
 
     return (
-        <article className={`surface-card border ${borderColor} ${bgColor} p-6 transition-all duration-300`}>
-            <div className="flex items-start justify-between mb-6">
+        <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.75)] sm:p-6">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-[1fr_auto_1fr] md:items-center">
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500">Current</p>
+                    <p className="mt-1 text-3xl font-bold text-slate-900 sm:text-4xl">{currentCO2.toFixed(2)}</p>
+                    <p className="text-sm text-slate-500">kg CO₂ / week</p>
+                    <p className="mt-2 text-sm font-medium text-slate-700">Eco Score: {currentScore}</p>
+                </div>
+
+                <div className="mx-auto inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500">
+                    <ArrowRight className="h-4 w-4" />
+                </div>
+
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-emerald-700">Projected</p>
+                    <div className="mt-1 flex items-end gap-2">
+                        <p className="text-3xl font-bold text-slate-900 sm:text-4xl">{projectedCO2.toFixed(2)}</p>
+                        <span className="mb-1 text-xs font-semibold text-emerald-700">-{co2Delta.toFixed(2)} kg</span>
+                    </div>
+                    <p className="text-sm text-slate-500">kg CO₂ / week</p>
+                    <p className="mt-2 text-sm font-medium text-slate-700">Eco Score: {projectedScore} <span className="text-emerald-700">(+{ecoDelta})</span></p>
+                </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 text-sm sm:grid-cols-3">
                 <div>
-                    <p className="text-sm text-slate-500 font-medium mb-1">{label}</p>
-                    <div className="flex items-baseline gap-2">
-                        <span className="text-4xl font-bold text-slate-900">{value.toFixed(2)}</span>
-                        <span className="text-lg text-slate-600">kg CO₂/week</span>
-                    </div>
+                    <p className="text-xs text-slate-500">Weekly Reduction</p>
+                    <p className="font-semibold text-emerald-700">{co2Delta.toFixed(2)} kg</p>
                 </div>
-                <div className={`p-3 rounded-xl ${badgeBg}`}>{icon}</div>
-            </div>
-
-            {/* Eco Score Section */}
-            <div className="rounded-lg border border-slate-100 bg-white p-4">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                            Eco Score
-                        </p>
-                        <div className="mt-2 flex items-baseline gap-2">
-                            <span className="text-3xl font-bold text-slate-900">{ecoScore}</span>
-                            <span className="text-sm text-slate-600">/100</span>
-                        </div>
-                    </div>
-                    <div className="flex flex-col items-end gap-2">
-                        <div className="h-1.5 w-24 rounded-full bg-slate-100 overflow-hidden">
-                            <div
-                                className={`h-full transition-all duration-500 ${isProjected ? "bg-green-500" : "bg-slate-400"
-                                    }`}
-                                style={{ width: `${(ecoScore / 100) * 100}%` }}
-                            />
-                        </div>
-                        <span className="text-xs text-slate-500">Progress</span>
-                    </div>
+                <div>
+                    <p className="text-xs text-slate-500">Improvement</p>
+                    <p className="font-semibold text-emerald-700">{reductionPercent.toFixed(1)}%</p>
+                </div>
+                <div>
+                    <p className="text-xs text-slate-500">Eco Score Gain</p>
+                    <p className="font-semibold text-emerald-700">+{ecoDelta}</p>
                 </div>
             </div>
-
-            {/* Status Badge */}
-            <div className="mt-4 flex items-center gap-2">
-                <Circle
-                    className={`w-2.5 h-2.5 ${isProjected ? "fill-green-500 text-green-500" : "fill-slate-400 text-slate-400"}`}
-                />
-                <span className={`text-xs font-medium ${isProjected ? "text-green-700" : "text-slate-600"}`}>
-                    {isProjected ? "Potential Target" : "Current State"}
-                </span>
-            </div>
-        </article>
+        </section>
     );
 };
 
