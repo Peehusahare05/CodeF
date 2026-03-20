@@ -18,6 +18,7 @@ import ChartSection from "../components/dashboard/ChartSection";
 import CategoryCard from "../components/dashboard/CategoryCard";
 import DashboardEmptyState from "../components/dashboard/DashboardEmptyState";
 import DashboardLoading from "../components/dashboard/DashboardLoading";
+import { getCarbonHistory, getCarbonStats } from "../services/carbonService";
 import {
     buildContributions,
     buildInsights,
@@ -25,7 +26,6 @@ import {
     calculateTrendDelta,
     getImpactLevel,
     getTopContributor,
-    readDashboardData,
 } from "../utils/dashboardData";
 
 const EcoAIChatbot = lazy(() => import("../components/EcoAIChatbot"));
@@ -74,13 +74,61 @@ const CATEGORY_STYLE = {
 const Dashboard = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
     const [snapshot, setSnapshot] = useState(null);
 
     useEffect(() => {
+        const loadDashboard = async () => {
+            try {
+                setError("");
+                const [statsResponse, historyResponse] = await Promise.all([
+                    getCarbonStats(),
+                    getCarbonHistory(1, 10),
+                ]);
+
+                const history = historyResponse?.data || [];
+                if (!history.length) {
+                    setSnapshot(null);
+                    return;
+                }
+
+                const latest = history[0];
+                const trend = [...history]
+                    .slice(0, 4)
+                    .reverse()
+                    .map((item, idx) => ({
+                        week: `Week ${idx + 1}`,
+                        value: Number(item?.results?.totalCO2 ?? 0),
+                    }));
+
+                setSnapshot({
+                    values: {
+                        transport: Number(latest?.results?.transportCO2 ?? 0),
+                        electricity: Number(latest?.results?.electricityCO2 ?? 0),
+                        waste: Number(latest?.results?.wasteCO2 ?? 0),
+                        plastic: Number(latest?.results?.plasticCO2 ?? 0),
+                        total: Number(latest?.results?.totalCO2 ?? 0),
+                        ecoScore: Number(
+                            statsResponse?.data?.latestEcoScore ??
+                            latest?.results?.ecoScore ??
+                            0,
+                        ),
+                    },
+                    trend,
+                    insight: latest?.insight || "",
+                    inputs: latest?.inputs || {},
+                });
+            } catch (err) {
+                setError(err.message || "Could not load dashboard data.");
+                setSnapshot(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         const timer = setTimeout(() => {
-            setSnapshot(readDashboardData());
-            setLoading(false);
-        }, 260);
+            loadDashboard();
+        }, 220);
 
         return () => clearTimeout(timer);
     }, []);
@@ -179,12 +227,27 @@ const Dashboard = () => {
     }, [snapshot]);
 
     const handleResetData = () => {
-        localStorage.removeItem("ecotrack_result");
-        setSnapshot(null);
+        navigate("/track");
     };
 
     if (loading) {
         return <DashboardLoading />;
+    }
+
+    if (error) {
+        return (
+            <div className="surface-card mx-auto max-w-3xl border border-red-200 bg-red-50 p-6 text-center">
+                <h2 className="text-lg font-bold text-red-700">Unable to load dashboard</h2>
+                <p className="mt-2 text-sm text-red-600">{error}</p>
+                <button
+                    type="button"
+                    onClick={() => window.location.reload()}
+                    className="mt-4 inline-flex items-center justify-center rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                >
+                    Retry
+                </button>
+            </div>
+        );
     }
 
     if (!snapshot || !derived) {

@@ -43,6 +43,7 @@ const deleteParamsSchema = z.object({
 });
 
 module.exports = {
+  inputSchema,
   saveResultSchema,
   historyQuerySchema,
   deleteParamsSchema,

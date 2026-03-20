@@ -1,5 +1,5 @@
 import React from "react";
-import { Leaf, LayoutDashboard, Sparkles, UserRound, LineChart, Calculator } from "lucide-react";
+import { Leaf, LayoutDashboard, Sparkles, UserRound, LineChart, Calculator, Trophy, Brain } from "lucide-react";
 import { NavLink, Outlet } from "react-router-dom";
 import { apiFetch } from "../utils/api";
 
@@ -7,7 +7,9 @@ const DASHBOARD_NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/track", label: "Track", icon: Calculator },
   { to: "/suggestions", label: "Suggestions", icon: Sparkles },
+  { to: "/ai-advisor", label: "AI Advisor", icon: Brain },
   { to: "/simulator", label: "Simulator", icon: LineChart },
+  { to: "/leaderboard", label: "Leaderboard", icon: Trophy },
   { to: "/profile", label: "Profile", icon: UserRound },
 ];
 

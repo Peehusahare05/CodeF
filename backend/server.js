@@ -72,6 +72,8 @@ app.use("/api/auth", authLimiter);
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/carbon", require("./routes/carbonRoutes"));
 app.use("/api/ai", require("./routes/aiRoutes"));
+app.use("/api/suggestions", require("./routes/suggestionsRoutes"));
+app.use("/api/simulator", require("./routes/simulatorRoutes"));
 
 // Health check
 app.get("/", (req, res) => res.json({ message: "EcoTrack API running" }));

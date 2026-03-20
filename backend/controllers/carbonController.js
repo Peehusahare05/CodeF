@@ -1,4 +1,25 @@
 const CarbonResult = require("../models/CarbonResult");
+const { calculateCarbon, generateInsight } = require("../utils/carbonEngine");
+
+// @route  POST /api/carbon/calculate
+// @access Private
+const calculate = async (req, res) => {
+  try {
+    const results = calculateCarbon(req.body);
+    const insight = generateInsight(results);
+
+    res.status(200).json({
+      data: {
+        inputs: req.body,
+        results,
+        insight,
+      },
+    });
+  } catch (error) {
+    console.error("Calculate error:", error);
+    res.status(500).json({ message: "Failed to calculate carbon footprint." });
+  }
+};
 
 // @route  POST /api/carbon/save
 // @access Private
@@ -167,6 +188,7 @@ const deleteEntry = async (req, res) => {
 };
 
 module.exports = {
+  calculate,
   saveResult,
   getHistory,
   getLeaderboard,

@@ -1,4 +1,5 @@
 // Keyword-based AI chat for sustainability advice
+const CarbonResult = require("../models/CarbonResult");
 
 const RESPONSES = [
   {
@@ -189,9 +190,67 @@ function getAIResponse(message, context = {}) {
   };
 }
 
+async function enrichContextFromLatestResult(context = {}, userId) {
+  const enriched = { ...(context || {}) };
+
+  const needsEcoScore = typeof enriched.ecoScore !== "number";
+  const needsTotalCO2 = typeof enriched.totalCO2 !== "number";
+  const needsTransportType = !enriched.transportType;
+
+  if (!userId || (!needsEcoScore && !needsTotalCO2 && !needsTransportType)) {
+    return enriched;
+  }
+
+  const latest = await CarbonResult.findOne({ user: userId })
+    .sort({ createdAt: -1 })
+    .select("results inputs")
+    .lean();
+
+  if (!latest) {
+    return enriched;
+  }
+
+  if (needsEcoScore && typeof latest?.results?.ecoScore === "number") {
+    enriched.ecoScore = latest.results.ecoScore;
+  }
+
+  if (needsTotalCO2 && typeof latest?.results?.totalCO2 === "number") {
+    enriched.totalCO2 = latest.results.totalCO2;
+  }
+
+  if (needsTransportType && latest?.inputs?.transportType) {
+    enriched.transportType = latest.inputs.transportType;
+  }
+
+  return enriched;
+}
+
+function hasContextValue(context = {}) {
+  return (
+    typeof context.ecoScore === "number" ||
+    typeof context.totalCO2 === "number" ||
+    (typeof context.transportType === "string" && context.transportType.trim())
+  );
+}
+
+function resolveContextSource(requestContext = {}, enrichedContext = {}) {
+  const hasRequestContext = hasContextValue(requestContext);
+  const hasFinalContext = hasContextValue(enrichedContext);
+
+  if (!hasFinalContext) {
+    return "none";
+  }
+
+  if (hasRequestContext) {
+    return "request";
+  }
+
+  return "enriched";
+}
+
 // @route  POST /api/ai/chat
-// @access Public (token optional — if provided, richer context is used)
-const chat = (req, res) => {
+// @access Public (token optional; if valid, missing context is enriched from latest saved result)
+const chat = async (req, res) => {
   try {
     const { message, context } = req.body;
 
@@ -199,8 +258,15 @@ const chat = (req, res) => {
       return res.status(400).json({ message: "Message is required." });
     }
 
-    const response = getAIResponse(message.trim(), context || {});
-    res.status(200).json(response);
+    const requestContext = context || {};
+    const enrichedContext = await enrichContextFromLatestResult(
+      requestContext,
+      req.user?._id,
+    );
+    const contextSource = resolveContextSource(requestContext, enrichedContext);
+
+    const response = getAIResponse(message.trim(), enrichedContext);
+    res.status(200).json({ ...response, contextSource });
   } catch (error) {
     console.error("AI chat error:", error);
     res.status(500).json({ message: "Failed to generate response." });

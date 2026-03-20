@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Lightbulb,
@@ -9,6 +9,7 @@ import {
   Recycle,
   Thermometer,
 } from "lucide-react";
+import { generateSuggestions } from "../services/suggestionService";
 import PageHeader from "../components/suggestions/PageHeader";
 import ImpactCard from "../components/suggestions/ImpactCard";
 import RecommendationCard from "../components/suggestions/RecommendationCard";
@@ -65,50 +66,84 @@ const CATEGORY_META = {
 
 const IMPACT_BY_INDEX = ["high", "medium", "low", "low"];
 
+const SUGGESTION_ICON = {
+  Transportation: <Car className="h-5 w-5 text-red-500" />,
+  Electricity: <Zap className="h-5 w-5 text-amber-500" />,
+  Waste: <Recycle className="h-5 w-5 text-green-500" />,
+  Plastic: <ShoppingBag className="h-5 w-5 text-blue-500" />,
+  General: <Lightbulb className="h-5 w-5 text-slate-500" />,
+};
+
 const SuggestionsPage = () => {
   const navigate = useNavigate();
-  const result = useMemo(() => {
-    const stored = localStorage.getItem("ecotrack_result");
-    return stored ? JSON.parse(stored) : null;
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [suggestionData, setSuggestionData] = useState(null);
+
+  useEffect(() => {
+    const loadSuggestions = async () => {
+      try {
+        setError("");
+        const response = await generateSuggestions();
+        setSuggestionData(response?.data || null);
+      } catch (err) {
+        setError(err.message || "Could not load suggestions.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSuggestions();
   }, []);
 
-  const weekly = result?.totalCO2 ?? 42;
-  const ecoScore = result?.ecoScore ?? 72;
+  const results = suggestionData?.results || {};
+  const weekly = Number(results?.totalCO2 ?? 42);
+  const ecoScore = Number(results?.ecoScore ?? 72);
 
   const categoryValues = {
-    Transportation: Number(result?.transportCO2 ?? 18.9),
-    Electricity: Number(result?.electricityCO2 ?? 13.4),
-    Waste: Number(result?.wasteCO2 ?? 6.2),
-    Plastic: Number(result?.plasticCO2 ?? 3.5),
+    Transportation: Number(results?.transportCO2 ?? 18.9),
+    Electricity: Number(results?.electricityCO2 ?? 13.4),
+    Waste: Number(results?.wasteCO2 ?? 6.2),
+    Plastic: Number(results?.plasticCO2 ?? 3.5),
   };
 
-  const sortedCategories = Object.entries(categoryValues).sort((a, b) => b[1] - a[1]);
-  const totalCategoryCO2 = sortedCategories.reduce((sum, [, value]) => sum + value, 0) || 1;
+  const sortedCategories = Object.entries(categoryValues).sort(
+    (a, b) => b[1] - a[1],
+  );
   const topCategory = sortedCategories[0]?.[0] || "Transportation";
 
-  const recommendationItems = sortedCategories.slice(0, 3).map(([category, value], index) => {
-    const meta = CATEGORY_META[category];
-    const share = Math.round((value / totalCategoryCO2) * 100);
-    const monthlyReduction = Math.max(2, Math.round(value * 4 * meta.factor));
+  const recommendationItems = useMemo(() => {
+    const serverItems = suggestionData?.suggestions || [];
+    if (!serverItems.length) return [];
 
-    return {
-      category,
-      icon: meta.icon,
+    return serverItems.map((item, index) => ({
+      category: item.category,
+      icon: SUGGESTION_ICON[item.category] || SUGGESTION_ICON.General,
       impact: IMPACT_BY_INDEX[index] || "low",
-      title: meta.title,
-      description: `${meta.description} ${category} currently contributes ${share}% of your weekly footprint.`,
-      reduction: `Reduce ${monthlyReduction} kg CO2 / month`,
-      monthlyReduction,
-    };
-  });
+      title: item.title,
+      description: item.action,
+      reduction: `Reduce ${item.estimatedReductionKgPerWeek} kg CO2 / week`,
+      monthlyReduction: Math.round(Number(item.estimatedReductionKgPerWeek || 0) * 4),
+    }));
+  }, [suggestionData]);
 
-  const quickTips = [
-    ...sortedCategories.flatMap(([category]) => CATEGORY_META[category].tips),
-    "Track your score weekly to see improvement trends",
-  ].slice(0, 4);
+  const quickTips = useMemo(() => {
+    const fromServer = (suggestionData?.suggestions || []).map((item) => item.action);
+    const fallback = [
+      ...sortedCategories.flatMap(([category]) => CATEGORY_META[category].tips),
+      "Track your score weekly to see improvement trends",
+    ];
+    return [...fromServer, ...fallback].slice(0, 4);
+  }, [suggestionData, sortedCategories]);
 
-  const monthlyPotential = recommendationItems.reduce((sum, item) => sum + item.monthlyReduction, 0);
-  const savedWeekly = Math.max(2, Math.min(weekly * 0.4, Math.round(monthlyPotential / 4)));
+  const monthlyPotential = recommendationItems.reduce(
+    (sum, item) => sum + item.monthlyReduction,
+    0,
+  );
+  const savedWeekly = Math.max(
+    2,
+    Math.min(weekly * 0.4, Math.round(monthlyPotential / 4 || 0)),
+  );
   const projectedAfter = Math.max(8, Number((weekly - savedWeekly).toFixed(1)));
   const annualPotential = Math.round(savedWeekly * 52);
 
@@ -118,6 +153,40 @@ const SuggestionsPage = () => {
     <Recycle className="h-4 w-4 text-slate-500" />,
     <Thermometer className="h-4 w-4 text-slate-500" />,
   ];
+
+  if (loading) {
+    return (
+      <div className="font-sans">
+        <main className="px-4 py-6 md:py-8">
+          <div className="section-wrap max-w-6xl px-0 md:px-0">
+            <div className="surface-card p-6 text-sm text-slate-500">Loading suggestions...</div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="font-sans">
+        <main className="px-4 py-6 md:py-8">
+          <div className="section-wrap max-w-6xl px-0 md:px-0">
+            <div className="surface-card border-red-200 bg-red-50 p-6 text-center">
+              <h2 className="text-lg font-bold text-red-700">Could not load suggestions</h2>
+              <p className="mt-2 text-sm text-red-600">{error}</p>
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="mt-4 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="font-sans">
@@ -177,6 +246,7 @@ const SuggestionsPage = () => {
                 Did you know?
               </h3>
               <p className="text-sm text-slate-600">
+                {suggestionData?.insight?.summary ? `${suggestionData.insight.summary} ` : ""}
                 If you consistently apply these recommendations, your projected
                 savings are about {annualPotential} kg CO2 per year based on your
                 current footprint pattern.

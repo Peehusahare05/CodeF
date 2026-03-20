@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
+  calculate,
   saveResult,
   getHistory,
   getLeaderboard,
@@ -10,11 +11,13 @@ const {
 const { protect } = require("../middleware/authMiddleware");
 const validate = require("../middleware/validate");
 const {
+  inputSchema,
   saveResultSchema,
   historyQuerySchema,
   deleteParamsSchema,
 } = require("../validations/carbonValidation");
 
+router.post("/calculate", protect, validate(inputSchema), calculate);
 router.post("/save", protect, validate(saveResultSchema), saveResult);
 router.get(
   "/history",

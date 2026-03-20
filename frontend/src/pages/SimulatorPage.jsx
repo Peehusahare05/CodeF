@@ -1,14 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Car,
-  Zap,
-  Trash2,
-  ShoppingBag,
-  TrendingDown,
-  Lightbulb,
-  ArrowRight,
-} from "lucide-react";
+import { getCarbonHistory } from "../services/carbonService";
+import { calculateSimulation } from "../services/simulatorService";
 import PageHeader from "../components/simulator/PageHeader";
 import FootprintCard from "../components/simulator/FootprintCard";
 import ChartCard from "../components/simulator/ChartCard";
@@ -18,31 +11,32 @@ import SimulationControls from "../components/simulator/SimulationControls";
 import ComparisonCard from "../components/simulator/ComparisonCard";
 import CTASection from "../components/simulator/CTASection";
 
-const CARBON_FACTORS = {
-  transportation: 0.192,
-  electricity: 0.233,
-  waste: 0.198,
-  plastic: 0.156,
+const FALLBACK_BASELINE = {
+  transportCO2: 18.9,
+  electricityCO2: 13.4,
+  wasteCO2: 6.2,
+  plasticCO2: 3.5,
+  totalCO2: 42,
+  ecoScore: 72,
 };
+
+const toSimulationPayload = (baseline, changes) => ({
+  baseline,
+  adjustments: {
+    transportationPct: Number(changes.transportation || 0),
+    electricityPct: Number(changes.electricity || 0),
+    wastePct: Number(changes.waste || 0),
+    plasticPct: changes.plastic === "low" ? 60 : changes.plastic === "medium" ? 30 : 0,
+  },
+});
 
 const SimulatorPage = () => {
   const navigate = useNavigate();
-
-  // Fetch initial data from localStorage
-  const baselineData = (() => {
-    const stored = localStorage.getItem("ecotrack_result");
-    if (!stored) {
-      return {
-        totalCO2: 42,
-        ecoScore: 72,
-        transportCO2: 18.9,
-        electricityCO2: 13.4,
-        wasteCO2: 6.2,
-        plasticCO2: 3.5,
-      };
-    }
-    return JSON.parse(stored);
-  })();
+  const [baselineData, setBaselineData] = useState(null);
+  const [simulationData, setSimulationData] = useState(null);
+  const [loadingBaseline, setLoadingBaseline] = useState(true);
+  const [simulating, setSimulating] = useState(false);
+  const [error, setError] = useState("");
 
   // State for user changes
   const [changes, setChanges] = useState({
@@ -57,91 +51,129 @@ const SimulatorPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Calculate new values based on changes
+  useEffect(() => {
+    const loadBaseline = async () => {
+      try {
+        setError("");
+        const history = await getCarbonHistory(1, 1);
+        const latest = history?.data?.[0]?.results;
+
+        if (latest) {
+          setBaselineData({
+            transportCO2: Number(latest.transportCO2 ?? 0),
+            electricityCO2: Number(latest.electricityCO2 ?? 0),
+            wasteCO2: Number(latest.wasteCO2 ?? 0),
+            plasticCO2: Number(latest.plasticCO2 ?? 0),
+            totalCO2: Number(latest.totalCO2 ?? 0),
+            ecoScore: Number(latest.ecoScore ?? 0),
+          });
+        } else {
+          setBaselineData(FALLBACK_BASELINE);
+        }
+      } catch (err) {
+        setError(err.message || "Could not load baseline data.");
+        setBaselineData(FALLBACK_BASELINE);
+      } finally {
+        setLoadingBaseline(false);
+      }
+    };
+
+    loadBaseline();
+  }, []);
+
+  useEffect(() => {
+    if (!baselineData) return;
+
+    let active = true;
+
+    const runSimulation = async () => {
+      try {
+        setSimulating(true);
+        const response = await calculateSimulation(
+          toSimulationPayload(baselineData, changes),
+        );
+        if (active) {
+          setSimulationData(response?.data || null);
+        }
+      } catch (err) {
+        if (active) {
+          setError(err.message || "Could not calculate simulation.");
+        }
+      } finally {
+        if (active) {
+          setSimulating(false);
+        }
+      }
+    };
+
+    runSimulation();
+
+    return () => {
+      active = false;
+    };
+  }, [baselineData, changes]);
+
+  // Build dashboard-friendly simulation data
   const calculations = useMemo(() => {
-    const baseTransport = baselineData.transportCO2 || 18.9;
-    const baseElectric = baselineData.electricityCO2 || 13.4;
-    const baseWaste = baselineData.wasteCO2 || 6.2;
-    const basePlastic = baselineData.plasticCO2 || 3.5;
+    const baseline = baselineData || FALLBACK_BASELINE;
+    const projected = simulationData?.projected || baseline;
+    const reduction = simulationData?.reduction || {
+      reducedByKgPerWeek: 0,
+      reducedByPercent: 0,
+      ecoScoreDelta: 0,
+    };
 
-    // Calculate reductions
-    const transportReduction = (baseTransport * changes.transportation) / 100;
-    const electricReduction = (baseElectric * changes.electricity) / 100;
-    const wasteReduction = (baseWaste * changes.waste) / 100;
+    const totalReduction = Number(reduction.reducedByKgPerWeek || 0);
+    const reductionPercent = Number(reduction.reducedByPercent || 0);
+    const scoreImprovement = Number(reduction.ecoScoreDelta || 0);
 
-    let plasticReduction = 0;
-    if (changes.plastic === "low") plasticReduction = basePlastic * 0.6;
-    else if (changes.plastic === "medium") plasticReduction = basePlastic * 0.3;
-
-    const newTransport = Math.max(0, baseTransport - transportReduction);
-    const newElectric = Math.max(0, baseElectric - electricReduction);
-    const newWaste = Math.max(0, baseWaste - wasteReduction);
-    const newPlastic = Math.max(0, basePlastic - plasticReduction);
-
-    const totalReduction =
-      transportReduction + electricReduction + wasteReduction + plasticReduction;
-    const currentWeekly = baselineData.totalCO2 || 42;
-    const newWeekly = Math.max(0, currentWeekly - totalReduction);
-    const reductionPercent =
-      currentWeekly > 0 ? Math.round((totalReduction / currentWeekly) * 100) : 0;
-
-    // Calculate new eco score (progressive improvement)
-    const baseEcoScore = baselineData.ecoScore || 72;
-    const maxEcoScore = 100;
-    const scoreImprovement = Math.min(
-      maxEcoScore - baseEcoScore,
-      (reductionPercent / 100) * 28 + (reductionPercent > 20 ? 5 : 0)
-    );
-    const newEcoScore = Math.round(baseEcoScore + scoreImprovement);
-
-    // Calculate monthly and yearly savings
-    const monthlySavings = totalReduction * 4.33;
-    const yearlySavings = totalReduction * 52;
-    const costSavings = yearlySavings * 0.18; // ~$0.18 per kg CO2 saved
+    const monthlySavings = Number((totalReduction * 4.33).toFixed(2));
+    const yearlySavings = Number((totalReduction * 52).toFixed(2));
+    const costSavings = Number((yearlySavings * 0.18).toFixed(2));
 
     return {
-      baselineWeekly: currentWeekly,
-      newWeekly,
+      baselineWeekly: Number(baseline.totalCO2 || 0),
+      newWeekly: Number(projected.totalCO2 || 0),
       totalReduction,
       reductionPercent,
-      baselineEcoScore: baseEcoScore,
-      newEcoScore,
-      scoreImprovement: Math.round(scoreImprovement),
+      baselineEcoScore: Number(baseline.ecoScore || 0),
+      newEcoScore: Number(projected.ecoScore || 0),
+      scoreImprovement,
       monthlySavings,
       yearlySavings,
       costSavings,
       breakdown: {
         transportation: {
-          current: baseTransport,
-          after: newTransport,
-          reduction: transportReduction,
+          current: Number(baseline.transportCO2 || 0),
+          after: Number(projected.transportCO2 || 0),
+          reduction: Number((baseline.transportCO2 || 0) - (projected.transportCO2 || 0)),
           icon: "🚗",
           name: "Transportation",
         },
         electricity: {
-          current: baseElectric,
-          after: newElectric,
-          reduction: electricReduction,
+          current: Number(baseline.electricityCO2 || 0),
+          after: Number(projected.electricityCO2 || 0),
+          reduction: Number((baseline.electricityCO2 || 0) - (projected.electricityCO2 || 0)),
           icon: "⚡",
           name: "Electricity",
         },
         waste: {
-          current: baseWaste,
-          after: newWaste,
-          reduction: wasteReduction,
+          current: Number(baseline.wasteCO2 || 0),
+          after: Number(projected.wasteCO2 || 0),
+          reduction: Number((baseline.wasteCO2 || 0) - (projected.wasteCO2 || 0)),
           icon: "♻️",
           name: "Waste",
         },
         plastic: {
-          current: basePlastic,
-          after: newPlastic,
-          reduction: plasticReduction,
+          current: Number(baseline.plasticCO2 || 0),
+          after: Number(projected.plasticCO2 || 0),
+          reduction: Number((baseline.plasticCO2 || 0) - (projected.plasticCO2 || 0)),
           icon: "🛍️",
           name: "Plastic",
         },
       },
     };
-  }, [changes, baselineData]);
+  }, [baselineData, simulationData]);
 
   // Generate dynamic insights
   const insights = useMemo(() => {
@@ -211,25 +243,29 @@ const SimulatorPage = () => {
   };
 
   const handleApply = () => {
-    // Save simulation results and navigate to dashboard
-    const simulationResult = {
-      timestamp: new Date().toISOString(),
-      baseline: calculations.baselineWeekly,
-      projected: calculations.newWeekly,
-      reduction: calculations.totalReduction,
-      reductionPercent: calculations.reductionPercent,
-      baselineEcoScore: calculations.baselineEcoScore,
-      newEcoScore: calculations.newEcoScore,
-      changes,
-    };
-    localStorage.setItem("simulator_result", JSON.stringify(simulationResult));
     navigate("/dashboard");
   };
+
+  if (loadingBaseline) {
+    return (
+      <div className="min-h-screen bg-slate-50 px-4 py-8">
+        <div className="mx-auto max-w-7xl rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
+          Loading simulator baseline...
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <PageHeader onReset={handleReset} />
+
+        {error && (
+          <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
+            {error}
+          </div>
+        )}
 
         {/* Content Grid */}
         <div className="space-y-8">
@@ -287,6 +323,12 @@ const SimulatorPage = () => {
               cost: calculations.costSavings,
             }}
           />
+
+          {simulating && (
+            <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-500">
+              Recalculating simulation...
+            </div>
+          )}
 
           {/* CTA Section */}
           <CTASection onApply={handleApply} onViewDashboard={() => navigate("/dashboard")} />

@@ -1,25 +1,32 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-const protect = async (req, res, next) => {
-  let token;
-
+const getTokenFromRequest = (req) => {
   if (req.cookies && req.cookies.ecotrack_token) {
-    token = req.cookies.ecotrack_token;
+    return req.cookies.ecotrack_token;
   }
 
   if (
-    !token &&
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
-    token = req.headers.authorization.split(" ")[1];
+    return req.headers.authorization.split(" ")[1];
   }
+
+  return null;
+};
+
+const attachUserFromToken = async (token) => {
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  return User.findById(decoded.id).select("-password");
+};
+
+const protect = async (req, res, next) => {
+  const token = getTokenFromRequest(req);
 
   if (token) {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select("-password");
+      req.user = await attachUserFromToken(token);
       if (!req.user) {
         return res
           .status(401)
@@ -40,4 +47,20 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const optionalProtect = async (req, res, next) => {
+  const token = getTokenFromRequest(req);
+
+  if (!token) {
+    return next();
+  }
+
+  try {
+    req.user = await attachUserFromToken(token);
+  } catch (_error) {
+    req.user = null;
+  }
+
+  return next();
+};
+
+module.exports = { protect, optionalProtect };

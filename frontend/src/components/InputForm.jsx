@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  calculateCarbon,
-  generateInsight,
-  generateTrend,
-} from "../utils/carbonCalculator";
-import { apiFetch } from "../utils/api";
+  calculateCarbon as calculateCarbonApi,
+  saveCarbonResult,
+} from "../services/carbonService";
 import {
   BarChart3,
   Car,
@@ -89,6 +87,12 @@ const FORM_STEPS = [
   },
 ];
 
+const generateTrendFromTotal = (totalCO2) => [
+  { week: "Week 1", value: Number((totalCO2 * 1.19).toFixed(1)) },
+  { week: "Week 2", value: Number((totalCO2 * 1.1).toFixed(1)) },
+  { week: "Week 3", value: Number(totalCO2) },
+];
+
 const InputForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -106,6 +110,7 @@ const InputForm = () => {
   const [direction, setDirection] = useState(1);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const validateAll = () => {
     const e = {};
@@ -161,10 +166,12 @@ const InputForm = () => {
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
+    setSubmitError("");
   };
 
   const handlePlastic = (value) => {
     setForm((prev) => ({ ...prev, plastic: value }));
+    setSubmitError("");
   };
 
   const handleNext = () => {
@@ -199,57 +206,57 @@ const InputForm = () => {
     }
 
     setLoading(true);
+    setSubmitError("");
 
-    const result = calculateCarbon({
+    const inputs = {
       transportType: form.transportType,
       distance: Number(form.distance),
       electricity: Number(form.electricity),
       waste: Number(form.waste),
       plastic: form.plastic,
-    });
-
-    const insight = generateInsight(result);
-    const trend = generateTrend(result.totalCO2);
-
-    const payload = {
-      ...result,
-      insight,
-      trend,
-      inputs: { ...form },
     };
 
-    localStorage.setItem("ecotrack_result", JSON.stringify(payload));
-
     try {
-      await apiFetch("/api/carbon/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          inputs: { ...form },
-          results: {
-            transportCO2: result.transportCO2,
-            electricityCO2: result.electricityCO2,
-            wasteCO2: result.wasteCO2,
-            plasticCO2: result.plasticCO2,
-            totalCO2: result.totalCO2,
-            ecoScore: result.ecoScore,
-          },
-          insight,
-          trend,
-        }),
-      });
-    } catch (err) {
-      console.warn("Could not save result to backend:", err.message);
-    }
+      const calculateResponse = await calculateCarbonApi(inputs);
+      const results = calculateResponse?.data?.results;
+      const insightSummary =
+        calculateResponse?.data?.insight?.summary ||
+        "Your latest footprint has been calculated successfully.";
 
-    if (requestedFeature === "advisor") {
-      navigate("/ai-advisor");
-    } else if (requestedFeature === "simulator") {
-      navigate("/reduction-simulator");
-    } else {
-      navigate("/dashboard");
+      if (!results) {
+        throw new Error("Could not calculate footprint from server.");
+      }
+
+      const trend = generateTrendFromTotal(results.totalCO2);
+
+      const payload = {
+        ...results,
+        insight: insightSummary,
+        trend,
+        inputs,
+      };
+
+      localStorage.setItem("ecotrack_result", JSON.stringify(payload));
+
+      await saveCarbonResult({
+        inputs,
+        results,
+        insight: insightSummary,
+        trend,
+      });
+
+      if (requestedFeature === "advisor") {
+        navigate("/ai-advisor");
+      } else if (requestedFeature === "simulator") {
+        navigate("/reduction-simulator");
+      } else {
+        navigate("/dashboard");
+      }
+    } catch (err) {
+      console.warn("Submit flow failed:", err.message);
+      setSubmitError(err.message || "Could not process your data. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -317,6 +324,12 @@ const InputForm = () => {
               description={activeStep.description}
               Icon={activeStep.Icon}
             >
+              {submitError && (
+                <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                  {submitError}
+                </div>
+              )}
+
               {stepContent}
 
               <NavigationButtons

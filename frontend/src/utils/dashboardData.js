@@ -1,44 +1,3 @@
-export function readDashboardData() {
-  try {
-    const raw = localStorage.getItem("ecotrack_result");
-    if (!raw) return null;
-
-    const parsed = JSON.parse(raw);
-    const numbers = {
-      transport: Number(
-        parsed.transportCO2 ?? parsed.results?.transportCO2 ?? 0,
-      ),
-      electricity: Number(
-        parsed.electricityCO2 ?? parsed.results?.electricityCO2 ?? 0,
-      ),
-      waste: Number(parsed.wasteCO2 ?? parsed.results?.wasteCO2 ?? 0),
-      plastic: Number(parsed.plasticCO2 ?? parsed.results?.plasticCO2 ?? 0),
-      total: Number(parsed.totalCO2 ?? parsed.results?.totalCO2 ?? 0),
-      ecoScore: Number(parsed.ecoScore ?? parsed.results?.ecoScore ?? 0),
-    };
-
-    if (Number.isNaN(numbers.total) || numbers.total <= 0) {
-      return null;
-    }
-
-    return {
-      values: {
-        transport: round2(numbers.transport),
-        electricity: round2(numbers.electricity),
-        waste: round2(numbers.waste),
-        plastic: round2(numbers.plastic),
-        total: round2(numbers.total),
-        ecoScore: clamp(Math.round(numbers.ecoScore), 0, 100),
-      },
-      trend: parsed.trend,
-      insight: parsed.insight,
-      inputs: parsed.inputs || {},
-    };
-  } catch {
-    return null;
-  }
-}
-
 export function getImpactLevel(total) {
   if (total < 45) {
     return { label: "Low Impact", tone: "emerald" };
@@ -160,12 +119,4 @@ function toSentence(value) {
 
 function round1(value) {
   return Math.round(value * 10) / 10;
-}
-
-function round2(value) {
-  return Math.round(value * 100) / 100;
-}
-
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
 }
