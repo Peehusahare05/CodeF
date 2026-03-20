@@ -2,13 +2,13 @@ import React from "react";
 import { Brain, RotateCcw } from "lucide-react";
 
 const PageHeader = ({ onRecalculate }) => (
-  <section className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+  <section className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
     <div>
-      <div className="flex items-center gap-3 mb-2">
-        <span className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-          <Brain className="w-5 h-5 text-green-700" />
+      <div className="mb-2 flex items-center gap-3">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100">
+          <Brain className="h-5 w-5 text-slate-700" />
         </span>
-        <h1 className="text-3xl font-extrabold text-slate-900">
+        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
           AI Sustainability Suggestions
         </h1>
       </div>
@@ -18,9 +18,9 @@ const PageHeader = ({ onRecalculate }) => (
     </div>
     <button
       onClick={onRecalculate}
-      className="btn-primary gap-2 px-6 py-3"
+      className="btn-secondary gap-2 px-6 py-3"
     >
-      <RotateCcw className="w-4 h-4" />
+      <RotateCcw className="h-4 w-4" />
       Recalculate Insights
     </button>
   </section>

@@ -1,36 +1,44 @@
 import React from "react";
-import { AlertCircle } from "lucide-react";
+import { Activity, Leaf, TrendingUp } from "lucide-react";
 
-const ImpactCard = ({ weekly = 42, ecoScore = 72, insight }) => (
-  <div className="surface-card border-l-4 border-l-green-600 p-6">
-    <h2 className="text-xl font-bold text-slate-900 mb-5">
-      Your Current Environmental Impact
-    </h2>
-    <div className="grid grid-cols-2 gap-6 mb-5">
+const ImpactCard = ({ weekly = 42, ecoScore = 72, topCategory = "Transportation" }) => (
+  <div className="surface-card border-slate-200 p-5 shadow-sm md:p-6">
+    <div className="mb-5 flex items-center justify-between gap-3">
       <div>
-        <p className="text-xs uppercase tracking-widest text-slate-400 font-semibold">
-          Weekly Footprint
-        </p>
-        <p className="text-4xl font-extrabold text-slate-900">
-          {weekly}{" "}
-          <span className="text-lg text-slate-400 font-bold">
-            kg CO2 / week
-          </span>
-        </p>
+        <h2 className="text-2xl font-bold tracking-tight text-slate-900">Suggestions Summary</h2>
+        <p className="mt-1 text-sm text-slate-500">Key signals from your latest footprint analysis</p>
       </div>
-      <div>
-        <p className="text-xs uppercase tracking-widest text-slate-400 font-semibold">
-          Eco Score
-        </p>
-        <p className="text-4xl font-extrabold text-green-600">
-          {ecoScore}{" "}
-          <span className="text-lg text-slate-300 font-bold">/ 100</span>
-        </p>
+      <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-green-50 text-green-700">
+        <Activity className="h-5 w-5" />
+      </span>
+    </div>
+
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">Total CO2</p>
+        <p className="mt-2 text-3xl font-extrabold text-slate-900">{weekly}</p>
+        <p className="text-xs font-medium text-slate-500">kg/week</p>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">Eco Score</p>
+        <p className="mt-2 text-3xl font-extrabold text-green-700">{ecoScore}</p>
+        <p className="text-xs font-medium text-slate-500">out of 100</p>
+      </div>
+
+      <div className="rounded-xl border border-slate-200 bg-white p-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">Top Category</p>
+        <p className="mt-2 text-2xl font-bold text-slate-900">{topCategory}</p>
+        <div className="mt-1 inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600">
+          <TrendingUp className="h-3.5 w-3.5" />
+          Highest contributor
+        </div>
       </div>
     </div>
-    <div className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
-      <AlertCircle className="w-4 h-4 text-amber-500" />
-      <p className="text-sm text-slate-700">{insight}</p>
+
+    <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-green-100 bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700">
+      <Leaf className="h-3.5 w-3.5" />
+      Prioritize {topCategory.toLowerCase()} suggestions for fastest weekly reduction
     </div>
   </div>
 );

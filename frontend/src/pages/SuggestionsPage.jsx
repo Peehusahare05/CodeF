@@ -11,11 +11,59 @@ import {
 } from "lucide-react";
 import PageHeader from "../components/suggestions/PageHeader";
 import ImpactCard from "../components/suggestions/ImpactCard";
-import ImpactAreaCard from "../components/suggestions/ImpactAreaCard";
 import RecommendationCard from "../components/suggestions/RecommendationCard";
 import EcoTipCard from "../components/suggestions/EcoTipCard";
 import SimulationCard from "../components/suggestions/SimulationCard";
 import CTASection from "../components/suggestions/CTASection";
+
+const CATEGORY_META = {
+  Transportation: {
+    icon: <Car className="h-5 w-5 text-red-500" />,
+    title: "Use Public Transport Weekly",
+    description:
+      "Replace short private-vehicle trips with bus, metro, cycling, or walking to reduce commute emissions.",
+    factor: 0.3,
+    tips: [
+      "Batch errands into one route to avoid extra trips",
+      "Use public transport for at least 2 weekly commutes",
+    ],
+  },
+  Electricity: {
+    icon: <Zap className="h-5 w-5 text-amber-500" />,
+    title: "Reduce Electricity Consumption",
+    description:
+      "Cut idle appliance usage and shift to efficient devices to bring down home energy footprint.",
+    factor: 0.24,
+    tips: [
+      "Switch off standby devices before sleep",
+      "Use LED bulbs and natural light where possible",
+    ],
+  },
+  Waste: {
+    icon: <Recycle className="h-5 w-5 text-green-500" />,
+    title: "Improve Waste Habits",
+    description:
+      "Segregate organic and recyclable waste to reduce landfill methane emissions.",
+    factor: 0.22,
+    tips: [
+      "Start a small kitchen compost routine",
+      "Separate dry and wet waste daily",
+    ],
+  },
+  Plastic: {
+    icon: <ShoppingBag className="h-5 w-5 text-blue-500" />,
+    title: "Cut Single-Use Plastic",
+    description:
+      "Reduce disposable packaging with reusables and better purchase planning.",
+    factor: 0.2,
+    tips: [
+      "Carry reusable bags and bottles",
+      "Choose low-packaging products",
+    ],
+  },
+};
+
+const IMPACT_BY_INDEX = ["high", "medium", "low", "low"];
 
 const SuggestionsPage = () => {
   const navigate = useNavigate();
@@ -27,99 +75,119 @@ const SuggestionsPage = () => {
   const weekly = result?.totalCO2 ?? 42;
   const ecoScore = result?.ecoScore ?? 72;
 
+  const categoryValues = {
+    Transportation: Number(result?.transportCO2 ?? 18.9),
+    Electricity: Number(result?.electricityCO2 ?? 13.4),
+    Waste: Number(result?.wasteCO2 ?? 6.2),
+    Plastic: Number(result?.plasticCO2 ?? 3.5),
+  };
+
+  const sortedCategories = Object.entries(categoryValues).sort((a, b) => b[1] - a[1]);
+  const totalCategoryCO2 = sortedCategories.reduce((sum, [, value]) => sum + value, 0) || 1;
+  const topCategory = sortedCategories[0]?.[0] || "Transportation";
+
+  const recommendationItems = sortedCategories.slice(0, 3).map(([category, value], index) => {
+    const meta = CATEGORY_META[category];
+    const share = Math.round((value / totalCategoryCO2) * 100);
+    const monthlyReduction = Math.max(2, Math.round(value * 4 * meta.factor));
+
+    return {
+      category,
+      icon: meta.icon,
+      impact: IMPACT_BY_INDEX[index] || "low",
+      title: meta.title,
+      description: `${meta.description} ${category} currently contributes ${share}% of your weekly footprint.`,
+      reduction: `Reduce ${monthlyReduction} kg CO2 / month`,
+      monthlyReduction,
+    };
+  });
+
+  const quickTips = [
+    ...sortedCategories.flatMap(([category]) => CATEGORY_META[category].tips),
+    "Track your score weekly to see improvement trends",
+  ].slice(0, 4);
+
+  const monthlyPotential = recommendationItems.reduce((sum, item) => sum + item.monthlyReduction, 0);
+  const savedWeekly = Math.max(2, Math.min(weekly * 0.4, Math.round(monthlyPotential / 4)));
+  const projectedAfter = Math.max(8, Number((weekly - savedWeekly).toFixed(1)));
+  const annualPotential = Math.round(savedWeekly * 52);
+
+  const tipIcons = [
+    <Lightbulb className="h-4 w-4 text-slate-500" />,
+    <Droplet className="h-4 w-4 text-slate-500" />,
+    <Recycle className="h-4 w-4 text-slate-500" />,
+    <Thermometer className="h-4 w-4 text-slate-500" />,
+  ];
+
   return (
     <div className="font-sans">
       <main className="px-4 py-6 md:py-8">
         <div className="section-wrap max-w-6xl px-0 md:px-0">
           <PageHeader onRecalculate={() => navigate("/track")} />
 
-          <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-5 md:mb-7">
-            <div className="lg:col-span-2">
-              <ImpactCard
-                weekly={weekly}
-                ecoScore={ecoScore}
-                insight="Transportation contributes the largest share of your emissions."
-              />
-            </div>
-            <ImpactAreaCard category="Transportation" share={45} />
-          </div>
+          <section className="mb-6 md:mb-7">
+            <ImpactCard weekly={weekly} ecoScore={ecoScore} topCategory={topCategory} />
+          </section>
 
-          <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-5 md:mb-7">
-            <div className="lg:col-span-2">
-              <h2 className="mb-3 text-2xl font-bold text-slate-900 md:mb-4 md:text-3xl">
+          <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-12 md:mb-7">
+            <div className="lg:col-span-8">
+              <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 md:mb-4 md:text-3xl">
                 AI Recommendations
               </h2>
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4">
-                <RecommendationCard
-                  icon={<Car className="w-5 h-5 text-red-500" />}
-                  impact="high"
-                  title="Use Public Transport Weekly"
-                  description="Swap your daily commute for bus or train rides to significantly lower transit emissions."
-                  reduction="Reduce 12 kg CO2 / month"
-                />
-                <RecommendationCard
-                  icon={<Zap className="w-5 h-5 text-amber-500" />}
-                  impact="medium"
-                  title="Reduce Electricity Consumption"
-                  description="Unplug standby devices and switch to LED bulbs to optimize home energy usage."
-                  reduction="Reduce 8 kg CO2 / month"
-                />
-                <RecommendationCard
-                  icon={<ShoppingBag className="w-5 h-5 text-blue-500" />}
-                  impact="low"
-                  title="Switch to Reusable Bags"
-                  description="Carry a cloth bag for grocery runs to eliminate single-use plastic waste."
-                  reduction="Reduce 4 kg CO2 / month"
-                />
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                {recommendationItems.map((item) => (
+                  <RecommendationCard
+                    key={item.category}
+                    icon={item.icon}
+                    impact={item.impact}
+                    title={item.title}
+                    description={item.description}
+                    reduction={item.reduction}
+                  />
+                ))}
               </div>
             </div>
 
-            <aside>
-              <h2 className="mb-3 text-2xl font-bold text-slate-900 md:mb-4 md:text-3xl">
+            <aside className="lg:col-span-4">
+              <h3 className="mb-3 text-xl font-bold tracking-tight text-slate-900 md:mb-4">
                 Quick Eco-Tips
-              </h2>
-              <div className="space-y-3">
-                <EcoTipCard
-                  icon={<Lightbulb className="w-4 h-4 text-slate-500" />}
-                  tip="Turn off lights when leaving"
-                />
-                <EcoTipCard
-                  icon={<Droplet className="w-4 h-4 text-slate-500" />}
-                  tip="Use reusable water bottles"
-                />
-                <EcoTipCard
-                  icon={<Recycle className="w-4 h-4 text-slate-500" />}
-                  tip="Start a kitchen compost bin"
-                />
-                <EcoTipCard
-                  icon={<Thermometer className="w-4 h-4 text-slate-500" />}
-                  tip="Lower heat by 1-2 degrees"
-                />
+              </h3>
+              <div className="space-y-2.5">
+                {quickTips.map((tip, index) => (
+                  <EcoTipCard
+                    key={`${tip}-${index}`}
+                    icon={tipIcons[index % tipIcons.length]}
+                    tip={tip}
+                  />
+                ))}
               </div>
             </aside>
-          </div>
+          </section>
 
-          <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3 lg:gap-5 md:mb-7">
-            <div className="lg:col-span-2">
+          <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-12 md:mb-7">
+            <div className="lg:col-span-8">
               <SimulationCard
                 current={weekly}
-                after={Math.max(weekly - 12, 10)}
-                saved={12}
+                after={projectedAfter}
+                saved={savedWeekly}
               />
             </div>
-            <div className="surface-card self-start border-green-100 bg-green-50 p-6">
-              <h3 className="mb-2 text-xl font-bold text-green-800 md:text-2xl">
+            <div className="surface-card self-start border-slate-200 bg-white p-5 shadow-sm lg:col-span-4">
+              <h3 className="mb-2 text-lg font-bold text-slate-900 md:text-xl">
                 Did you know?
               </h3>
-              <p className="text-sm text-green-900/80">
-                The average person generates 7 tons of CO2 annually. By following
-                these suggestions, you can reduce your emissions significantly
-                over the year.
+              <p className="text-sm text-slate-600">
+                If you consistently apply these recommendations, your projected
+                savings are about {annualPotential} kg CO2 per year based on your
+                current footprint pattern.
               </p>
             </div>
-          </div>
+          </section>
 
-          <CTASection />
+          <CTASection
+            onApply={() => navigate("/track")}
+            onViewDashboard={() => navigate("/dashboard")}
+          />
         </div>
       </main>
     </div>
