@@ -16,8 +16,6 @@ import RecommendationCard from "../components/suggestions/RecommendationCard";
 import EcoTipCard from "../components/suggestions/EcoTipCard";
 import SimulationCard from "../components/suggestions/SimulationCard";
 import CTASection from "../components/suggestions/CTASection";
-import Footer from "../components/suggestions/Footer";
-import Navbar from "../components/Navbar";
 
 const SuggestionsPage = () => {
   const navigate = useNavigate();
@@ -30,10 +28,8 @@ const SuggestionsPage = () => {
   const ecoScore = result?.ecoScore ?? 72;
 
   return (
-    <div className="page-shell font-sans">
-      <Navbar />
-
-      <main className="page-main px-4 py-6 md:py-8">
+    <div className="font-sans">
+      <main className="px-4 py-6 md:py-8">
         <div className="section-wrap max-w-6xl px-0 md:px-0">
           <PageHeader onRecalculate={() => navigate("/track")} />
 
@@ -124,7 +120,6 @@ const SuggestionsPage = () => {
           </div>
 
           <CTASection />
-          <Footer />
         </div>
       </main>
     </div>

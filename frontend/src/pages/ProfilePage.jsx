@@ -10,7 +10,6 @@ import {
   Star,
   User,
 } from "lucide-react";
-import Navbar from "../components/Navbar";
 
 const ProfileLineChart = lazy(() =>
   import("../components/charts/ChartWidgets").then((module) => ({
@@ -275,10 +274,8 @@ const ProfilePage = () => {
   if (!user) return null;
 
   return (
-    <div className="page-shell font-sans">
-      <Navbar />
-
-      <main className="page-main section-wrap max-w-4xl py-8 md:py-10">
+    <div className="font-sans">
+      <main className="section-wrap max-w-4xl py-8 md:py-10">
         {/* Profile Header */}
         <div className="surface-card mb-6 flex flex-col items-center gap-5 p-5 sm:p-6 md:mb-8 md:flex-row md:gap-6">
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-600 text-4xl font-extrabold uppercase text-white">
@@ -558,11 +555,6 @@ const ProfilePage = () => {
           </div>
         )}
       </main>
-
-      <footer className="mt-auto text-center py-8 text-slate-400 text-sm">
-        © 2024 Environmental Impact Tracker. Powered by Sustainable Analytics
-        AI.
-      </footer>
     </div>
   );
 };

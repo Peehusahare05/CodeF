@@ -8,8 +8,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState(() => {
-    const stored = localStorage.getItem("ecotrack_user");
-    return stored ? JSON.parse(stored) : null;
+    const stored = localStorage.getItem("ecotrack_user");    return stored ? JSON.parse(stored) : null;
   });
 
   const handleLogout = () => {

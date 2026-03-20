@@ -9,7 +9,6 @@ import {
   RefreshCw,
   Zap,
 } from "lucide-react";
-import Navbar from "../components/Navbar";
 
 const EcoAIChatbot = lazy(() => import("../components/EcoAIChatbot"));
 const DashboardDonutChart = lazy(() =>
@@ -192,10 +191,8 @@ const Dashboard = () => {
   const pct = (v) => ((v / totalPie) * 100).toFixed(0);
 
   return (
-    <div className="page-shell font-sans">
-      <Navbar />
-
-      <main className="page-main section-wrap max-w-5xl py-6 md:py-10">
+    <div className="font-sans">
+      <main className="section-wrap max-w-5xl py-6 md:py-10">
         {/* Page title */}
         <div className="mb-6 md:mb-8">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900">
@@ -417,11 +414,6 @@ const Dashboard = () => {
           </button>
         </div>
       </main>
-
-      <footer className="mt-auto text-center py-8 text-slate-400 text-sm">
-        © 2024 Environmental Impact Tracker. Powered by Sustainable Analytics
-        AI.
-      </footer>
       {/* Floating AI Chatbot */}
       <Suspense fallback={null}>
         <EcoAIChatbot />

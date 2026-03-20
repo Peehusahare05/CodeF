@@ -10,13 +10,11 @@ import {
   Bolt,
   Recycle,
 } from "lucide-react";
-import Navbar from "../components/Navbar";
 import StatCard from "../components/StatCard";
 import TopRankCard from "../components/TopRankCard";
 import LeaderboardRow from "../components/LeaderboardRow";
 import BadgeCard from "../components/BadgeCard";
 import CTASection from "../components/CTASection";
-import Footer from "../components/Footer";
 import { apiFetch } from "../utils/api";
 
 // badge sets assigned by rank position
@@ -129,112 +127,106 @@ const LeaderboardPage = () => {
   const rest = displayed.slice(3);
 
   return (
-    <div className="page-shell font-sans">
-      <Navbar />
+    <div className="font-sans">
 
-      <main className="page-main">
-
-        {/* Page Header */}
-        <section className="section-wrap max-w-6xl pb-6 pt-8 md:pt-10">
-          <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Trophy className="w-5 h-5 text-green-600" />
-                <span className="text-xs font-semibold text-green-600 tracking-widest">
-                  GLOBAL RANKING
-                </span>
-              </div>
-              <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-900 md:text-4xl">
-                Community Leaderboard
-              </h1>
-              <p className="max-w-lg text-sm text-slate-600 md:text-base">
-                Discover the top eco-conscious users making the biggest impact in
-                reducing their carbon footprint.
-              </p>
-            </div>
-            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:gap-3">
-              <button className="btn-secondary w-full gap-2 px-4 py-2 sm:w-auto">
-                Campus Leaderboard <ChevronDown className="w-4 h-4" />
-              </button>
-              <button className="btn-secondary w-full gap-2 px-4 py-2 sm:w-auto">
-                City Leaderboard <ChevronDown className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats Cards */}
-        <section className="section-wrap mb-8 grid max-w-6xl grid-cols-1 gap-4 md:mb-10 md:gap-6 md:grid-cols-3">
-          {statsData.map((s, i) => (
-            <StatCard key={i} {...s} />
-          ))}
-        </section>
-
-        {/* Top 3 Podium */}
-        {!loading && top3Podium.length > 0 && (
-          <section className="section-wrap mb-8 max-w-6xl md:mb-10">
-            <div className="flex flex-col items-stretch justify-center gap-5 md:flex-row md:items-end md:gap-6">
-              {top3Podium.map((u) => (
-                <TopRankCard
-                  key={u.rank}
-                  rank={u.rank}
-                  name={u.name}
-                  score={u.avgEcoScore}
-                  badge={RANK_BADGE[u.rank - 1] || "bronze"}
-                  large={u.rank === 1}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Community Rankings Table */}
-        {!loading && rest.length > 0 && (
-          <section className="section-wrap mb-10 max-w-4xl md:mb-12">
-            <h2 className="mb-3 flex items-center gap-2 text-base font-bold text-slate-900 md:mb-4 md:text-lg">
+      {/* Page Header */}
+      <section className="section-wrap max-w-6xl pb-6 pt-8 md:pt-10">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
               <Trophy className="w-5 h-5 text-green-600" />
-              Community Rankings
-            </h2>
-            <div className="surface-card overflow-hidden">
-              <div className="hidden sm:grid sm:grid-cols-12 gap-2 border-b bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-500 md:px-6 md:text-xs">
-                <div className="col-span-1">RANK</div>
-                <div className="col-span-4">USER</div>
-                <div className="col-span-4">BADGES</div>
-                <div className="col-span-3 text-right">SCORE</div>
-              </div>
-              {rest.map((u, i) => (
-                <LeaderboardRow
-                  key={u.rank}
-                  rank={u.rank}
-                  name={u.name}
-                  score={u.avgEcoScore}
-                  badges={BADGE_SETS[i % BADGE_SETS.length]}
-                />
-              ))}
+              <span className="text-xs font-semibold text-green-600 tracking-widest">
+                GLOBAL RANKING
+              </span>
             </div>
-          </section>
-        )}
+            <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-900 md:text-4xl">
+              Community Leaderboard
+            </h1>
+            <p className="max-w-lg text-sm text-slate-600 md:text-base">
+              Discover the top eco-conscious users making the biggest impact in
+              reducing their carbon footprint.
+            </p>
+          </div>
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:gap-3">
+            <button className="btn-secondary w-full gap-2 px-4 py-2 sm:w-auto">
+              Campus Leaderboard <ChevronDown className="w-4 h-4" />
+            </button>
+            <button className="btn-secondary w-full gap-2 px-4 py-2 sm:w-auto">
+              City Leaderboard <ChevronDown className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </section>
 
-        {loading && (
-          <div className="py-12 text-center text-sm text-slate-400 md:py-16">Loading leaderboard...</div>
-        )}
+      {/* Stats Cards */}
+      <section className="section-wrap mb-8 grid max-w-6xl grid-cols-1 gap-4 md:mb-10 md:gap-6 md:grid-cols-3">
+        {statsData.map((s, i) => (
+          <StatCard key={i} {...s} />
+        ))}
+      </section>
 
-        {/* Badges */}
-        <section className="section-wrap mb-10 max-w-6xl md:mb-12">
-          <h2 className="mb-3 text-base font-bold text-slate-900 md:mb-4 md:text-lg">
-            Sustainability Achievement Badges
-          </h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-6">
-            {badges.map((b, i) => (
-              <BadgeCard key={i} {...b} />
+      {/* Top 3 Podium */}
+      {!loading && top3Podium.length > 0 && (
+        <section className="section-wrap mb-8 max-w-6xl md:mb-10">
+          <div className="flex flex-col items-stretch justify-center gap-5 md:flex-row md:items-end md:gap-6">
+            {top3Podium.map((u) => (
+              <TopRankCard
+                key={u.rank}
+                rank={u.rank}
+                name={u.name}
+                score={u.avgEcoScore}
+                badge={RANK_BADGE[u.rank - 1] || "bronze"}
+                large={u.rank === 1}
+              />
             ))}
           </div>
         </section>
+      )}
 
-      </main>
+      {/* Community Rankings Table */}
+      {!loading && rest.length > 0 && (
+        <section className="section-wrap mb-10 max-w-4xl md:mb-12">
+          <h2 className="mb-3 flex items-center gap-2 text-base font-bold text-slate-900 md:mb-4 md:text-lg">
+            <Trophy className="w-5 h-5 text-green-600" />
+            Community Rankings
+          </h2>
+          <div className="surface-card overflow-hidden">
+            <div className="hidden sm:grid sm:grid-cols-12 gap-2 border-b bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-500 md:px-6 md:text-xs">
+              <div className="col-span-1">RANK</div>
+              <div className="col-span-4">USER</div>
+              <div className="col-span-4">BADGES</div>
+              <div className="col-span-3 text-right">SCORE</div>
+            </div>
+            {rest.map((u, i) => (
+              <LeaderboardRow
+                key={u.rank}
+                rank={u.rank}
+                name={u.name}
+                score={u.avgEcoScore}
+                badges={BADGE_SETS[i % BADGE_SETS.length]}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {loading && (
+        <div className="py-12 text-center text-sm text-slate-400 md:py-16">Loading leaderboard...</div>
+      )}
+
+      {/* Badges */}
+      <section className="section-wrap mb-10 max-w-6xl md:mb-12">
+        <h2 className="mb-3 text-base font-bold text-slate-900 md:mb-4 md:text-lg">
+          Sustainability Achievement Badges
+        </h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-6">
+          {badges.map((b, i) => (
+            <BadgeCard key={i} {...b} />
+          ))}
+        </div>
+      </section>
 
       <CTASection />
-      <Footer />
     </div>
   );
 };
