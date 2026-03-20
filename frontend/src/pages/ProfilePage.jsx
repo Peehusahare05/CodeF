@@ -413,8 +413,8 @@ const ProfilePage = () => {
   if (!user) return null;
 
   return (
-    <div className="font-sans bg-slate-50">
-      <main className="section-wrap max-w-4xl py-8 md:py-10">
+    <div className="font-sans mx-auto w-full max-w-6xl">
+      <main>
         {/* Profile Header */}
         <div className="surface-card mb-6 overflow-hidden p-0 md:mb-8">
           <div className="bg-gradient-to-r from-green-600 to-emerald-500 p-5 text-white sm:p-6">
@@ -750,8 +750,8 @@ const ProfilePage = () => {
                       key={option.key}
                       onClick={() => setRangeFilter(option.key)}
                       className={`rounded-full px-3 py-1 text-xs font-semibold transition ${rangeFilter === option.key
-                          ? "bg-slate-800 text-white"
-                          : "text-slate-500 hover:bg-slate-100"
+                        ? "bg-slate-800 text-white"
+                        : "text-slate-500 hover:bg-slate-100"
                         }`}
                     >
                       {option.label}
@@ -770,8 +770,8 @@ const ProfilePage = () => {
                       key={option.key}
                       onClick={() => setScoreFilter(option.key)}
                       className={`rounded-full px-3 py-1 text-xs font-semibold transition ${scoreFilter === option.key
-                          ? "bg-green-600 text-white"
-                          : "text-slate-500 hover:bg-slate-100"
+                        ? "bg-green-600 text-white"
+                        : "text-slate-500 hover:bg-slate-100"
                         }`}
                     >
                       {option.label}
@@ -839,12 +839,12 @@ const ProfilePage = () => {
                         <td className="px-4 py-3">
                           <span
                             className={`text-xs font-semibold ${!previous
-                                ? "text-slate-500"
-                                : scoreDelta > 0
-                                  ? "text-green-600"
-                                  : scoreDelta < 0
-                                    ? "text-red-600"
-                                    : "text-amber-600"
+                              ? "text-slate-500"
+                              : scoreDelta > 0
+                                ? "text-green-600"
+                                : scoreDelta < 0
+                                  ? "text-red-600"
+                                  : "text-amber-600"
                               }`}
                           >
                             {!previous ? "—" : `${scoreDelta > 0 ? "+" : ""}${scoreDelta} pts`}

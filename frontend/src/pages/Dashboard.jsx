@@ -2,9 +2,7 @@ import React, { lazy, Suspense, useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     ArrowRight,
-    BarChart3,
     Car,
-    Cloud,
     Lightbulb,
     Package,
     RefreshCw,
@@ -12,7 +10,6 @@ import {
     Zap,
 } from "lucide-react";
 import HeroSection from "../components/dashboard/HeroSection";
-import MetricCard from "../components/dashboard/MetricCard";
 import ChartCard from "../components/dashboard/ChartCard";
 import ChartSection from "../components/dashboard/ChartSection";
 import CategoryCard from "../components/dashboard/CategoryCard";
@@ -258,71 +255,6 @@ const Dashboard = () => {
 
     return (
         <div className="space-y-6 lg:space-y-8">
-            <HeroSection
-                total={values.total}
-                impact={derived.impact}
-                topContributor={derived.topContributor ? {
-                    label: CATEGORY_STYLE[derived.topContributor.key].label,
-                    percentage: derived.topContributor.percentage,
-                } : null}
-                trendLabel={derived.trendDelta.label}
-            />
-
-            <section className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-                <div className="lg:col-span-7">
-                    <MetricCard
-                        title="Total Carbon Emissions"
-                        value={`${values.total} kg CO2/week`}
-                        subtitle="Primary footprint signal across your weekly routine"
-                        trend={derived.trendDelta}
-                        tone="emerald"
-                        Icon={Cloud}
-                        size="primary"
-                    />
-                </div>
-
-                <div className="space-y-4 lg:col-span-5">
-                    <MetricCard
-                        title="Eco Score"
-                        value={`${values.ecoScore} / 100`}
-                        subtitle={values.ecoScore >= 70 ? "Efficient pattern" : "Opportunity to optimize"}
-                        tone="blue"
-                        variant="score"
-                        score={values.ecoScore}
-                    />
-                    <MetricCard
-                        title="Impact Level"
-                        value={derived.impact.label}
-                        subtitle={derived.topContributor ? `${CATEGORY_STYLE[derived.topContributor.key].label} is currently your main driver` : "Monitoring weekly impact signal"}
-                        tone={derived.impact.tone}
-                        Icon={BarChart3}
-                    />
-                </div>
-            </section>
-
-            <ChartSection
-                DonutChart={DashboardDonutChart}
-                pieData={derived.pieData}
-                pieOptions={derived.pieOptions}
-                breakdown={derived.chartBreakdown}
-                insightTitle="Smart System Insight"
-                insightText={`${snapshot.insight || derived.generatedInsights.primary} ${derived.topContributor ? `Focus first on ${CATEGORY_STYLE[derived.topContributor.key].label.toLowerCase()} to unlock the fastest reduction.` : ""}`}
-            />
-
-            <section>
-                <ChartCard title="Weekly Carbon Trend" badge="4-Week Trajectory">
-                    <div className="mb-3 flex items-center justify-between">
-                        <p className="text-sm text-slate-500">Emission direction across recent weeks</p>
-                        <span className={`text-xs font-semibold ${derived.trendDelta.isPositive ? "text-emerald-600" : "text-rose-600"}`}>
-                            {derived.trendDelta.label}
-                        </span>
-                    </div>
-                    <Suspense fallback={<div className="h-64 w-full animate-pulse rounded-2xl bg-slate-100" />}>
-                        <DashboardLineChart data={derived.lineData} options={derived.lineOptions} />
-                    </Suspense>
-                </ChartCard>
-            </section>
-
             <section>
                 <div className="mb-3 flex items-center justify-between gap-3">
                     <h2 className="text-xl font-bold text-slate-900">Category Breakdown</h2>
@@ -358,40 +290,71 @@ const Dashboard = () => {
                 </div>
             </section>
 
-            <section className="rounded-3xl border border-slate-200 bg-[linear-gradient(135deg,#ffffff,#f8fafc)] p-5 shadow-[0_20px_42px_-34px_rgba(15,23,42,0.65)] sm:p-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                        <h3 className="text-xl font-bold text-slate-900">Improve Your Footprint</h3>
-                        <p className="mt-1 text-sm text-slate-500">
-                            Recalculate with updated lifestyle inputs or jump to personalized suggestions.
-                        </p>
+            <HeroSection
+                total={values.total}
+                impact={derived.impact}
+                topContributor={derived.topContributor ? {
+                    label: CATEGORY_STYLE[derived.topContributor.key].label,
+                    percentage: derived.topContributor.percentage,
+                } : null}
+                trendLabel={derived.trendDelta.label}
+                ecoScore={values.ecoScore}
+            />
+
+            <ChartSection
+                DonutChart={DashboardDonutChart}
+                pieData={derived.pieData}
+                pieOptions={derived.pieOptions}
+                breakdown={derived.chartBreakdown}
+                insightTitle="Smart System Insight"
+                insightText={`${snapshot.insight || derived.generatedInsights.primary} ${derived.topContributor ? `Focus first on ${CATEGORY_STYLE[derived.topContributor.key].label.toLowerCase()} to unlock the fastest reduction.` : ""}`}
+            />
+
+            <section>
+                <ChartCard title="Weekly Carbon Trend" badge="4-Week Trajectory">
+                    <div className="mb-3 flex items-center justify-between">
+                        <p className="text-sm text-slate-500">Emission direction across recent weeks</p>
+                        <span className={`text-xs font-semibold ${derived.trendDelta.isPositive ? "text-emerald-600" : "text-rose-600"}`}>
+                            {derived.trendDelta.label}
+                        </span>
                     </div>
-                    <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-                        <button
-                            type="button"
-                            onClick={() => navigate("/track")}
-                            className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
-                        >
-                            <RefreshCw className="h-4 w-4" />
-                            Recalculate
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => navigate("/suggestions")}
-                            className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-100"
-                        >
-                            <Lightbulb className="h-4 w-4" />
-                            View Suggestions
-                            <ArrowRight className="h-4 w-4" />
-                        </button>
-                        <button
-                            type="button"
-                            onClick={handleResetData}
-                            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
-                        >
-                            <Trash2 className="h-4 w-4" />
-                            Reset
-                        </button>
+                    <Suspense fallback={<div className="h-64 w-full animate-pulse rounded-2xl bg-slate-100" />}>
+                        <DashboardLineChart data={derived.lineData} options={derived.lineOptions} />
+                    </Suspense>
+                </ChartCard>
+            </section>
+
+            <section className="overflow-hidden rounded-3xl border border-slate-200/60 bg-gradient-to-br from-slate-50 via-white to-slate-50/50 backdrop-blur-sm">
+                <div className="p-6 sm:p-10">
+                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-center">
+                        <div>
+                            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
+                                Next Steps
+                            </h2>
+                            <p className="mt-3 text-base text-slate-600 leading-relaxed">
+                                Fine-tune your inputs for more accurate tracking or discover personalized recommendations to reduce your carbon footprint.
+                            </p>
+                        </div>
+
+                        <div className="flex flex-col gap-3 sm:flex-row sm:gap-3 lg:justify-end">
+                            <button
+                                type="button"
+                                onClick={() => navigate("/suggestions")}
+                                className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/30 transition-all duration-300 hover:bg-emerald-700 hover:shadow-xl hover:shadow-emerald-600/40 active:scale-95"
+                            >
+                                <Lightbulb className="h-4 w-4" />
+                                Get Suggestions
+                                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => navigate("/track")}
+                                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition-all duration-300 hover:bg-slate-900 hover:text-white active:scale-95"
+                            >
+                                <RefreshCw className="h-4 w-4" />
+                                Recalculate
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>

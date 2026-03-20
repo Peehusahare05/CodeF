@@ -248,8 +248,8 @@ const SimulatorPage = () => {
 
   if (loadingBaseline) {
     return (
-      <div className="min-h-screen bg-slate-50 px-4 py-8">
-        <div className="mx-auto max-w-7xl rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
+      <div className="mx-auto w-full max-w-6xl">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500">
           Loading simulator baseline...
         </div>
       </div>
@@ -257,82 +257,80 @@ const SimulatorPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <PageHeader onReset={handleReset} />
+    <div className="mx-auto w-full max-w-6xl">
+      <PageHeader onReset={handleReset} />
 
-        {error && (
-          <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
-            {error}
+      {error && (
+        <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
+          {error}
+        </div>
+      )}
+
+      {/* Content Grid */}
+      <div className="space-y-8">
+        {/* Top Row: Current Stats & Controls */}
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-1">
+            <FootprintCard
+              current={calculations.baselineWeekly}
+              reduction={calculations.totalReduction}
+              percentage={calculations.reductionPercent}
+            />
+          </div>
+          <div className="lg:col-span-2">
+            <SimulationControls
+              changes={changes}
+              onChangeUpdate={handleChangeUpdate}
+            />
+          </div>
+        </div>
+
+        {/* Comparison Cards: Before/After */}
+        <div className="grid gap-6 md:grid-cols-2">
+          <ComparisonCard
+            label="Current Weekly Footprint"
+            value={calculations.baselineWeekly}
+            ecoScore={calculations.baselineEcoScore}
+            type="current"
+          />
+          <ComparisonCard
+            label="Projected After Changes"
+            value={calculations.newWeekly}
+            ecoScore={calculations.newEcoScore}
+            type="projected"
+          />
+        </div>
+
+        {/* Chart & Insights Row */}
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <ChartCard categories={Object.values(calculations.breakdown)} />
+          </div>
+          <div>
+            <InsightCard
+              insight={insights.text}
+              recommendations={insights.recommendations}
+            />
+          </div>
+        </div>
+
+        {/* Results Summary */}
+        <ResultsCard
+          savings={{
+            monthly: calculations.monthlySavings,
+            yearly: calculations.yearlySavings,
+            cost: calculations.costSavings,
+          }}
+        />
+
+        {simulating && (
+          <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-500">
+            Recalculating simulation...
           </div>
         )}
 
-        {/* Content Grid */}
-        <div className="space-y-8">
-          {/* Top Row: Current Stats & Controls */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-1">
-              <FootprintCard
-                current={calculations.baselineWeekly}
-                reduction={calculations.totalReduction}
-                percentage={calculations.reductionPercent}
-              />
-            </div>
-            <div className="lg:col-span-2">
-              <SimulationControls
-                changes={changes}
-                onChangeUpdate={handleChangeUpdate}
-              />
-            </div>
-          </div>
-
-          {/* Comparison Cards: Before/After */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <ComparisonCard
-              label="Current Weekly Footprint"
-              value={calculations.baselineWeekly}
-              ecoScore={calculations.baselineEcoScore}
-              type="current"
-            />
-            <ComparisonCard
-              label="Projected After Changes"
-              value={calculations.newWeekly}
-              ecoScore={calculations.newEcoScore}
-              type="projected"
-            />
-          </div>
-
-          {/* Chart & Insights Row */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="lg:col-span-2">
-              <ChartCard categories={Object.values(calculations.breakdown)} />
-            </div>
-            <div>
-              <InsightCard
-                insight={insights.text}
-                recommendations={insights.recommendations}
-              />
-            </div>
-          </div>
-
-          {/* Results Summary */}
-          <ResultsCard
-            savings={{
-              monthly: calculations.monthlySavings,
-              yearly: calculations.yearlySavings,
-              cost: calculations.costSavings,
-            }}
-          />
-
-          {simulating && (
-            <div className="rounded-xl border border-slate-200 bg-white p-3 text-xs text-slate-500">
-              Recalculating simulation...
-            </div>
-          )}
-
-          {/* CTA Section */}
-          <CTASection onApply={handleApply} onViewDashboard={() => navigate("/dashboard")} />
-        </div>
+        {/* CTA Section */}
+        <CTASection onApply={handleApply} onViewDashboard={() => navigate("/dashboard")} />
       </div>
     </div>
   );

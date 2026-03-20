@@ -156,110 +156,98 @@ const SuggestionsPage = () => {
 
   if (loading) {
     return (
-      <div className="font-sans">
-        <main className="px-4 py-6 md:py-8">
-          <div className="section-wrap max-w-6xl px-0 md:px-0">
-            <div className="surface-card p-6 text-sm text-slate-500">Loading suggestions...</div>
-          </div>
-        </main>
+      <div className="font-sans mx-auto w-full max-w-6xl">
+        <div className="surface-card p-6 text-sm text-slate-500">Loading suggestions...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="font-sans">
-        <main className="px-4 py-6 md:py-8">
-          <div className="section-wrap max-w-6xl px-0 md:px-0">
-            <div className="surface-card border-red-200 bg-red-50 p-6 text-center">
-              <h2 className="text-lg font-bold text-red-700">Could not load suggestions</h2>
-              <p className="mt-2 text-sm text-red-600">{error}</p>
-              <button
-                type="button"
-                onClick={() => window.location.reload()}
-                className="mt-4 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
-              >
-                Retry
-              </button>
-            </div>
-          </div>
-        </main>
+      <div className="font-sans mx-auto w-full max-w-6xl">
+        <div className="surface-card border-red-200 bg-red-50 p-6 text-center">
+          <h2 className="text-lg font-bold text-red-700">Could not load suggestions</h2>
+          <p className="mt-2 text-sm text-red-600">{error}</p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-4 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="font-sans">
-      <main className="px-4 py-6 md:py-8">
-        <div className="section-wrap max-w-6xl px-0 md:px-0">
-          <PageHeader onRecalculate={() => navigate("/track")} />
+    <div className="font-sans mx-auto w-full max-w-6xl">
+      <PageHeader onRecalculate={() => navigate("/track")} />
 
-          <section className="mb-6 md:mb-7">
-            <ImpactCard weekly={weekly} ecoScore={ecoScore} topCategory={topCategory} />
-          </section>
+      <section className="mb-6 md:mb-7">
+        <ImpactCard weekly={weekly} ecoScore={ecoScore} topCategory={topCategory} />
+      </section>
 
-          <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-12 md:mb-7">
-            <div className="lg:col-span-8">
-              <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 md:mb-4 md:text-3xl">
-                AI Recommendations
-              </h2>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {recommendationItems.map((item) => (
-                  <RecommendationCard
-                    key={item.category}
-                    icon={item.icon}
-                    impact={item.impact}
-                    title={item.title}
-                    description={item.description}
-                    reduction={item.reduction}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <aside className="lg:col-span-4">
-              <h3 className="mb-3 text-xl font-bold tracking-tight text-slate-900 md:mb-4">
-                Quick Eco-Tips
-              </h3>
-              <div className="space-y-2.5">
-                {quickTips.map((tip, index) => (
-                  <EcoTipCard
-                    key={`${tip}-${index}`}
-                    icon={tipIcons[index % tipIcons.length]}
-                    tip={tip}
-                  />
-                ))}
-              </div>
-            </aside>
-          </section>
-
-          <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-12 md:mb-7">
-            <div className="lg:col-span-8">
-              <SimulationCard
-                current={weekly}
-                after={projectedAfter}
-                saved={savedWeekly}
+      <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-12 md:mb-7">
+        <div className="lg:col-span-8">
+          <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 md:mb-4 md:text-3xl">
+            AI Recommendations
+          </h2>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            {recommendationItems.map((item) => (
+              <RecommendationCard
+                key={item.category}
+                icon={item.icon}
+                impact={item.impact}
+                title={item.title}
+                description={item.description}
+                reduction={item.reduction}
               />
-            </div>
-            <div className="surface-card self-start border-slate-200 bg-white p-5 shadow-sm lg:col-span-4">
-              <h3 className="mb-2 text-lg font-bold text-slate-900 md:text-xl">
-                Did you know?
-              </h3>
-              <p className="text-sm text-slate-600">
-                {suggestionData?.insight?.summary ? `${suggestionData.insight.summary} ` : ""}
-                If you consistently apply these recommendations, your projected
-                savings are about {annualPotential} kg CO2 per year based on your
-                current footprint pattern.
-              </p>
-            </div>
-          </section>
+            ))}
+          </div>
+        </div>
 
-          <CTASection
-            onApply={() => navigate("/track")}
-            onViewDashboard={() => navigate("/dashboard")}
+        <aside className="lg:col-span-4">
+          <h3 className="mb-3 text-xl font-bold tracking-tight text-slate-900 md:mb-4">
+            Quick Eco-Tips
+          </h3>
+          <div className="space-y-2.5">
+            {quickTips.map((tip, index) => (
+              <EcoTipCard
+                key={`${tip}-${index}`}
+                icon={tipIcons[index % tipIcons.length]}
+                tip={tip}
+              />
+            ))}
+          </div>
+        </aside>
+      </section>
+
+      <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-12 md:mb-7">
+        <div className="lg:col-span-8">
+          <SimulationCard
+            current={weekly}
+            after={projectedAfter}
+            saved={savedWeekly}
           />
         </div>
-      </main>
+        <div className="surface-card self-start border-slate-200 bg-white p-5 shadow-sm lg:col-span-4">
+          <h3 className="mb-2 text-lg font-bold text-slate-900 md:text-xl">
+            Did you know?
+          </h3>
+          <p className="text-sm text-slate-600">
+            {suggestionData?.insight?.summary ? `${suggestionData.insight.summary} ` : ""}
+            If you consistently apply these recommendations, your projected
+            savings are about {annualPotential} kg CO2 per year based on your
+            current footprint pattern.
+          </p>
+        </div>
+      </section>
+
+      <CTASection
+        onApply={() => navigate("/track")}
+        onViewDashboard={() => navigate("/dashboard")}
+      />
     </div>
   );
 };

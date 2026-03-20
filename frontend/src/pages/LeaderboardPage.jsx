@@ -127,10 +127,9 @@ const LeaderboardPage = () => {
   const rest = displayed.slice(3);
 
   return (
-    <div className="font-sans">
-
+    <div className="mx-auto w-full max-w-6xl">
       {/* Page Header */}
-      <section className="section-wrap max-w-6xl pb-6 pt-8 md:pt-10">
+      <section className="pb-6 pt-2 md:pt-4">
         <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -159,7 +158,7 @@ const LeaderboardPage = () => {
       </section>
 
       {/* Stats Cards */}
-      <section className="section-wrap mb-8 grid max-w-6xl grid-cols-1 gap-4 md:mb-10 md:gap-6 md:grid-cols-3">
+      <section className="mb-8 grid grid-cols-1 gap-4 md:mb-10 md:grid-cols-3 md:gap-6">
         {statsData.map((s, i) => (
           <StatCard key={i} {...s} />
         ))}
@@ -167,7 +166,7 @@ const LeaderboardPage = () => {
 
       {/* Top 3 Podium */}
       {!loading && top3Podium.length > 0 && (
-        <section className="section-wrap mb-8 max-w-6xl md:mb-10">
+        <section className="mb-8 md:mb-10">
           <div className="flex flex-col items-stretch justify-center gap-5 md:flex-row md:items-end md:gap-6">
             {top3Podium.map((u) => (
               <TopRankCard
@@ -185,7 +184,7 @@ const LeaderboardPage = () => {
 
       {/* Community Rankings Table */}
       {!loading && rest.length > 0 && (
-        <section className="section-wrap mb-10 max-w-4xl md:mb-12">
+        <section className="mb-10 md:mb-12">
           <h2 className="mb-3 flex items-center gap-2 text-base font-bold text-slate-900 md:mb-4 md:text-lg">
             <Trophy className="w-5 h-5 text-green-600" />
             Community Rankings
@@ -215,7 +214,7 @@ const LeaderboardPage = () => {
       )}
 
       {/* Badges */}
-      <section className="section-wrap mb-10 max-w-6xl md:mb-12">
+      <section className="mb-10 md:mb-12">
         <h2 className="mb-3 text-base font-bold text-slate-900 md:mb-4 md:text-lg">
           Sustainability Achievement Badges
         </h2>

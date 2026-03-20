@@ -4,6 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
 import MainLayout from "./layouts/MainLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
+import LeaderboardLayout from "./layouts/LeaderboardLayout";
 import "./App.css";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
@@ -32,8 +33,17 @@ function App() {
           <Route path="/auth" element={<AuthPage />} />
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/about" element={<AboutPage />} />
+          </Route>
+
+          <Route
+            element={
+              <ProtectedRoute>
+                <LeaderboardLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="/leaderboard" element={<LeaderboardPage />} />
           </Route>
 
           <Route

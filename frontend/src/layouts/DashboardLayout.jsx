@@ -91,12 +91,12 @@ const DashboardLayout = () => {
 
           <main className="flex-1 p-4 md:p-6 lg:p-8">
             <div className="mx-auto w-full max-w-7xl">
-              <NavLink
+              {/* <NavLink
                 to="/"
                 className="mb-4 inline-flex items-center rounded-full border border-slate-200 px-4 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:bg-white"
               >
                 Back to Public Site
-              </NavLink>
+              </NavLink> */}
               <Outlet />
             </div>
           </main>
