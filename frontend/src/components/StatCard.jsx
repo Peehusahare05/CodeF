@@ -1,16 +1,12 @@
 import React from "react";
 
-const StatCard = ({ icon, title, value, iconBg }) => (
-  <div className="surface-card flex items-center gap-4 p-6">
-    <div
-      className={`flex h-12 w-12 items-center justify-center rounded-full ${iconBg}`}
-    >
+const StatCard = ({ icon, title, value }) => (
+  <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_8px_24px_-18px_rgba(15,23,42,0.45)]">
+    <div className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-600">
       {icon}
     </div>
-    <div>
-      <div className="text-xs font-semibold text-slate-500 mb-1">{title}</div>
-      <div className="text-2xl font-extrabold text-slate-900">{value}</div>
-    </div>
+    <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">{title}</p>
+    <p className="mt-1.5 text-2xl font-bold text-slate-900">{value}</p>
   </div>
 );
 

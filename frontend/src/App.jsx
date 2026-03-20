@@ -4,7 +4,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
 import MainLayout from "./layouts/MainLayout";
 import DashboardLayout from "./layouts/DashboardLayout";
-import LeaderboardLayout from "./layouts/LeaderboardLayout";
+import SidebarLayout from "./layouts/SidebarLayout";
 import "./App.css";
 
 const LandingPage = lazy(() => import("./pages/LandingPage"));
@@ -39,7 +39,7 @@ function App() {
           <Route
             element={
               <ProtectedRoute>
-                <LeaderboardLayout />
+                <SidebarLayout />
               </ProtectedRoute>
             }
           >

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
   Leaf,
-  Trophy,
+  Shield,
   Users,
   Zap,
-  ChevronDown,
+  Filter,
   Medal,
   Bike,
   Bolt,
   Recycle,
 } from "lucide-react";
 import StatCard from "../components/StatCard";
-import TopRankCard from "../components/TopRankCard";
+import TopUserCard from "../components/TopUserCard";
 import LeaderboardRow from "../components/LeaderboardRow";
 import BadgeCard from "../components/BadgeCard";
 import CTASection from "../components/CTASection";
@@ -28,32 +28,26 @@ const BADGE_SETS = [
   ["recycle"],
 ];
 
-const RANK_BADGE = ["gold", "silver", "bronze"];
-
 const badges = [
   {
-    icon: <Medal className="w-6 h-6 text-green-600" />,
+    icon: <Medal className="w-4 h-4" />,
     title: "Eco Champion",
-    desc: "Consistency for 30 days",
-    bg: "bg-green-50",
+    desc: "30-day consistency streak",
   },
   {
-    icon: <Bike className="w-6 h-6 text-blue-500" />,
-    title: "Green Traveler",
-    desc: "Low carbon commutes",
-    bg: "bg-blue-50",
+    icon: <Bike className="w-4 h-4" />,
+    title: "Green Commute",
+    desc: "Low-impact travel habits",
   },
   {
-    icon: <Bolt className="w-6 h-6 text-yellow-500" />,
+    icon: <Bolt className="w-4 h-4" />,
     title: "Energy Saver",
-    desc: "Reduced power usage",
-    bg: "bg-yellow-50",
+    desc: "Lower household energy usage",
   },
   {
-    icon: <Recycle className="w-6 h-6 text-green-400" />,
+    icon: <Recycle className="w-4 h-4" />,
     title: "Waste Reducer",
-    desc: "Recycling milestones",
-    bg: "bg-green-100",
+    desc: "Steady recycling milestones",
   },
 ];
 
@@ -70,6 +64,8 @@ const FALLBACK = [
 const LeaderboardPage = () => {
   const [leaders, setLeaders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [campusFilter, setCampusFilter] = useState("All Campuses");
+  const [cityFilter, setCityFilter] = useState("All Cities");
 
   useEffect(() => {
     apiFetch("/api/carbon/leaderboard")
@@ -97,22 +93,19 @@ const LeaderboardPage = () => {
 
   const statsData = [
     {
-      icon: <Leaf className="w-6 h-6 text-green-600" />,
+      icon: <Leaf className="h-4 w-4" />,
       title: "Total CO₂ Tracked",
       value: `${totalCO2Saved} kg`,
-      iconBg: "bg-green-50",
     },
     {
-      icon: <Users className="w-6 h-6 text-blue-500" />,
-      title: "Active Eco Citizens",
+      icon: <Users className="h-4 w-4" />,
+      title: "Active Users",
       value: String(activeUsers),
-      iconBg: "bg-blue-50",
     },
     {
-      icon: <Zap className="w-6 h-6 text-yellow-500" />,
+      icon: <Zap className="h-4 w-4" />,
       title: "Average Eco Score",
       value: `${avgScore} / 100`,
-      iconBg: "bg-yellow-50",
     },
   ];
 
@@ -125,57 +118,85 @@ const LeaderboardPage = () => {
       : top3Raw;
 
   const rest = displayed.slice(3);
+  const filteredTop3 = top3Podium.filter(() => true);
+  const filteredRest = rest.filter(() => true);
 
   return (
     <div className="mx-auto w-full max-w-6xl">
       {/* Page Header */}
-      <section className="pb-6 pt-2 md:pt-4">
-        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+      <section className="pb-7 pt-2 md:pb-8 md:pt-3">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Trophy className="w-5 h-5 text-green-600" />
-              <span className="text-xs font-semibold text-green-600 tracking-widest">
-                GLOBAL RANKING
-              </span>
-            </div>
-            <h1 className="mb-2 text-2xl font-bold tracking-tight text-slate-900 md:text-4xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+              <Shield className="h-3.5 w-3.5" />
+              Live Rankings
+            </span>
+            <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 md:text-4xl">
               Community Leaderboard
             </h1>
-            <p className="max-w-lg text-sm text-slate-600 md:text-base">
-              Discover the top eco-conscious users making the biggest impact in
-              reducing their carbon footprint.
+            <p className="mt-2 max-w-xl text-sm text-slate-600 md:text-base">
+              Track top-performing eco users, compare weekly progress, and compete on consistency.
             </p>
           </div>
-          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:gap-3">
-            <button className="btn-secondary w-full gap-2 px-4 py-2 sm:w-auto">
-              Campus Leaderboard <ChevronDown className="w-4 h-4" />
-            </button>
-            <button className="btn-secondary w-full gap-2 px-4 py-2 sm:w-auto">
-              City Leaderboard <ChevronDown className="w-4 h-4" />
-            </button>
+
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <label className="relative">
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                <Filter className="h-4 w-4" />
+              </span>
+              <select
+                value={campusFilter}
+                onChange={(e) => setCampusFilter(e.target.value)}
+                className="h-10 w-full appearance-none rounded-xl border border-slate-200 bg-white pl-9 pr-8 text-sm font-medium text-slate-700 outline-none transition-colors focus:border-slate-400"
+              >
+                <option>All Campuses</option>
+                <option>North Campus</option>
+                <option>South Campus</option>
+                <option>Central Campus</option>
+              </select>
+            </label>
+
+            <label className="relative">
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                <Filter className="h-4 w-4" />
+              </span>
+              <select
+                value={cityFilter}
+                onChange={(e) => setCityFilter(e.target.value)}
+                className="h-10 w-full appearance-none rounded-xl border border-slate-200 bg-white pl-9 pr-8 text-sm font-medium text-slate-700 outline-none transition-colors focus:border-slate-400"
+              >
+                <option>All Cities</option>
+                <option>Mumbai</option>
+                <option>Pune</option>
+                <option>Delhi</option>
+              </select>
+            </label>
           </div>
         </div>
       </section>
 
       {/* Stats Cards */}
       <section className="mb-8 grid grid-cols-1 gap-4 md:mb-10 md:grid-cols-3 md:gap-6">
-        {statsData.map((s, i) => (
-          <StatCard key={i} {...s} />
+        {statsData.map((item) => (
+          <StatCard key={item.title} icon={item.icon} title={item.title} value={item.value} />
         ))}
       </section>
 
-      {/* Top 3 Podium */}
-      {!loading && top3Podium.length > 0 && (
+      {/* Top 3 */}
+      {!loading && filteredTop3.length > 0 && (
         <section className="mb-8 md:mb-10">
-          <div className="flex flex-col items-stretch justify-center gap-5 md:flex-row md:items-end md:gap-6">
-            {top3Podium.map((u) => (
-              <TopRankCard
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-base font-semibold text-slate-900 md:text-lg">Top 3 Performers</h2>
+            <span className="text-xs font-medium text-slate-500">Updated this week</span>
+          </div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {filteredTop3.map((u) => (
+              <TopUserCard
                 key={u.rank}
                 rank={u.rank}
                 name={u.name}
                 score={u.avgEcoScore}
-                badge={RANK_BADGE[u.rank - 1] || "bronze"}
-                large={u.rank === 1}
+                isLeader={u.rank === 1}
               />
             ))}
           </div>
@@ -183,20 +204,21 @@ const LeaderboardPage = () => {
       )}
 
       {/* Community Rankings Table */}
-      {!loading && rest.length > 0 && (
+      {!loading && filteredRest.length > 0 && (
         <section className="mb-10 md:mb-12">
-          <h2 className="mb-3 flex items-center gap-2 text-base font-bold text-slate-900 md:mb-4 md:text-lg">
-            <Trophy className="w-5 h-5 text-green-600" />
-            Community Rankings
-          </h2>
-          <div className="surface-card overflow-hidden">
-            <div className="hidden sm:grid sm:grid-cols-12 gap-2 border-b bg-slate-50 px-4 py-3 text-[11px] font-semibold text-slate-500 md:px-6 md:text-xs">
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-base font-semibold text-slate-900 md:text-lg">Full Rankings</h2>
+            <span className="text-xs text-slate-500">Rank | User | Eco Score | Badge</span>
+          </div>
+
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_14px_34px_-28px_rgba(15,23,42,0.75)]">
+            <div className="hidden grid-cols-12 gap-3 border-b border-slate-100 bg-slate-50/80 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.09em] text-slate-500 sm:grid md:px-5">
               <div className="col-span-1">RANK</div>
-              <div className="col-span-4">USER</div>
-              <div className="col-span-4">BADGES</div>
-              <div className="col-span-3 text-right">SCORE</div>
+              <div className="col-span-5">USER</div>
+              <div className="col-span-3">ECO SCORE</div>
+              <div className="col-span-2 text-right">BADGE</div>
             </div>
-            {rest.map((u, i) => (
+            {filteredRest.map((u, i) => (
               <LeaderboardRow
                 key={u.rank}
                 rank={u.rank}
@@ -215,12 +237,10 @@ const LeaderboardPage = () => {
 
       {/* Badges */}
       <section className="mb-10 md:mb-12">
-        <h2 className="mb-3 text-base font-bold text-slate-900 md:mb-4 md:text-lg">
-          Sustainability Achievement Badges
-        </h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4 md:gap-6">
-          {badges.map((b, i) => (
-            <BadgeCard key={i} {...b} />
+        <h2 className="mb-3 text-base font-semibold text-slate-900 md:mb-4 md:text-lg">Achievement Badges</h2>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
+          {badges.map((badge) => (
+            <BadgeCard key={badge.title} icon={badge.icon} title={badge.title} desc={badge.desc} />
           ))}
         </div>
       </section>

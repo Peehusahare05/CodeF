@@ -1,28 +1,38 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const CTASection = () => (
-  <section className="max-w-5xl mx-auto px-4 mb-12 md:mb-16">
-    <div className="bg-gradient-to-tr from-green-500 to-green-400 rounded-2xl shadow-xl p-5 sm:p-7 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8 relative overflow-hidden">
-      <div>
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white mb-2">
-          Improve Your Eco Score and Climb the Leaderboard
-        </h2>
-        <p className="text-sm sm:text-base text-green-50 mb-4 max-w-md">
-          Every small action counts. Log your activities today and see how you
-          rank against the community.
-        </p>
+const CTASection = () => {
+  const navigate = useNavigate();
+
+  return (
+    <section className="mb-12 md:mb-16">
+      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_10px_30px_-24px_rgba(15,23,42,0.7)] sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900">Ready to climb the rankings?</h3>
+            <p className="mt-1 text-sm text-slate-500">Track one week of activity to improve your eco score.</p>
+          </div>
+
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+            <button
+              type="button"
+              onClick={() => navigate("/track")}
+              className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+            >
+              Start Tracking
+            </button>
+            <button
+              type="button"
+              onClick={() => navigate("/dashboard")}
+              className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+            >
+              View Dashboard
+            </button>
+          </div>
+        </div>
       </div>
-      <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
-        <button className="w-full rounded-full bg-white px-5 py-2.5 text-base font-bold text-green-700 shadow-lg transition-all hover:scale-105 hover:shadow-xl sm:w-auto sm:px-7 sm:py-3 sm:text-lg">
-          Start Tracking
-        </button>
-        <button className="w-full rounded-full bg-green-50 px-5 py-2.5 text-base font-bold text-green-700 shadow-lg transition-all hover:scale-105 hover:shadow-xl sm:w-auto sm:px-7 sm:py-3 sm:text-lg">
-          View Carbon Dashboard
-        </button>
-      </div>
-      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-green-300 opacity-30 rounded-full blur-2xl z-0"></div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 export default CTASection;

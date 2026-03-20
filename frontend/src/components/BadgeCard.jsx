@@ -1,14 +1,12 @@
 import React from "react";
 
-const BadgeCard = ({ icon, title, desc, bg }) => (
-  <div className="surface-card flex min-h-[140px] flex-col items-center p-6 text-center">
-    <div
-      className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full ${bg}`}
-    >
+const BadgeCard = ({ icon, title, desc }) => (
+  <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_8px_24px_-20px_rgba(15,23,42,0.5)]">
+    <div className="mb-2 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-600">
       {icon}
     </div>
-    <div className="font-bold text-base text-slate-800 mb-1">{title}</div>
-    <div className="text-xs text-slate-500">{desc}</div>
+    <p className="text-sm font-semibold text-slate-900">{title}</p>
+    <p className="mt-1 text-xs text-slate-500">{desc}</p>
   </div>
 );
 
