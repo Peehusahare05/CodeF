@@ -156,22 +156,22 @@ const SuggestionsPage = () => {
 
   if (loading) {
     return (
-      <div className="font-sans mx-auto w-full max-w-6xl">
-        <div className="surface-card p-6 text-sm text-slate-500">Loading suggestions...</div>
+      <div className="font-sans mx-auto w-full max-w-7xl min-w-0">
+        <div className="surface-card p-3 text-xs text-slate-500 shadow-sm sm:p-4 sm:text-sm lg:p-6">Loading suggestions...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="font-sans mx-auto w-full max-w-6xl">
-        <div className="surface-card border-red-200 bg-red-50 p-6 text-center">
-          <h2 className="text-lg font-bold text-red-700">Could not load suggestions</h2>
-          <p className="mt-2 text-sm text-red-600">{error}</p>
+      <div className="font-sans mx-auto w-full max-w-7xl min-w-0">
+        <div className="surface-card border-red-200 bg-red-50 p-3 text-center shadow-sm sm:p-4 lg:p-6">
+          <h2 className="text-lg font-bold text-red-700 sm:text-xl lg:text-2xl">Could not load suggestions</h2>
+          <p className="mt-2 text-xs text-red-600 sm:text-sm">{error}</p>
           <button
             type="button"
             onClick={() => window.location.reload()}
-            className="mt-4 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
+            className="mt-4 rounded-xl bg-red-600 px-4 py-2 text-xs font-semibold text-white hover:bg-red-700 sm:text-sm"
           >
             Retry
           </button>
@@ -181,19 +181,19 @@ const SuggestionsPage = () => {
   }
 
   return (
-    <div className="font-sans mx-auto w-full max-w-6xl">
+    <div className="font-sans mx-auto w-full max-w-7xl min-w-0 space-y-3 sm:space-y-4 lg:space-y-6">
       <PageHeader onRecalculate={() => navigate("/track")} />
 
-      <section className="mb-6 md:mb-7">
+      <section>
         <ImpactCard weekly={weekly} ecoScore={ecoScore} topCategory={topCategory} />
       </section>
 
-      <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-12 md:mb-7">
-        <div className="lg:col-span-8">
-          <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 md:mb-4 md:text-3xl">
+      <section className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-6">
+        <div className="lg:col-span-2 min-w-0">
+          <h2 className="mb-3 text-lg font-bold tracking-tight text-slate-900 sm:mb-4 sm:text-xl lg:text-2xl">
             AI Recommendations
           </h2>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {recommendationItems.map((item) => (
               <RecommendationCard
                 key={item.category}
@@ -207,11 +207,11 @@ const SuggestionsPage = () => {
           </div>
         </div>
 
-        <aside className="lg:col-span-4">
-          <h3 className="mb-3 text-xl font-bold tracking-tight text-slate-900 md:mb-4">
+        <aside className="lg:col-span-1 min-w-0">
+          <h3 className="mb-3 text-lg font-bold tracking-tight text-slate-900 sm:mb-4 sm:text-xl lg:text-2xl">
             Quick Eco-Tips
           </h3>
-          <div className="space-y-2.5">
+          <div className="space-y-3">
             {quickTips.map((tip, index) => (
               <EcoTipCard
                 key={`${tip}-${index}`}
@@ -223,19 +223,19 @@ const SuggestionsPage = () => {
         </aside>
       </section>
 
-      <section className="mb-6 grid grid-cols-1 gap-5 lg:grid-cols-12 md:mb-7">
-        <div className="lg:col-span-8">
+      <section className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-6">
+        <div className="min-w-0">
           <SimulationCard
             current={weekly}
             after={projectedAfter}
             saved={savedWeekly}
           />
         </div>
-        <div className="surface-card self-start border-slate-200 bg-white p-5 shadow-sm lg:col-span-4">
-          <h3 className="mb-2 text-lg font-bold text-slate-900 md:text-xl">
+        <div className="surface-card self-start border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
+          <h3 className="mb-2 text-lg font-bold text-slate-900 sm:text-xl lg:text-2xl">
             Did you know?
           </h3>
-          <p className="text-sm text-slate-600">
+          <p className="text-xs text-slate-600 sm:text-sm">
             {suggestionData?.insight?.summary ? `${suggestionData.insight.summary} ` : ""}
             If you consistently apply these recommendations, your projected
             savings are about {annualPotential} kg CO2 per year based on your

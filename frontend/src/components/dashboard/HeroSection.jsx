@@ -48,7 +48,7 @@ const HeroSection = ({ total, impact, topContributor, trendLabel, ecoScore }) =>
 
                 <div className="mb-3 grid grid-cols-2 gap-3 sm:mb-4 sm:gap-4 md:grid-cols-4 lg:mb-6 lg:gap-6">
                     {/* Total CO2 */}
-                    <div className="h-full rounded-xl border border-slate-100 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
+                    <div className="h-full rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
                         <div className="space-y-1">
                             <p className="truncate text-xs font-semibold uppercase tracking-[0.12em] text-slate-400 sm:text-sm lg:text-base">Total CO2</p>
                             <p className="text-sm font-black text-slate-900 sm:text-lg lg:text-xl">{total}</p>
@@ -57,7 +57,7 @@ const HeroSection = ({ total, impact, topContributor, trendLabel, ecoScore }) =>
                     </div>
 
                     {/* Eco Score */}
-                    <div className="h-full rounded-xl border border-blue-100 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
+                    <div className="h-full rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
                         <div className="space-y-1">
                             <p className="truncate text-xs font-semibold uppercase tracking-[0.12em] text-blue-600 sm:text-sm lg:text-base">Eco Score</p>
                             <p className="text-sm font-black text-blue-700 sm:text-lg lg:text-xl">{ecoScore}</p>
@@ -80,7 +80,7 @@ const HeroSection = ({ total, impact, topContributor, trendLabel, ecoScore }) =>
                     </div>
 
                     {/* Trend */}
-                    <div className="h-full rounded-xl border border-emerald-100 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
+                    <div className="h-full rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
                         <div className="space-y-1">
                             <p className="truncate text-xs font-semibold uppercase tracking-[0.12em] text-emerald-600 sm:text-sm lg:text-base">Trend</p>
                             <div className="flex items-center gap-1.5">
@@ -93,7 +93,7 @@ const HeroSection = ({ total, impact, topContributor, trendLabel, ecoScore }) =>
 
                 {/* Biggest Contributor */}
                 {topContributor && (
-                    <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
+                    <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
                         <div className="min-w-0 flex items-center gap-2">
                             <Zap className="h-4 w-4 flex-shrink-0 text-amber-500 sm:h-5 sm:w-5" />
                             <div className="min-w-0">
