@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Brain, Bot, Send, Sparkles, RotateCcw } from "lucide-react";
+import { Brain, Bot, Send, Sparkles, RotateCcw, Menu, X } from "lucide-react";
 import { getCarbonHistory } from "../services/carbonService";
 import { sendAIMessage } from "../services/aiService";
 
@@ -20,9 +20,9 @@ function MessageBubble({ type, content }) {
   const aiMessage = type === "ai";
 
   return (
-    <div className={`flex ${aiMessage ? "justify-start" : "justify-end"}`}>
+    <div className={`flex ${aiMessage ? "justify-start" : "justify-end"} px-3 sm:px-0`}>
       <div
-        className={`max-w-[90%] rounded-2xl px-4 py-3 text-sm shadow-sm transition-all ${aiMessage
+        className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm shadow-sm transition-all ${aiMessage
           ? "rounded-bl-md border border-emerald-100 bg-emerald-50 text-emerald-900"
           : "rounded-br-md border border-slate-200 bg-slate-100 text-slate-800"
           }`}
@@ -132,97 +132,126 @@ const AIAdvisorPage = () => {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl">
-      <section className="mb-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
-              <Brain className="h-6 w-6" />
-            </span>
-            <div>
-              <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+    <div className="min-w-0 space-y-3 font-sans sm:space-y-4 lg:space-y-6">
+      {/* Header Section - AI Climate Advisor */}
+      <section className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:rounded-2xl sm:p-4 lg:rounded-3xl lg:p-6">
+        <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+            <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 sm:h-12 sm:w-12 sm:rounded-2xl">
+              <Brain className="h-5 w-5 sm:h-6 sm:w-6" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-lg font-extrabold tracking-tight text-slate-900 sm:text-xl lg:text-2xl">
                 AI Climate Advisor
               </h1>
-              <p className="text-sm text-slate-500 sm:text-base">
-                Ask anything about sustainability, footprint reduction, and eco improvement.
+              <p className="truncate text-xs text-slate-500 sm:text-sm">
+                Personalized sustainability guidance
               </p>
             </div>
           </div>
           <button
             type="button"
             onClick={resetChat}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-100 sm:rounded-xl sm:px-4 sm:py-2 sm:text-sm"
           >
-            <RotateCcw className="h-4 w-4" />
-            Reset Chat
+            <RotateCcw className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">Reset</span>
           </button>
         </div>
       </section>
 
-      <section className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Eco Score</p>
-          <p className="mt-2 text-2xl font-extrabold text-slate-900">
+      {/* Summary Cards - Eco Score, CO2, Status */}
+      <section className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:gap-6">
+        {/* Eco Score Card */}
+        <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm sm:rounded-xl sm:p-4 lg:rounded-2xl lg:p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Eco Score
+          </p>
+          <p className="mt-2 text-xl font-extrabold text-slate-900 sm:text-2xl lg:text-3xl">
             {loadingContext ? "--" : Math.round(context.ecoScore || 0)}
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Weekly CO2</p>
-          <p className="mt-2 text-2xl font-extrabold text-slate-900">
-            {loadingContext ? "--" : `${Number(context.totalCO2 || 0).toFixed(1)} kg`}
+
+        {/* Weekly CO2 Card */}
+        <div className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm sm:rounded-xl sm:p-4 lg:rounded-2xl lg:p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Weekly CO2
+          </p>
+          <p className="mt-2 text-xl font-extrabold text-slate-900 sm:text-2xl lg:text-3xl">
+            {loadingContext
+              ? "--"
+              : `${Number(context.totalCO2 || 0).toFixed(1)}`}
+            <span className="text-xs font-semibold text-slate-500 sm:text-sm"> kg</span>
           </p>
         </div>
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">Advisor Status</p>
-          <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">
-            <Sparkles className="h-4 w-4" />
-            Online
+
+        {/* Advisor Status Card */}
+        <div className="col-span-2 rounded-lg border border-slate-200 bg-white p-3 shadow-sm sm:col-span-1 sm:rounded-xl sm:p-4 lg:rounded-2xl lg:p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            Advisor Status
           </p>
+          <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-2 py-1 sm:px-3 sm:py-1.5 lg:px-4 lg:py-2">
+            <Sparkles className="h-3.5 w-3.5 text-emerald-700 sm:h-4 sm:w-4" />
+            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
+              Online
+            </span>
+          </div>
         </div>
       </section>
 
+      {/* Error Alert */}
       {error && (
-        <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-700">
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700 sm:rounded-xl sm:p-4 sm:text-sm">
           {error}
         </div>
       )}
 
-      <section className="rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex items-center gap-2 border-b border-slate-200 px-5 py-4 text-sm font-semibold text-slate-700">
-          <Bot className="h-4 w-4 text-emerald-600" />
-          Conversation
+      {/* Chat Section - Main Container */}
+      <section className="flex flex-col gap-0 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm sm:rounded-xl lg:rounded-2xl">
+        {/* Chat Header */}
+        <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-3 text-xs font-semibold text-slate-700 sm:px-4 sm:py-4 sm:text-sm lg:px-5 lg:py-5">
+          <Bot className="h-3.5 w-3.5 shrink-0 text-emerald-600 sm:h-4 sm:w-4" />
+          <span>Conversation</span>
         </div>
 
-        <div className="max-h-[52vh] space-y-3 overflow-y-auto px-4 py-4 sm:px-5">
+        {/* Messages Area - Scrollable */}
+        <div className="flex-1 space-y-3 overflow-y-auto px-3 py-3 sm:space-y-4 sm:px-4 sm:py-4 lg:px-5 lg:py-5">
           {messages.map((message, index) => (
             <MessageBubble key={`${message.type}-${index}`} {...message} />
           ))}
 
+          {/* Loading State */}
           {loading && (
-            <div className="flex items-center gap-2 text-sm text-slate-500">
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                <Bot className="h-3.5 w-3.5" />
+            <div className="flex items-center gap-2 px-3 text-xs text-slate-500 sm:text-sm">
+              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 sm:h-6 sm:w-6">
+                <Bot className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
               </span>
-              AI advisor is thinking...
+              <span>AI advisor is thinking...</span>
             </div>
           )}
-          <div ref={scrollRef} />
+
+          {/* Scroll Anchor */}
+          <div ref={scrollRef} className="h-0 w-0" />
         </div>
 
-        <div className="border-t border-slate-200 px-4 pb-4 pt-3 sm:px-5">
-          <div className="mb-3 flex flex-wrap gap-2">
+        {/* Input Section */}
+        <div className="border-t border-slate-200 px-3 py-3 sm:px-4 sm:py-4 lg:px-5 lg:py-5">
+          {/* Suggestion Chips - Wrapped */}
+          <div className="mb-3 flex flex-wrap gap-2 sm:mb-4">
             {EXAMPLE_PROMPTS.map((prompt) => (
               <button
                 key={prompt}
                 type="button"
                 onClick={() => sendMessage(prompt)}
-                className="rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 hover:bg-emerald-100"
+                disabled={loading}
+                className="rounded-full bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700 transition hover:bg-emerald-100 disabled:opacity-50 sm:px-3 sm:py-1.5 sm:text-xs lg:px-4 lg:py-2"
               >
                 {prompt}
               </button>
             ))}
           </div>
 
+          {/* Input Form */}
           <form
             className="flex items-center gap-2"
             onSubmit={(event) => {
@@ -234,16 +263,16 @@ const AIAdvisorPage = () => {
               type="text"
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Ask for a personalized sustainability action plan..."
-              className="h-11 flex-1 rounded-xl border border-slate-200 bg-white px-4 text-sm outline-none focus:border-emerald-400"
+              placeholder="Ask for sustainability advice..."
+              className="h-9 flex-1 rounded-lg border border-slate-200 bg-white px-3 text-xs outline-none transition focus:border-emerald-400 sm:h-10 sm:rounded-xl sm:px-4 sm:text-sm"
               disabled={loading}
             />
             <button
               type="submit"
               disabled={loading || !input.trim()}
-              className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-600 text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50 sm:h-10 sm:w-10 sm:rounded-xl"
             >
-              <Send className="h-4 w-4" />
+              <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </button>
           </form>
         </div>
