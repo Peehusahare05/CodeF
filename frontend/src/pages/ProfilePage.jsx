@@ -2,7 +2,6 @@ import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiFetch } from "../utils/api";
 import {
-  BarChart3,
   CalendarDays,
   ChevronRight,
   Cloud,
@@ -14,7 +13,6 @@ import {
   Star,
   Target,
   Trophy,
-  User,
 } from "lucide-react";
 
 const ProfileLineChart = lazy(() =>
@@ -100,12 +98,12 @@ const StatCard = ({
   color = "text-slate-800",
 }) => {
   return (
-    <div className="surface-card flex h-full flex-col gap-1 p-4 transition-all hover:-translate-y-0.5 hover:shadow-md sm:p-5">
+    <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md sm:p-4 lg:p-6">
       <span>{iconNode}</span>
       <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">
         {label}
       </p>
-      <p className={`text-xl font-extrabold sm:text-2xl ${color}`}>{value}</p>
+      <p className={`break-words text-base font-extrabold sm:text-lg lg:text-xl ${color}`}>{value}</p>
       {sub && <p className="text-xs text-slate-400">{sub}</p>}
     </div>
   );
@@ -413,31 +411,31 @@ const ProfilePage = () => {
   if (!user) return null;
 
   return (
-    <div className="font-sans mx-auto w-full max-w-6xl">
-      <main>
+    <div className="min-w-0 space-y-3 font-sans sm:space-y-4 lg:space-y-6">
+      <main className="space-y-3 sm:space-y-4 lg:space-y-6">
         {/* Profile Header */}
-        <div className="surface-card mb-6 overflow-hidden p-0 md:mb-8">
-          <div className="bg-gradient-to-r from-green-600 to-emerald-500 p-5 text-white sm:p-6">
-            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-4">
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+          <div className="bg-gradient-to-r from-green-600 to-emerald-500 p-3 text-white sm:p-4 lg:p-6">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex min-w-0 items-center gap-4">
                 <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white/20 text-4xl font-extrabold uppercase text-white backdrop-blur-sm">
                   {user.name ? user.name[0] : "U"}
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold sm:text-3xl">{user.name}</h1>
-                  <p className="text-sm text-green-50">{user.email}</p>
-                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold">
-                    <span className="rounded-full bg-white/20 px-3 py-1">
+                <div className="min-w-0">
+                  <h1 className="truncate text-lg font-bold sm:text-xl lg:text-2xl">{user.name}</h1>
+                  <p className="truncate text-xs text-green-50 sm:text-sm">{user.email}</p>
+                  <div className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold max-[359px]:gap-1.5">
+                    <span className="rounded-full bg-white/20 px-3 py-1 max-[359px]:px-2 max-[359px]:py-0.5 max-[359px]:text-[11px]">
                       {memberType}
                     </span>
-                    <span className="rounded-full bg-white/20 px-3 py-1">
+                    <span className="rounded-full bg-white/20 px-3 py-1 max-[359px]:px-2 max-[359px]:py-0.5 max-[359px]:text-[11px]">
                       Eco Level: {ecoLevel}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 md:min-w-[280px]">
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:min-w-[420px]">
                 <div className="rounded-xl bg-white/15 p-3">
                   <p className="text-[11px] uppercase tracking-wide text-green-50">
                     Total CO₂ Tracked
@@ -450,26 +448,38 @@ const ProfilePage = () => {
                   <p className="text-[11px] uppercase tracking-wide text-green-50">
                     Current Trend
                   </p>
-                  <p className="mt-1 text-lg font-bold">{trend}</p>
+                  <p className="mt-1 text-sm font-bold sm:text-base">{trend}</p>
+                </div>
+                <div className="rounded-xl bg-white/15 p-3">
+                  <p className="text-[11px] uppercase tracking-wide text-green-50">
+                    Total Sessions
+                  </p>
+                  <p className="mt-1 text-lg font-bold">{history.length}</p>
+                </div>
+                <div className="rounded-xl bg-white/15 p-3">
+                  <p className="text-[11px] uppercase tracking-wide text-green-50">
+                    Best Score
+                  </p>
+                  <p className="mt-1 text-lg font-bold">{bestScore !== "—" ? `${bestScore}/100` : "—"}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
-            <p className="text-sm text-slate-600">
+          <div className="flex flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4 lg:p-6">
+            <p className="text-xs text-slate-600 sm:text-sm">
               Keep tracking weekly to unlock higher eco levels and achievements.
             </p>
-            <div className="flex gap-2">
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
               <button
                 onClick={handleEditOpen}
-                className="btn-secondary px-5 py-2 text-sm"
+                className="btn-secondary w-full px-5 py-2 text-sm sm:w-auto"
               >
                 Edit Profile
               </button>
               <button
                 onClick={handleLogout}
-                className="btn-secondary px-5 py-2 text-sm"
+                className="btn-secondary w-full px-5 py-2 text-sm sm:w-auto"
               >
                 <span className="inline-flex items-center gap-2">
                   <LogOut className="icon-glyph-sm" />
@@ -487,7 +497,7 @@ const ProfilePage = () => {
           </div>
         )}
         {editMode && (
-          <div className="surface-card mb-8 p-5 sm:p-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
             <h2 className="mb-4 text-base font-bold text-slate-800 sm:text-lg">Edit Profile</h2>
             <form onSubmit={handleUpdateProfile} className="flex flex-col gap-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -552,7 +562,7 @@ const ProfilePage = () => {
         )}
 
         {/* Stats Grid */}
-        <div className="mb-8 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
           <StatCard
             iconNode={
               <span className="icon-shell icon-shell-md icon-tone-green">
@@ -598,13 +608,13 @@ const ProfilePage = () => {
         </div>
 
         {/* Eco Progress Section */}
-        <div className="surface-card mb-8 p-5 sm:p-6">
-          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-lg font-bold text-slate-800 sm:text-xl">
+              <h2 className="text-lg font-bold text-slate-800 sm:text-xl lg:text-2xl">
                 Eco Progress
               </h2>
-              <p className="text-sm text-slate-500">
+              <p className="text-xs text-slate-500 sm:text-sm">
                 Your current level: {progressMeta.current} | Next: {progressMeta.target}
               </p>
             </div>
@@ -626,18 +636,18 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-slate-200 bg-white p-3">
+          <div className="mt-4 flex flex-col gap-3 lg:flex-row">
+            <div className="rounded-xl border border-slate-200 bg-white p-3 lg:flex-1">
               <p className="text-xs uppercase tracking-wide text-slate-400">Eco Level</p>
               <p className="mt-1 text-base font-bold text-slate-800">{ecoLevel}</p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-3">
+            <div className="rounded-xl border border-slate-200 bg-white p-3 lg:flex-1">
               <p className="text-xs uppercase tracking-wide text-slate-400">Total CO₂ Tracked</p>
               <p className="mt-1 text-base font-bold text-slate-800">
                 {totalCO2Tracked !== "—" ? `${totalCO2Tracked} kg` : "—"}
               </p>
             </div>
-            <div className="rounded-xl border border-slate-200 bg-white p-3">
+            <div className="rounded-xl border border-slate-200 bg-white p-3 lg:flex-1">
               <p className="text-xs uppercase tracking-wide text-slate-400">Member Type</p>
               <p className="mt-1 text-base font-bold text-slate-800">{memberType}</p>
             </div>
@@ -645,13 +655,13 @@ const ProfilePage = () => {
         </div>
 
         {/* Achievements Section */}
-        <div className="surface-card mb-8 p-5 sm:p-6">
-          <div className="mb-4 flex items-center justify-between">
+        <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <h2 className="text-lg font-bold text-slate-800 sm:text-xl">
+              <h2 className="text-lg font-bold text-slate-800 sm:text-xl lg:text-2xl">
                 Achievements
               </h2>
-              <p className="text-sm text-slate-500">
+              <p className="text-xs text-slate-500 sm:text-sm">
                 Unlock milestones by staying consistent with your tracking.
               </p>
             </div>
@@ -674,13 +684,13 @@ const ProfilePage = () => {
         </div>
 
         {/* Carbon History Chart */}
-        <div ref={historyChartRef} className="surface-card mb-8 p-5 sm:p-6">
+        <div ref={historyChartRef} className="overflow-hidden rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
           <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:mb-6">
             <div>
-              <h2 className="text-lg font-bold text-slate-800 sm:text-xl">
+              <h2 className="text-lg font-bold text-slate-800 sm:text-xl lg:text-2xl">
                 Personal Carbon History
               </h2>
-              <p className="text-slate-400 text-sm mt-0.5">
+              <p className="mt-0.5 text-xs text-slate-400 sm:text-sm">
                 Your weekly CO₂ emissions and Eco Score over time
               </p>
             </div>
@@ -690,15 +700,15 @@ const ProfilePage = () => {
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center h-48 text-slate-400">
+            <div className="flex h-48 items-center justify-center text-slate-400 sm:h-64 lg:h-80">
               Loading history...
             </div>
           ) : error ? (
-            <div className="flex items-center justify-center h-48 text-red-400 text-sm">
+            <div className="flex h-48 items-center justify-center text-sm text-red-400 sm:h-64 lg:h-80">
               {error}
             </div>
           ) : history.length === 0 ? (
-            <div className="flex h-56 flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-4 text-center">
+            <div className="flex h-48 flex-col items-center justify-center gap-4 rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-4 text-center sm:h-64 lg:h-80">
               <span className="icon-shell icon-shell-lg icon-tone-slate rounded-2xl">
                 <Inbox className="icon-glyph-lg" />
               </span>
@@ -719,20 +729,22 @@ const ProfilePage = () => {
               </button>
             </div>
           ) : shouldLoadHistoryChart ? (
-            <Suspense fallback={<div className="h-56 bg-slate-50 rounded-xl" />}>
-              <ProfileLineChart data={lineData} options={lineOptions} />
+            <Suspense fallback={<div className="h-48 rounded-xl bg-slate-50 sm:h-64 lg:h-80" />}>
+              <div className="h-48 sm:h-64 lg:h-80">
+                <ProfileLineChart data={lineData} options={lineOptions} />
+              </div>
             </Suspense>
           ) : (
-            <div className="h-56 bg-slate-50 rounded-xl" />
+            <div className="h-48 rounded-xl bg-slate-50 sm:h-64 lg:h-80" />
           )}
         </div>
 
         {/* Weekly breakdown table */}
         {history.length > 0 && (
-          <div className="surface-card p-5 sm:p-6">
+          <div className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
             <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-base font-bold text-slate-800 sm:text-lg">
+                <h2 className="text-base font-bold text-slate-800 sm:text-lg lg:text-xl">
                   Weekly Breakdown Analytics
                 </h2>
                 <p className="text-xs text-slate-500">
@@ -781,129 +793,131 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            <div className="max-h-[460px] overflow-auto rounded-xl border border-slate-100">
-              <table className="w-full text-xs sm:text-sm">
-                <thead>
-                  <tr className="text-left text-xs text-slate-400 uppercase tracking-wide border-b border-slate-100">
-                    <th className="sticky top-0 z-10 bg-white px-4 py-3">Week</th>
-                    <th className="sticky top-0 z-10 bg-white px-4 py-3">Total CO₂</th>
-                    <th className="sticky top-0 z-10 bg-white px-4 py-3">Trend</th>
-                    <th className="sticky top-0 z-10 bg-white px-4 py-3">Eco Score</th>
-                    <th className="sticky top-0 z-10 bg-white px-4 py-3">Delta</th>
-                    <th className="sticky top-0 z-10 bg-white px-4 py-3">Transport</th>
-                    <th className="sticky top-0 z-10 bg-white px-4 py-3">Electricity</th>
-                    <th className="sticky top-0 z-10 bg-white px-4 py-3">Waste</th>
-                    <th className="sticky top-0 z-10 bg-white px-4 py-3">Plastic</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredRows.map((record) => {
-                    const globalIndex = chronological.findIndex((row) => row._id === record._id);
-                    const previous = globalIndex > 0 ? chronological[globalIndex - 1] : null;
-                    const currentScore = Number(record.results?.ecoScore ?? 0);
-                    const previousScore = Number(previous?.results?.ecoScore ?? 0);
-                    const scoreDelta = previous ? currentScore - previousScore : 0;
-                    const currentCO2 = Number(record.results?.totalCO2 ?? 0);
-                    const previousCO2 = Number(previous?.results?.totalCO2 ?? 0);
-                    const co2Delta = previous ? currentCO2 - previousCO2 : 0;
-                    const trendChip =
-                      !previous
-                        ? { label: "Baseline", className: "bg-slate-100 text-slate-600" }
-                        : co2Delta < 0
-                          ? { label: "Improving", className: "bg-green-100 text-green-700" }
-                          : co2Delta > 0
-                            ? { label: "Rising", className: "bg-red-100 text-red-700" }
-                            : { label: "Stable", className: "bg-amber-100 text-amber-700" };
+            <div className="overflow-x-auto">
+              <div className="max-h-[460px] overflow-y-auto rounded-xl border border-slate-100">
+                <table className="min-w-[600px] w-full text-xs sm:text-sm">
+                  <thead>
+                    <tr className="text-left text-xs text-slate-400 uppercase tracking-wide border-b border-slate-100">
+                      <th className="sticky top-0 z-10 bg-white px-4 py-3">Week</th>
+                      <th className="sticky top-0 z-10 bg-white px-4 py-3">Total CO₂</th>
+                      <th className="sticky top-0 z-10 bg-white px-4 py-3">Trend</th>
+                      <th className="sticky top-0 z-10 bg-white px-4 py-3">Eco Score</th>
+                      <th className="sticky top-0 z-10 bg-white px-4 py-3">Delta</th>
+                      <th className="sticky top-0 z-10 bg-white px-4 py-3">Transport</th>
+                      <th className="sticky top-0 z-10 bg-white px-4 py-3">Electricity</th>
+                      <th className="sticky top-0 z-10 bg-white px-4 py-3">Waste</th>
+                      <th className="sticky top-0 z-10 bg-white px-4 py-3">Plastic</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredRows.map((record) => {
+                      const globalIndex = chronological.findIndex((row) => row._id === record._id);
+                      const previous = globalIndex > 0 ? chronological[globalIndex - 1] : null;
+                      const currentScore = Number(record.results?.ecoScore ?? 0);
+                      const previousScore = Number(previous?.results?.ecoScore ?? 0);
+                      const scoreDelta = previous ? currentScore - previousScore : 0;
+                      const currentCO2 = Number(record.results?.totalCO2 ?? 0);
+                      const previousCO2 = Number(previous?.results?.totalCO2 ?? 0);
+                      const co2Delta = previous ? currentCO2 - previousCO2 : 0;
+                      const trendChip =
+                        !previous
+                          ? { label: "Baseline", className: "bg-slate-100 text-slate-600" }
+                          : co2Delta < 0
+                            ? { label: "Improving", className: "bg-green-100 text-green-700" }
+                            : co2Delta > 0
+                              ? { label: "Rising", className: "bg-red-100 text-red-700" }
+                              : { label: "Stable", className: "bg-amber-100 text-amber-700" };
 
-                    return (
-                      <tr
-                        key={record._id}
-                        className="border-b border-slate-50 transition-colors hover:bg-green-50/50"
-                      >
-                        <td className="px-4 py-3 font-semibold text-slate-700">
-                          Week {globalIndex + 1}
-                        </td>
-                        <td className="px-4 py-3 font-bold text-slate-800">
-                          {record.results?.totalCO2} kg
-                        </td>
-                        <td className="px-4 py-3">
-                          <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${trendChip.className}`}>
-                            {trendChip.label}
-                          </span>
-                        </td>
-                        <td
-                          className={`px-4 py-3 font-bold ${getEcoColor(record.results?.ecoScore)}`}
+                      return (
+                        <tr
+                          key={record._id}
+                          className="border-b border-slate-50 transition-colors hover:bg-green-50/50"
                         >
-                          {record.results?.ecoScore} — {getEcoLabel(record.results?.ecoScore)}
-                        </td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={`text-xs font-semibold ${!previous
-                              ? "text-slate-500"
-                              : scoreDelta > 0
-                                ? "text-green-600"
-                                : scoreDelta < 0
-                                  ? "text-red-600"
-                                  : "text-amber-600"
-                              }`}
+                          <td className="px-4 py-3 font-semibold text-slate-700">
+                            Week {globalIndex + 1}
+                          </td>
+                          <td className="px-4 py-3 font-bold text-slate-800">
+                            {record.results?.totalCO2} kg
+                          </td>
+                          <td className="px-4 py-3">
+                            <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${trendChip.className}`}>
+                              {trendChip.label}
+                            </span>
+                          </td>
+                          <td
+                            className={`px-4 py-3 font-bold ${getEcoColor(record.results?.ecoScore)}`}
                           >
-                            {!previous ? "—" : `${scoreDelta > 0 ? "+" : ""}${scoreDelta} pts`}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-slate-600">
-                          {record.inputs?.distance !== undefined &&
-                            record.inputs?.distance !== ""
-                            ? `${record.inputs.distance} km/day`
-                            : `${record.results?.transportCO2 ?? "—"} kg CO₂/week`}
-                        </td>
-                        <td className="px-4 py-3 text-slate-600">
-                          {record.inputs?.electricity !== undefined &&
-                            record.inputs?.electricity !== ""
-                            ? `${record.inputs.electricity} kWh/day`
-                            : `${record.results?.electricityCO2 ?? "—"} kg CO₂/week`}
-                        </td>
-                        <td className="px-4 py-3 text-slate-600">
-                          {record.inputs?.waste !== undefined &&
-                            record.inputs?.waste !== ""
-                            ? `${record.inputs.waste} kg/week`
-                            : `${record.results?.wasteCO2 ?? "—"} kg CO₂/week`}
-                        </td>
-                        <td className="px-4 py-3 text-slate-600">
-                          {record.inputs?.plastic
-                            ? formatPlasticLevel(record.inputs.plastic)
-                            : `${record.results?.plasticCO2 ?? "—"} kg CO₂/week`}
+                            {record.results?.ecoScore} — {getEcoLabel(record.results?.ecoScore)}
+                          </td>
+                          <td className="px-4 py-3">
+                            <span
+                              className={`text-xs font-semibold ${!previous
+                                ? "text-slate-500"
+                                : scoreDelta > 0
+                                  ? "text-green-600"
+                                  : scoreDelta < 0
+                                    ? "text-red-600"
+                                    : "text-amber-600"
+                                }`}
+                            >
+                              {!previous ? "—" : `${scoreDelta > 0 ? "+" : ""}${scoreDelta} pts`}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-slate-600">
+                            {record.inputs?.distance !== undefined &&
+                              record.inputs?.distance !== ""
+                              ? `${record.inputs.distance} km/day`
+                              : `${record.results?.transportCO2 ?? "—"} kg CO₂/week`}
+                          </td>
+                          <td className="px-4 py-3 text-slate-600">
+                            {record.inputs?.electricity !== undefined &&
+                              record.inputs?.electricity !== ""
+                              ? `${record.inputs.electricity} kWh/day`
+                              : `${record.results?.electricityCO2 ?? "—"} kg CO₂/week`}
+                          </td>
+                          <td className="px-4 py-3 text-slate-600">
+                            {record.inputs?.waste !== undefined &&
+                              record.inputs?.waste !== ""
+                              ? `${record.inputs.waste} kg/week`
+                              : `${record.results?.wasteCO2 ?? "—"} kg CO₂/week`}
+                          </td>
+                          <td className="px-4 py-3 text-slate-600">
+                            {record.inputs?.plastic
+                              ? formatPlasticLevel(record.inputs.plastic)
+                              : `${record.results?.plasticCO2 ?? "—"} kg CO₂/week`}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    {filteredRows.length === 0 && (
+                      <tr>
+                        <td colSpan={9} className="px-4 py-8 text-center text-sm text-slate-500">
+                          No rows match your current filters.
                         </td>
                       </tr>
-                    );
-                  })}
-                  {filteredRows.length === 0 && (
-                    <tr>
-                      <td colSpan={9} className="px-4 py-8 text-center text-sm text-slate-500">
-                        No rows match your current filters.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
 
         {/* Engagement CTA */}
-        <div className="surface-card border-green-100 bg-green-50 p-5 sm:p-6">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="rounded-xl border border-green-100 bg-green-50 p-3 shadow-sm sm:p-4 lg:p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
             <div>
-              <h3 className="text-lg font-bold text-slate-900">
+              <h3 className="text-lg font-bold text-slate-900 sm:text-xl lg:text-2xl">
                 Ready for your next improvement?
               </h3>
-              <p className="mt-1 text-sm text-slate-600">
+              <p className="mt-1 text-xs text-slate-600 sm:text-sm">
                 Log a new footprint, improve your eco level, and unlock your next badge.
               </p>
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
               <button
                 onClick={() => navigate("/track")}
-                className="btn-primary px-5 py-2 text-sm"
+                className="btn-primary w-full px-5 py-2 text-sm sm:w-auto"
               >
                 <span className="inline-flex items-center gap-2">
                   <Flame className="icon-glyph-sm" />
@@ -912,7 +926,7 @@ const ProfilePage = () => {
               </button>
               <button
                 onClick={() => navigate("/simulator")}
-                className="btn-secondary px-5 py-2 text-sm"
+                className="btn-secondary w-full px-5 py-2 text-sm sm:w-auto"
               >
                 <span className="inline-flex items-center gap-2">
                   <ShieldCheck className="icon-glyph-sm" />
