@@ -34,7 +34,7 @@ const ChartSection = ({ DonutChart, pieData, pieOptions, breakdown, insightTitle
                         {breakdown.map((item) => (
                             <div
                                 key={item.key}
-                                className="flex min-h-[72px] items-center justify-between gap-2 rounded-xl border border-slate-100 bg-white p-3 shadow-sm sm:min-h-[84px] sm:p-4 lg:p-6"
+                                className="flex min-h-[72px] items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:min-h-[84px] sm:p-4 lg:p-6"
                             >
                                 <div className="min-w-0 flex items-center gap-2">
                                     <span className="h-2.5 w-2.5 flex-shrink-0 rounded-full sm:h-3 sm:w-3" style={{ backgroundColor: item.color }} />

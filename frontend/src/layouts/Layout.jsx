@@ -137,7 +137,7 @@ function Layout() {
 
             <div
                 className={[
-                    "fixed inset-0 z-40 bg-slate-900/40 transition-opacity duration-200 md:hidden",
+                    "fixed inset-0 z-40 bg-slate-900/40 transition-opacity duration-200 lg:hidden",
                     isDrawerOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0",
                 ].join(" ")}
                 onClick={() => setIsDrawerOpen(false)}
@@ -151,7 +151,7 @@ function Layout() {
                 aria-modal="true"
                 aria-label="Mobile navigation"
                 className={[
-                    "fixed inset-y-0 left-0 z-50 transition-transform duration-200 ease-out md:hidden",
+                    "fixed inset-y-0 left-0 z-50 transition-transform duration-200 ease-out lg:hidden",
                     isDrawerOpen ? "translate-x-0" : "-translate-x-full",
                 ].join(" ")}
             >
