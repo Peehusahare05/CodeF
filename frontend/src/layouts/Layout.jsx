@@ -121,20 +121,8 @@ function Layout() {
 
     return (
         <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-900">
-            <Sidebar className="fixed left-0 top-0 hidden md:block" />
-
-            <button
-                ref={menuButtonRef}
-                type="button"
-                onClick={() => setIsDrawerOpen(true)}
-                className="fixed left-4 top-4 z-30 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm md:hidden"
-                aria-label="Open menu"
-                aria-haspopup="dialog"
-                aria-expanded={isDrawerOpen}
-                aria-controls="mobile-nav-drawer"
-            >
-                <Menu className="icon-glyph-sm" />
-            </button>
+            <Sidebar widthClass="w-20" compact className="fixed left-0 top-0 hidden md:block lg:hidden" />
+            <Sidebar widthClass="w-64" className="fixed left-0 top-0 hidden lg:block" />
 
             <div
                 className={[
@@ -156,12 +144,34 @@ function Layout() {
                     isDrawerOpen ? "translate-x-0" : "-translate-x-full",
                 ].join(" ")}
             >
-                <Sidebar showClose onClose={() => setIsDrawerOpen(false)} onNavigate={() => setIsDrawerOpen(false)} />
+                <Sidebar
+                    widthClass="w-64"
+                    showClose
+                    onClose={() => setIsDrawerOpen(false)}
+                    onNavigate={() => setIsDrawerOpen(false)}
+                />
             </div>
 
-            <main id="app-main-content" className="flex-1 h-full overflow-y-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:ml-64">
-                <div className="mx-auto w-full max-w-7xl p-4 md:p-6 lg:p-8">
-                    <div className="mb-4 h-10 md:hidden" aria-hidden="true" />
+            <main id="app-main-content" className="min-w-0 flex-1 h-full overflow-y-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:ml-20 lg:ml-64">
+                <div className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 p-3 backdrop-blur md:hidden">
+                    <div className="flex items-center gap-3">
+                        <button
+                            ref={menuButtonRef}
+                            type="button"
+                            onClick={() => setIsDrawerOpen(true)}
+                            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm"
+                            aria-label="Open menu"
+                            aria-haspopup="dialog"
+                            aria-expanded={isDrawerOpen}
+                            aria-controls="mobile-nav-drawer"
+                        >
+                            <Menu className="icon-glyph-sm" />
+                        </button>
+                        <p className="text-sm font-semibold tracking-wide text-slate-700">EcoTrack Dashboard</p>
+                    </div>
+                </div>
+
+                <div className="mx-auto w-full max-w-7xl p-3 sm:p-4 lg:p-6 xl:p-8">
                     <Outlet />
                 </div>
             </main>

@@ -223,10 +223,6 @@ const Dashboard = () => {
         };
     }, [snapshot]);
 
-    const handleResetData = () => {
-        navigate("/track");
-    };
-
     if (loading) {
         return <DashboardLoading />;
     }
@@ -254,16 +250,16 @@ const Dashboard = () => {
     const { values, inputs } = snapshot;
 
     return (
-        <div className="space-y-6 lg:space-y-8">
-            <section>
-                <div className="mb-3 flex items-center justify-between gap-3">
-                    <h2 className="text-xl font-bold text-slate-900">Category Breakdown</h2>
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">
+        <div className="min-w-0 space-y-4 sm:space-y-5 lg:space-y-8">
+            <section className="px-3 sm:px-4 lg:px-6">
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:mb-4 sm:gap-3">
+                    <h2 className="text-base font-bold text-slate-900 sm:text-lg lg:text-xl xl:text-2xl">Category Breakdown</h2>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:text-xs">
                         Contribution + Progress
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:gap-6 xl:grid-cols-4">
                     {derived.contributions.map((item) => {
                         const style = CATEGORY_STYLE[item.key];
                         const Icon = style.icon;
@@ -312,35 +308,35 @@ const Dashboard = () => {
 
             <section>
                 <ChartCard title="Weekly Carbon Trend" badge="4-Week Trajectory">
-                    <div className="mb-3 flex items-center justify-between">
-                        <p className="text-sm text-slate-500">Emission direction across recent weeks</p>
-                        <span className={`text-xs font-semibold ${derived.trendDelta.isPositive ? "text-emerald-600" : "text-rose-600"}`}>
+                    <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:mb-4 sm:gap-3">
+                        <p className="text-sm text-slate-500 sm:text-base">Emission direction across recent weeks</p>
+                        <span className={`text-xs font-semibold sm:text-sm ${derived.trendDelta.isPositive ? "text-emerald-600" : "text-rose-600"}`}>
                             {derived.trendDelta.label}
                         </span>
                     </div>
-                    <Suspense fallback={<div className="h-64 w-full animate-pulse rounded-2xl bg-slate-100" />}>
+                    <Suspense fallback={<div className="h-52 w-full animate-pulse rounded-2xl bg-slate-100 sm:h-64" />}>
                         <DashboardLineChart data={derived.lineData} options={derived.lineOptions} />
                     </Suspense>
                 </ChartCard>
             </section>
 
             <section className="overflow-hidden rounded-3xl border border-slate-200/60 bg-gradient-to-br from-slate-50 via-white to-slate-50/50 backdrop-blur-sm">
-                <div className="p-6 sm:p-10">
-                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-center">
+                <div className="p-3 sm:p-4 lg:p-6 xl:p-8">
+                    <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2 lg:items-center lg:gap-6">
                         <div>
-                            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">
+                            <h2 className="text-xl font-bold text-slate-900 sm:text-2xl lg:text-3xl xl:text-4xl">
                                 Next Steps
                             </h2>
-                            <p className="mt-3 text-base text-slate-600 leading-relaxed">
+                            <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:mt-3 sm:text-base lg:text-lg">
                                 Fine-tune your inputs for more accurate tracking or discover personalized recommendations to reduce your carbon footprint.
                             </p>
                         </div>
 
-                        <div className="flex flex-col gap-3 sm:flex-row sm:gap-3 lg:justify-end">
+                        <div className="flex flex-col gap-3 sm:flex-row sm:justify-start lg:justify-end">
                             <button
                                 type="button"
                                 onClick={() => navigate("/suggestions")}
-                                className="group relative inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/30 transition-all duration-300 hover:bg-emerald-700 hover:shadow-xl hover:shadow-emerald-600/40 active:scale-95"
+                                className="group relative inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/30 transition-all duration-300 hover:bg-emerald-700 hover:shadow-xl hover:shadow-emerald-600/40 active:scale-95 sm:w-auto"
                             >
                                 <Lightbulb className="h-4 w-4" />
                                 Get Suggestions
@@ -349,7 +345,7 @@ const Dashboard = () => {
                             <button
                                 type="button"
                                 onClick={() => navigate("/track")}
-                                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition-all duration-300 hover:bg-slate-900 hover:text-white active:scale-95"
+                                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-900 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition-all duration-300 hover:bg-slate-900 hover:text-white active:scale-95 sm:w-auto"
                             >
                                 <RefreshCw className="h-4 w-4" />
                                 Recalculate

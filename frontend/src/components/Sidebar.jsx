@@ -20,7 +20,14 @@ const navLinkClass = ({ isActive }) =>
             : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
     ].join(" ");
 
-function Sidebar({ className = "", showClose = false, onClose, onNavigate }) {
+function Sidebar({
+    className = "",
+    widthClass = "w-64",
+    compact = false,
+    showClose = false,
+    onClose,
+    onNavigate,
+}) {
     const handleLogout = () => {
         apiFetch("/api/auth/logout", { method: "POST" }).finally(() => {
             localStorage.removeItem("ecotrack_user");
@@ -29,17 +36,22 @@ function Sidebar({ className = "", showClose = false, onClose, onNavigate }) {
     };
 
     return (
-        <aside className={["w-64 h-full border-r border-slate-200 bg-white px-4 py-6", className].join(" ")}>
+        <aside className={[widthClass, "h-full border-r border-slate-200 bg-white px-3 py-4 lg:px-4 lg:py-6", className].join(" ")}>
             <div className="flex h-full flex-col">
-                <div className="mb-8 flex items-center justify-between gap-2">
-                    <NavLink to="/" className="flex items-center gap-2" onClick={onNavigate}>
+                <div className={["mb-6 flex items-center gap-2", compact ? "justify-center" : "justify-between"].join(" ")}>
+                    <NavLink
+                        to="/"
+                        className={["flex items-center", compact ? "justify-center" : "gap-2"].join(" ")}
+                        onClick={onNavigate}
+                        aria-label="EcoTrack home"
+                    >
                         <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-green-700">
                             <Leaf className="icon-glyph-sm" />
                         </span>
-                        <span className="text-lg font-extrabold tracking-tight text-green-700">EcoTrack</span>
+                        {!compact ? <span className="text-lg font-extrabold tracking-tight text-green-700">EcoTrack</span> : null}
                     </NavLink>
 
-                    {showClose ? (
+                    {showClose && !compact ? (
                         <button
                             type="button"
                             onClick={onClose}
@@ -58,12 +70,19 @@ function Sidebar({ className = "", showClose = false, onClose, onNavigate }) {
                             <NavLink
                                 key={item.to}
                                 to={item.to}
-                                className={navLinkClass}
+                                className={(state) =>
+                                    [
+                                        navLinkClass(state),
+                                        compact ? "justify-center px-2" : "",
+                                    ].join(" ")
+                                }
                                 end={item.to === "/dashboard"}
                                 onClick={onNavigate}
+                                aria-label={item.label}
+                                title={compact ? item.label : undefined}
                             >
                                 <Icon className="icon-glyph-sm" />
-                                <span>{item.label}</span>
+                                {!compact ? <span>{item.label}</span> : null}
                             </NavLink>
                         );
                     })}
@@ -72,10 +91,15 @@ function Sidebar({ className = "", showClose = false, onClose, onNavigate }) {
                 <button
                     type="button"
                     onClick={handleLogout}
-                    className="mt-auto flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100"
+                    className={[
+                        "mt-auto flex w-full items-center justify-center rounded-xl border border-red-200 bg-red-50 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-100",
+                        compact ? "px-2" : "gap-2 px-3",
+                    ].join(" ")}
+                    aria-label="Logout"
+                    title={compact ? "Logout" : undefined}
                 >
                     <LogOut className="icon-glyph-sm" />
-                    <span>Logout</span>
+                    {!compact ? <span>Logout</span> : null}
                 </button>
             </div>
         </aside>
