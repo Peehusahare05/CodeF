@@ -3,56 +3,51 @@ import { motion } from "framer-motion";
 import InsightCard from "./InsightCard";
 
 const ChartSection = ({ DonutChart, pieData, pieOptions, breakdown, insightTitle, insightText }) => {
+    const MotionArticle = motion.article;
+    const DonutWidget = DonutChart;
+
     return (
-        <section className="grid grid-cols-1 gap-4 2xl:grid-cols-5">
-            <motion.article
+        <section className="space-y-3 sm:space-y-4 lg:space-y-6">
+            <MotionArticle
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.35 }}
-                className="rounded-3xl border border-slate-200/80 bg-white p-5 shadow-[0_20px_40px_-30px_rgba(15,23,42,0.6)] sm:p-6 2xl:col-span-3"
+                className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6"
             >
-                <div className="mb-4 flex items-center justify-between gap-3">
-                    <h3 className="text-lg font-bold text-slate-900">Emission Breakdown</h3>
+                <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4">
+                    <h3 className="text-base font-bold text-slate-900 sm:text-lg lg:text-xl">Emission Breakdown</h3>
                     <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-500">
                         Category Share
                     </span>
                 </div>
 
-                <div className="flex flex-col gap-5 lg:flex-row lg:items-center">
-                    <div className="h-64 w-full max-w-[320px]">
+                <div className="grid grid-cols-1 items-center gap-3 sm:gap-4 lg:grid-cols-2 lg:gap-6">
+                    <div className="w-full">
                         <Suspense fallback={<div className="h-full w-full animate-pulse rounded-2xl bg-slate-100" />}>
-                            <DonutChart data={pieData} options={pieOptions} />
+                            <div className="mx-auto w-full max-w-[340px]">
+                                <DonutWidget data={pieData} options={pieOptions} />
+                            </div>
                         </Suspense>
                     </div>
 
-                    <div className="w-full space-y-3">
+                    <div className="grid w-full grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
                         {breakdown.map((item) => (
                             <div
                                 key={item.key}
-                                className="rounded-2xl border border-slate-200/80 bg-slate-50 px-3 py-3"
+                                className="flex min-h-[72px] items-center justify-between gap-2 rounded-xl border border-slate-100 bg-white p-3 shadow-sm sm:min-h-[84px] sm:p-4 lg:p-6"
                             >
-                                <div className="mb-2 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <span className="h-3 w-3 rounded-full" style={{ backgroundColor: item.color }} />
-                                        <p className="text-sm font-semibold text-slate-800">{item.key}</p>
-                                    </div>
-                                    <p className="text-sm font-bold text-slate-900">{item.percentage}%</p>
+                                <div className="min-w-0 flex items-center gap-2">
+                                    <span className="h-2.5 w-2.5 flex-shrink-0 rounded-full sm:h-3 sm:w-3" style={{ backgroundColor: item.color }} />
+                                    <p className="truncate text-xs font-semibold text-slate-800 sm:text-sm lg:text-base">{item.key}</p>
                                 </div>
-                                <div className="h-2 rounded-full bg-slate-200">
-                                    <div
-                                        className="h-2 rounded-full"
-                                        style={{ width: `${item.percentage}%`, backgroundColor: item.color }}
-                                    />
-                                </div>
+                                <p className="flex-shrink-0 text-sm font-bold tabular-nums text-slate-900 sm:text-base lg:text-lg">{item.percentage}%</p>
                             </div>
                         ))}
                     </div>
                 </div>
-            </motion.article>
+            </MotionArticle>
 
-            <div className="2xl:col-span-2">
-                <InsightCard title={insightTitle} text={insightText} />
-            </div>
+            <InsightCard title={insightTitle} text={insightText} />
         </section>
     );
 };
