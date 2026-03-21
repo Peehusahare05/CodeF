@@ -250,8 +250,8 @@ const Dashboard = () => {
     const { values, inputs } = snapshot;
 
     return (
-        <div className="min-w-0 space-y-4 sm:space-y-5 lg:space-y-8">
-            <section className="px-3 sm:px-4 lg:px-6">
+        <div className="min-w-0 space-y-3 px-3 sm:space-y-4 sm:px-4 lg:space-y-6 lg:px-6">
+            <section>
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:mb-4 sm:gap-3">
                     <h2 className="text-base font-bold text-slate-900 sm:text-lg lg:text-xl xl:text-2xl">Category Breakdown</h2>
                     <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400 sm:text-xs">
@@ -320,14 +320,14 @@ const Dashboard = () => {
                 </ChartCard>
             </section>
 
-            <section className="overflow-hidden rounded-3xl border border-slate-200/60 bg-gradient-to-br from-slate-50 via-white to-slate-50/50 backdrop-blur-sm">
-                <div className="p-3 sm:p-4 lg:p-6 xl:p-8">
-                    <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:grid-cols-2 lg:items-center lg:gap-6">
+            <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div className="p-3 sm:p-4 lg:p-6">
+                    <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-2 lg:items-center lg:gap-6">
                         <div>
-                            <h2 className="text-xl font-bold text-slate-900 sm:text-2xl lg:text-3xl xl:text-4xl">
+                            <h2 className="text-base font-bold text-slate-900 sm:text-lg lg:text-xl">
                                 Next Steps
                             </h2>
-                            <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:mt-3 sm:text-base lg:text-lg">
+                            <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base lg:text-lg">
                                 Fine-tune your inputs for more accurate tracking or discover personalized recommendations to reduce your carbon footprint.
                             </p>
                         </div>

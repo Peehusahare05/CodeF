@@ -31,7 +31,7 @@ export const DashboardDonutChart = ({ data, options }) => {
     };
 
     return (
-        <div className="relative h-44 w-full sm:h-52">
+        <div className="relative h-48 w-full sm:h-56 lg:h-64">
             <Doughnut data={data} options={mergedOptions} />
         </div>
     );
@@ -45,7 +45,7 @@ export const DashboardLineChart = ({ data, options }) => {
     };
 
     return (
-        <div className="relative h-56 w-full sm:h-64">
+        <div className="relative h-48 w-full sm:h-64 lg:h-80">
             <Line data={data} options={mergedOptions} />
         </div>
     );
