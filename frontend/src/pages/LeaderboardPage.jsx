@@ -122,24 +122,24 @@ const LeaderboardPage = () => {
   const filteredRest = rest.filter(() => true);
 
   return (
-    <div className="mx-auto w-full max-w-6xl">
+    <div className="min-w-0 space-y-3 font-sans sm:space-y-4 lg:space-y-6">
       {/* Page Header */}
-      <section className="pb-7 pt-2 md:pb-8 md:pt-3">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div>
+      <section className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4 lg:gap-6">
+          <div className="min-w-0">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
               <Shield className="h-3.5 w-3.5" />
               Live Rankings
             </span>
-            <h1 className="mt-3 text-2xl font-bold tracking-tight text-slate-900 md:text-4xl">
+            <h1 className="mt-3 text-lg font-bold tracking-tight text-slate-900 sm:text-xl lg:text-2xl">
               Community Leaderboard
             </h1>
-            <p className="mt-2 max-w-xl text-sm text-slate-600 md:text-base">
+            <p className="mt-2 max-w-xl text-xs text-slate-600 sm:text-sm">
               Track top-performing eco users, compare weekly progress, and compete on consistency.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <div className="grid w-full grid-cols-1 gap-2 sm:w-auto sm:grid-cols-2">
             <label className="relative">
               <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                 <Filter className="h-4 w-4" />
@@ -147,7 +147,7 @@ const LeaderboardPage = () => {
               <select
                 value={campusFilter}
                 onChange={(e) => setCampusFilter(e.target.value)}
-                className="h-10 w-full appearance-none rounded-xl border border-slate-200 bg-white pl-9 pr-8 text-sm font-medium text-slate-700 outline-none transition-colors focus:border-slate-400"
+                className="h-10 w-full appearance-none rounded-xl border border-slate-200 bg-white pl-9 pr-8 text-xs font-medium text-slate-700 outline-none transition-colors focus:border-slate-400 sm:text-sm"
               >
                 <option>All Campuses</option>
                 <option>North Campus</option>
@@ -163,7 +163,7 @@ const LeaderboardPage = () => {
               <select
                 value={cityFilter}
                 onChange={(e) => setCityFilter(e.target.value)}
-                className="h-10 w-full appearance-none rounded-xl border border-slate-200 bg-white pl-9 pr-8 text-sm font-medium text-slate-700 outline-none transition-colors focus:border-slate-400"
+                className="h-10 w-full appearance-none rounded-xl border border-slate-200 bg-white pl-9 pr-8 text-xs font-medium text-slate-700 outline-none transition-colors focus:border-slate-400 sm:text-sm"
               >
                 <option>All Cities</option>
                 <option>Mumbai</option>
@@ -176,7 +176,7 @@ const LeaderboardPage = () => {
       </section>
 
       {/* Stats Cards */}
-      <section className="mb-8 grid grid-cols-1 gap-4 md:mb-10 md:grid-cols-3 md:gap-6">
+      <section className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:gap-6">
         {statsData.map((item) => (
           <StatCard key={item.title} icon={item.icon} title={item.title} value={item.value} />
         ))}
@@ -184,12 +184,12 @@ const LeaderboardPage = () => {
 
       {/* Top 3 */}
       {!loading && filteredTop3.length > 0 && (
-        <section className="mb-8 md:mb-10">
+        <section className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-base font-semibold text-slate-900 md:text-lg">Top 3 Performers</h2>
-            <span className="text-xs font-medium text-slate-500">Updated this week</span>
+            <h2 className="text-sm font-semibold text-slate-900 sm:text-base lg:text-lg">Top 3 Performers</h2>
+            <span className="text-xs font-medium text-slate-500 sm:text-sm">Updated this week</span>
           </div>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredTop3.map((u) => (
               <TopUserCard
                 key={u.rank}
@@ -205,13 +205,13 @@ const LeaderboardPage = () => {
 
       {/* Community Rankings Table */}
       {!loading && filteredRest.length > 0 && (
-        <section className="mb-10 md:mb-12">
+        <section className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-base font-semibold text-slate-900 md:text-lg">Full Rankings</h2>
+            <h2 className="text-sm font-semibold text-slate-900 sm:text-base lg:text-lg">Full Rankings</h2>
             <span className="text-xs text-slate-500">Rank | User | Eco Score | Badge</span>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_14px_34px_-28px_rgba(15,23,42,0.75)]">
+          <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm sm:rounded-2xl">
             <div className="hidden grid-cols-12 gap-3 border-b border-slate-100 bg-slate-50/80 px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.09em] text-slate-500 sm:grid md:px-5">
               <div className="col-span-1">RANK</div>
               <div className="col-span-5">USER</div>
@@ -236,9 +236,9 @@ const LeaderboardPage = () => {
       )}
 
       {/* Badges */}
-      <section className="mb-10 md:mb-12">
-        <h2 className="mb-3 text-base font-semibold text-slate-900 md:mb-4 md:text-lg">Achievement Badges</h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4">
+      <section className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
+        <h2 className="mb-3 text-sm font-semibold text-slate-900 sm:text-base lg:text-lg">Achievement Badges</h2>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4">
           {badges.map((badge) => (
             <BadgeCard key={badge.title} icon={badge.icon} title={badge.title} desc={badge.desc} />
           ))}

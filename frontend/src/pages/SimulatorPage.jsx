@@ -299,9 +299,9 @@ const SimulatorPage = () => {
               const ratio =
                 cat.current > 0
                   ? Math.max(
-                      0,
-                      Math.min(100, (cat.after / cat.current) * 100)
-                    )
+                    0,
+                    Math.min(100, (cat.after / cat.current) * 100)
+                  )
                   : 0;
               return (
                 <div key={cat.name}>

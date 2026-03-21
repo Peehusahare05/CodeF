@@ -12,10 +12,10 @@ const TopUserCard = ({ rank, name, score, isLeader }) => {
 
     return (
         <div
-            className={`rounded-2xl border bg-white p-5 shadow-[0_12px_34px_-26px_rgba(15,23,42,0.8)] transition-transform hover:-translate-y-0.5 ${isLeader ? "border-slate-300" : "border-slate-200"
+            className={`rounded-xl border bg-white p-3 shadow-sm transition-transform hover:-translate-y-0.5 sm:p-4 ${isLeader ? "border-slate-300" : "border-slate-200"
                 }`}
         >
-            <div className="mb-4 flex items-center justify-between">
+            <div className="mb-3 flex items-center justify-between sm:mb-4">
                 <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-full border border-slate-200 bg-slate-50 px-2 text-xs font-semibold text-slate-600">
                     {rank}
                 </span>
@@ -24,8 +24,8 @@ const TopUserCard = ({ rank, name, score, isLeader }) => {
                 </span>
             </div>
 
-            <div className="flex items-center gap-3">
-                <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-white">
+            <div className="flex items-center gap-2.5 sm:gap-3">
+                <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-slate-200 bg-white sm:h-11 sm:w-11">
                     <img
                         src={dicebear}
                         alt={name}
@@ -37,13 +37,13 @@ const TopUserCard = ({ rank, name, score, isLeader }) => {
                     />
                 </span>
 
-                <div>
-                    <p className="text-sm font-semibold text-slate-900">{name}</p>
+                <div className="min-w-0">
+                    <p className="truncate text-xs font-semibold text-slate-900 sm:text-sm">{name}</p>
                     <p className="text-xs text-slate-500">Eco Score {score}</p>
                 </div>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-3 sm:mt-4">
                 <div className="mb-1.5 flex items-center justify-between text-xs">
                     <span className="font-semibold text-slate-700">Performance</span>
                     <span className="text-slate-500">{score}/100</span>
