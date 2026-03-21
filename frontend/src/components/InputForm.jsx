@@ -294,25 +294,25 @@ const InputForm = () => {
   })();
 
   return (
-    <section className="page-shell relative overflow-hidden py-12 sm:py-14">
+    <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.16),transparent_40%),radial-gradient(circle_at_bottom_right,rgba(15,23,42,0.08),transparent_38%)]" />
 
-      <div className="section-wrap flex flex-col items-center">
-        <div className="relative w-full max-w-4xl">
-          <div className="mb-8 text-center sm:mb-10">
-            <div className="mb-4 inline-block rounded-full border border-emerald-200 bg-emerald-50 px-5 py-1 text-xs font-semibold tracking-[0.18em] text-emerald-700">
+      <div className="relative mx-auto w-full max-w-7xl p-3 max-[359px]:p-2.5 sm:p-4 lg:p-6">
+        <div className="mx-auto w-full max-w-4xl space-y-3 sm:space-y-4 lg:space-y-6">
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 text-center shadow-sm max-[359px]:p-2.5 sm:p-4 lg:p-6">
+            <div className="mb-3 inline-block rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1 text-xs font-semibold tracking-[0.16em] text-emerald-700 max-[359px]:px-3 max-[359px]:text-[10px] sm:mb-4">
               CARBON TRACKER
             </div>
-            <h1 className="mb-2 text-3xl font-bold text-slate-900 sm:text-4xl md:text-5xl">
+            <h1 className="mb-2 text-lg font-bold text-slate-900 max-[359px]:text-base sm:text-xl lg:text-2xl">
               Daily Emission Input Wizard
             </h1>
-            <p className="mx-auto max-w-2xl text-sm text-slate-500 sm:text-base">
+            <p className="mx-auto max-w-2xl text-xs leading-relaxed text-slate-500 max-[359px]:text-[11px] sm:text-sm">
               Complete this guided workflow to generate a precise carbon footprint baseline,
               insights, and personalized recommendations.
             </p>
           </div>
 
-          <div className="mb-5 sm:mb-6">
+          <div>
             <Stepper steps={FORM_STEPS} currentStep={currentStep} />
           </div>
 
@@ -325,7 +325,7 @@ const InputForm = () => {
               Icon={activeStep.Icon}
             >
               {submitError && (
-                <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                <div className="mb-3 rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-medium text-red-700 max-[359px]:p-2.5 max-[359px]:text-[11px] sm:mb-4 sm:text-sm">
                   {submitError}
                 </div>
               )}
@@ -343,8 +343,8 @@ const InputForm = () => {
             </StepCard>
           </form>
 
-          <div className="mt-6 grid gap-4 text-sm text-slate-500 md:grid-cols-2">
-            <div className="flex items-start gap-2 rounded-2xl border border-slate-200/70 bg-white/85 p-4">
+          <div className="grid grid-cols-1 gap-4 text-xs text-slate-500 max-[359px]:gap-3 max-[359px]:text-[11px] sm:text-sm md:grid-cols-2">
+            <div className="flex items-start gap-2 rounded-2xl border border-slate-200/70 bg-white/85 p-3 shadow-sm max-[359px]:gap-1.5 max-[359px]:p-2.5 sm:p-4 lg:p-6">
               <span className="icon-shell icon-tone-green mt-0.5 rounded-full w-5 h-5">
                 <ShieldCheck className="w-3 h-3" />
               </span>
@@ -354,7 +354,7 @@ const InputForm = () => {
               </span>
             </div>
 
-            <div className="flex items-start gap-2 rounded-2xl border border-slate-200/70 bg-white/85 p-4">
+            <div className="flex items-start gap-2 rounded-2xl border border-slate-200/70 bg-white/85 p-3 shadow-sm max-[359px]:gap-1.5 max-[359px]:p-2.5 sm:p-4 lg:p-6">
               <span className="icon-shell icon-tone-blue mt-0.5 rounded-full w-5 h-5">
                 <BarChart3 className="w-3 h-3" />
               </span>

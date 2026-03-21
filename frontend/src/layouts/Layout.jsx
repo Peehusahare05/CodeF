@@ -9,6 +9,17 @@ function Layout() {
     const drawerRef = useRef(null);
     const menuButtonRef = useRef(null);
     const previousFocusedElementRef = useRef(null);
+    const mobileTitleByRoute = {
+        "/dashboard": "EcoTrack Dashboard",
+        "/track": "Track",
+        "/suggestions": "Suggestions",
+        "/simulator": "Simulator",
+        "/leaderboard": "Leaderboard",
+        "/profile": "Profile",
+        "/ai-advisor": "AI Advisor",
+        "/reduction-simulator": "Simulator",
+    };
+    const mobileTitle = mobileTitleByRoute[pathname] || "EcoTrack Dashboard";
 
     useEffect(() => {
         document.body.classList.add("overflow-hidden");
@@ -153,13 +164,13 @@ function Layout() {
             </div>
 
             <main id="app-main-content" className="min-w-0 flex-1 h-full overflow-y-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:ml-20 lg:ml-64">
-                <div className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 p-3 backdrop-blur md:hidden">
-                    <div className="flex items-center gap-3">
+                <div className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 p-3 backdrop-blur max-[359px]:p-2 lg:hidden">
+                    <div className="flex items-center gap-3 max-[359px]:gap-2">
                         <button
                             ref={menuButtonRef}
                             type="button"
                             onClick={() => setIsDrawerOpen(true)}
-                            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm"
+                            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm max-[359px]:h-9 max-[359px]:w-9"
                             aria-label="Open menu"
                             aria-haspopup="dialog"
                             aria-expanded={isDrawerOpen}
@@ -167,7 +178,7 @@ function Layout() {
                         >
                             <Menu className="icon-glyph-sm" />
                         </button>
-                        <p className="text-sm font-semibold tracking-wide text-slate-700">EcoTrack Dashboard</p>
+                        <p className="truncate text-sm font-semibold tracking-wide text-slate-700 max-[359px]:text-xs">{mobileTitle}</p>
                     </div>
                 </div>
 
