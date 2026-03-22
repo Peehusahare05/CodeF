@@ -40,9 +40,10 @@ const AIAdvisorPage = () => {
   const [error, setError] = useState("");
   const [latestResults, setLatestResults] = useState(null);
   const scrollRef = useRef(null);
+  const inputRef = useRef(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    inputRef.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -119,28 +120,31 @@ const AIAdvisorPage = () => {
       ]);
     } finally {
       setLoading(false);
+      inputRef.current?.focus();
     }
   };
 
   return (
-    <div className="min-w-0 space-y-3 font-sans sm:space-y-4 lg:space-y-6">
+    <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-50 font-sans lg:p-4">
       {/* Error Alert */}
       {error && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700 sm:rounded-xl sm:p-4 sm:text-sm">
+        <div className="mx-3 mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700 sm:mx-4 sm:mt-4 sm:rounded-xl sm:p-4 sm:text-sm lg:mx-0 lg:mt-0">
           {error}
         </div>
       )}
 
       {/* Chat Section - Main Container */}
-      <section className="flex flex-col gap-0 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm sm:rounded-xl lg:rounded-2xl">
+      <section className="flex min-h-0 flex-1 min-w-0 flex-col overflow-hidden border border-slate-200 bg-white shadow-sm lg:rounded-2xl">
         {/* Chat Header */}
-        <div className="flex items-center gap-2 border-b border-slate-200 px-3 py-3 text-xs font-semibold text-slate-700 sm:px-4 sm:py-4 sm:text-sm lg:px-5 lg:py-5">
-          <Bot className="h-3.5 w-3.5 shrink-0 text-emerald-600 sm:h-4 sm:w-4" />
-          <span>Conversation</span>
+        <div className="shrink-0 border-b border-slate-200 bg-white px-3 py-3 sm:px-4 sm:py-4 lg:px-5 lg:py-5">
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 sm:text-sm">
+            <Bot className="h-3.5 w-3.5 shrink-0 text-emerald-600 sm:h-4 sm:w-4" />
+            <span>Conversation</span>
+          </div>
         </div>
 
         {/* Messages Area - Scrollable */}
-        <div className="flex-1 space-y-3 overflow-y-auto px-3 py-3 sm:space-y-4 sm:px-4 sm:py-4 lg:px-5 lg:py-5">
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3 sm:space-y-4 sm:px-4 sm:py-4 lg:px-5 lg:py-5">
           {messages.map((message, index) => (
             <MessageBubble key={`${message.type}-${index}`} {...message} />
           ))}
@@ -160,7 +164,7 @@ const AIAdvisorPage = () => {
         </div>
 
         {/* Input Section */}
-        <div className="border-t border-slate-200 px-3 py-3 sm:px-4 sm:py-4 lg:px-5 lg:py-5">
+        <div className="shrink-0 border-t border-slate-200 bg-white px-3 py-3 sm:px-4 sm:py-4 lg:px-5 lg:py-5">
           {/* Suggestion Chips - Wrapped */}
           <div className="mb-3 flex flex-wrap gap-2 sm:mb-4">
             {EXAMPLE_PROMPTS.map((prompt) => (
@@ -185,6 +189,7 @@ const AIAdvisorPage = () => {
             }}
           >
             <input
+              ref={inputRef}
               type="text"
               value={input}
               onChange={(event) => setInput(event.target.value)}
