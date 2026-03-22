@@ -1,15 +1,9 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 
 const InsightCard = ({ title, text }) => {
     return (
-        <motion.section
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6"
-        >
+        <section className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-6">
             <div className="mb-3 flex items-start gap-3">
                 <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white sm:h-10 sm:w-10">
                     <Sparkles className="h-5 w-5" />
@@ -19,7 +13,7 @@ const InsightCard = ({ title, text }) => {
                 </p>
             </div>
             <p className="text-sm leading-relaxed text-slate-700 sm:text-base lg:text-lg">{text}</p>
-        </motion.section>
+        </section>
     );
 };
 

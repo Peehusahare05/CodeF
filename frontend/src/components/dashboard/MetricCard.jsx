@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 
 const ScoreRing = ({ score, tone }) => {
     const radius = 34;
@@ -63,10 +62,7 @@ const MetricCard = ({
     const isScore = variant === "score";
 
     return (
-        <motion.article
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
+        <article
             className={`group rounded-3xl border border-slate-200/80 bg-white shadow-[0_18px_36px_-30px_rgba(15,23,42,0.75)] transition-all hover:-translate-y-0.5 hover:shadow-[0_24px_44px_-28px_rgba(15,23,42,0.4)] ${sizeClass}`}
         >
             {isScore ? (
@@ -101,7 +97,7 @@ const MetricCard = ({
             )}
 
             {trend ? <p className={`mt-2 text-sm font-semibold ${trendTone}`}>{trend.label}</p> : null}
-        </motion.article>
+        </article>
     );
 };
 
