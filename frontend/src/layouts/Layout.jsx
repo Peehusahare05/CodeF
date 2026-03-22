@@ -6,6 +6,7 @@ import Sidebar from "../components/Sidebar";
 function Layout() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const { pathname } = useLocation();
+    const isAIAdvisorRoute = pathname === "/ai-advisor";
     const drawerRef = useRef(null);
     const menuButtonRef = useRef(null);
     const previousFocusedElementRef = useRef(null);
@@ -160,7 +161,13 @@ function Layout() {
                 />
             </div>
 
-            <main id="app-main-content" className="min-w-0 flex-1 h-full overflow-y-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:ml-20 lg:ml-64">
+            <main
+                id="app-main-content"
+                className={[
+                    "min-w-0 flex-1 h-full scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden md:ml-20 lg:ml-64",
+                    isAIAdvisorRoute ? "flex flex-col overflow-hidden" : "overflow-y-auto",
+                ].join(" ")}
+            >
                 <div className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/95 p-3 backdrop-blur max-[359px]:p-2 lg:hidden">
                     <div className="flex items-center gap-3 max-[359px]:gap-2">
                         <button
@@ -179,9 +186,15 @@ function Layout() {
                     </div>
                 </div>
 
-                <div className="mx-auto w-full max-w-7xl p-3 sm:p-4 lg:p-6 xl:p-8">
-                    <Outlet />
-                </div>
+                {isAIAdvisorRoute ? (
+                    <div className="min-h-0 flex-1 p-0">
+                        <Outlet />
+                    </div>
+                ) : (
+                    <div className="mx-auto w-full max-w-7xl p-3 sm:p-4 lg:p-6 xl:p-8">
+                        <Outlet />
+                    </div>
+                )}
             </main>
         </div>
     );
