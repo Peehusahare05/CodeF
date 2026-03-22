@@ -32,10 +32,6 @@ function Layout() {
     }, []);
 
     useEffect(() => {
-        setIsDrawerOpen(false);
-    }, [pathname]);
-
-    useEffect(() => {
         if (!isDrawerOpen) {
             return;
         }
@@ -61,6 +57,7 @@ function Layout() {
             });
 
         previousFocusedElementRef.current = document.activeElement;
+        const currentMenuButton = menuButtonRef.current;
         const focusableElements = getFocusableElements();
         if (focusableElements.length > 0) {
             focusableElements[0].focus();
@@ -107,8 +104,8 @@ function Layout() {
             const previousFocusedElement = previousFocusedElementRef.current;
             if (previousFocusedElement && typeof previousFocusedElement.focus === "function") {
                 previousFocusedElement.focus();
-            } else if (menuButtonRef.current) {
-                menuButtonRef.current.focus();
+            } else if (currentMenuButton) {
+                currentMenuButton.focus();
             }
         };
     }, [isDrawerOpen]);

@@ -74,7 +74,7 @@ For production deployments where frontend and backend are on different domains,
 set `frontend/.env`:
 
 ```env
-VITE_API_BASE_URL=https://your-api-domain.com
+VITE_API_URL=https://your-api-domain.com
 ```
 
 ## Backend (`backend/`)
@@ -117,9 +117,11 @@ NODE_ENV=production
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=7d
-PORT=5001
+PORT=5000
 CORS_ORIGINS=https://your-frontend-domain.com
 ```
+
+`VITE_API_BASE_URL` remains supported as a backward-compatible fallback.
 
 Use `backend/.env.example` as the source-of-truth template.
 

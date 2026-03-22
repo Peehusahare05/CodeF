@@ -70,7 +70,7 @@ const AuthPage = () => {
       localStorage.setItem("ecotrack_user", JSON.stringify(data.user));
 
       navigate(from);
-    } catch (err) {
+    } catch {
       setServerError(
         "Cannot connect to server. Please check backend availability and network settings.",
       );

@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const mongoose = require("mongoose");
 const compression = require("compression");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
@@ -34,7 +35,9 @@ app.use(
       if (!origin) return callback(null, true);
       if (!env.isProduction) return callback(null, true);
       if (env.corsOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error("CORS policy does not allow this origin."));
+      const corsError = new Error("CORS policy does not allow this origin.");
+      corsError.statusCode = 403;
+      return callback(corsError);
     },
     credentials: true,
   }),
@@ -78,15 +81,31 @@ app.use("/api/simulator", require("./routes/simulatorRoutes"));
 // Health check
 app.get("/", (req, res) => res.json({ message: "EcoTrack API running" }));
 app.get("/health/live", (req, res) => res.status(200).json({ status: "live" }));
-app.get("/health/ready", (req, res) =>
-  res.status(200).json({ status: "ready" }),
-);
+app.get("/health/ready", (req, res) => {
+  const isDbReady = mongoose.connection.readyState === 1;
+  if (!isDbReady) {
+    return res
+      .status(503)
+      .json({ status: "not_ready", database: "disconnected" });
+  }
+
+  return res.status(200).json({ status: "ready", database: "connected" });
+});
 
 app.use(notFound);
 app.use(errorHandler);
 
 const PORT = env.port;
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT} in ${env.nodeEnv} mode`);
+});
+
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(`Port ${PORT} is already in use.`);
+  } else {
+    console.error("Server startup error:", error.message);
+  }
+  process.exit(1);
 });
