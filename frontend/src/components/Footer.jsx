@@ -1,5 +1,6 @@
 // Footer.jsx
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Github,
@@ -56,27 +57,18 @@ const Footer = () => (
           <h4 className="text-base font-semibold text-gray-900">Platform</h4>
           <ul className="space-y-2 text-sm text-gray-600">
             <li>
-              <a href="#how" className="transition-colors hover:text-green-600">
+              <a href="/#how" className="transition-colors hover:text-green-600">
                 How It Works
               </a>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-green-600">
-                Pricing
-              </a>
+              <Link to="/dashboard" className="transition-colors hover:text-green-600">Carbon Dashboard</Link>
             </li>
             <li>
-              <a
-                href="#leaderboard"
-                className="transition-colors hover:text-green-600"
-              >
-                Leaderboard
-              </a>
+              <Link to="/track" className="transition-colors hover:text-green-600">Carbon Tracker</Link>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-green-600">
-                Mobile App
-              </a>
+              <Link to="/ai-advisor" className="transition-colors hover:text-green-600">AI Advisor</Link>
             </li>
           </ul>
         </div>
@@ -86,24 +78,19 @@ const Footer = () => (
           <h4 className="text-base font-semibold text-gray-900">Resources</h4>
           <ul className="space-y-2 text-sm text-gray-600">
             <li>
-              <a href="#" className="transition-colors hover:text-green-600">
-                Sustainability Blog
-              </a>
+              <Link to="/how-to-reduce-carbon-footprint" className="transition-colors hover:text-green-600">How to Reduce Carbon Footprint</Link>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-green-600">
-                Help Center
-              </a>
+              <Link to="/best-sustainability-practices" className="transition-colors hover:text-green-600">Best Sustainability Practices</Link>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-green-600">
-                API Docs
-              </a>
+              <Link to="/ai-for-climate-change" className="transition-colors hover:text-green-600">AI for Climate Change</Link>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-green-600">
-                Partnerships
-              </a>
+              <Link to="/suggestions" className="transition-colors hover:text-green-600">AI Sustainability Suggestions</Link>
+            </li>
+            <li>
+              <Link to="/seo-hub" className="transition-colors hover:text-green-600">SEO Hub</Link>
             </li>
           </ul>
         </div>

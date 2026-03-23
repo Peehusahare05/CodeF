@@ -1,7 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Bot, Send } from "lucide-react";
 import { getCarbonHistory } from "../services/carbonService";
 import { sendAIMessage } from "../services/aiService";
+import SEO from "../components/SEO";
+import { buildBreadcrumbSchema, buildFaqSchema, buildWebPageSchema } from "../utils/seoSchema";
 
 const EXAMPLE_PROMPTS = [
   "What is my biggest carbon reduction opportunity this week?",
@@ -126,6 +129,36 @@ const AIAdvisorPage = () => {
 
   return (
     <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-slate-50 font-sans lg:p-4">
+      <SEO
+        title="AI Advisor - Personalized Sustainability Guidance"
+        description="Chat with EcoTrack AI Advisor for personalized emission reduction plans, eco score improvement strategies, and practical sustainability actions."
+        path="/ai-advisor"
+        keywords="AI sustainability advisor, carbon reduction tips, personalized eco score guidance"
+        structuredData={[
+          buildWebPageSchema({
+            title: "AI Advisor - Personalized Sustainability Guidance",
+            description:
+              "AI-powered sustainability assistant for tailored carbon reduction and eco score improvement.",
+            path: "/ai-advisor",
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "AI Advisor", path: "/ai-advisor" },
+          ]),
+          buildFaqSchema([
+            {
+              question: "What can an AI sustainability advisor help me with?",
+              answer:
+                "An AI sustainability advisor can analyze your footprint context and provide practical carbon reduction tips based on your highest-impact lifestyle patterns.",
+            },
+            {
+              question: "How do I get better carbon reduction tips?",
+              answer:
+                "Track your latest emissions in EcoTrack first, then ask the AI advisor for actions by category such as electricity, transportation, waste, and plastic.",
+            },
+          ]),
+        ]}
+      />
       {/* Error Alert */}
       {error && (
         <div className="mx-3 mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700 sm:mx-4 sm:mt-4 sm:rounded-xl sm:p-4 sm:text-sm lg:mx-0 lg:mt-0">
@@ -205,7 +238,26 @@ const AIAdvisorPage = () => {
               <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </button>
           </form>
+
+          <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
+            <h2 className="text-sm font-bold text-slate-900 sm:text-base">AI Sustainability Advisor for Carbon Reduction Tips</h2>
+            <p className="mt-1 text-xs leading-relaxed text-slate-600 sm:text-sm">
+              Ask focused prompts to get targeted AI sustainability advisor actions, then validate impact in your dashboard trend and suggestions pages.
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2 text-xs font-medium sm:text-sm">
+              <Link to="/dashboard" className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-slate-700 hover:border-emerald-200 hover:text-emerald-700">View Dashboard</Link>
+              <Link to="/suggestions" className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-slate-700 hover:border-emerald-200 hover:text-emerald-700">See Suggestions</Link>
+              <Link to="/track" className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-slate-700 hover:border-emerald-200 hover:text-emerald-700">Update Tracker</Link>
+            </div>
+          </div>
         </div>
+      </section>
+
+      <section className="sr-only" aria-label="AI Advisor SEO content">
+        <h2>AI sustainability advisor</h2>
+        <p>
+          Get carbon reduction tips with an AI sustainability advisor that uses your latest eco score and CO2 profile to suggest practical weekly actions.
+        </p>
       </section>
     </div>
   );

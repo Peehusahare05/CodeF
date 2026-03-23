@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Lightbulb,
   Zap,
@@ -16,6 +16,8 @@ import RecommendationCard from "../components/suggestions/RecommendationCard";
 import EcoTipCard from "../components/suggestions/EcoTipCard";
 import SimulationCard from "../components/suggestions/SimulationCard";
 import CTASection from "../components/suggestions/CTASection";
+import SEO from "../components/SEO";
+import { buildBreadcrumbSchema, buildFaqSchema, buildWebPageSchema } from "../utils/seoSchema";
 
 const CATEGORY_META = {
   Transportation: {
@@ -182,6 +184,36 @@ const SuggestionsPage = () => {
 
   return (
     <div className="font-sans mx-auto w-full max-w-7xl min-w-0 space-y-3 sm:space-y-4 lg:space-y-6">
+      <SEO
+        title="AI Sustainability Suggestions"
+        description="Get high-impact AI sustainability recommendations ranked by category to reduce weekly CO2 and improve your EcoTrack score faster."
+        path="/suggestions"
+        keywords="AI sustainability suggestions, carbon reduction plan, eco score improvement"
+        structuredData={[
+          buildWebPageSchema({
+            title: "AI Sustainability Suggestions",
+            description:
+              "Actionable AI recommendations to reduce your carbon footprint across transport, electricity, waste, and plastic.",
+            path: "/suggestions",
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Suggestions", path: "/suggestions" },
+          ]),
+          buildFaqSchema([
+            {
+              question: "How are AI sustainability suggestions prioritized?",
+              answer:
+                "Recommendations are prioritized by expected emission reduction impact and your current category-level carbon contribution.",
+            },
+            {
+              question: "Can AI suggestions improve eco score quickly?",
+              answer:
+                "Yes. Focusing on high-impact actions first can improve eco score faster than evenly distributed low-impact changes.",
+            },
+          ]),
+        ]}
+      />
       <PageHeader onRecalculate={() => navigate("/track")} />
 
       <section>
@@ -248,6 +280,26 @@ const SuggestionsPage = () => {
         onApply={() => navigate("/track")}
         onViewDashboard={() => navigate("/dashboard")}
       />
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 lg:p-6">
+        <h2 className="text-lg font-bold text-slate-900 sm:text-xl">AI Sustainability Suggestions for Faster Eco Score Improvement</h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
+          Use high-impact recommendations first, then monitor weekly changes to validate reduction trends and refine your sustainability action plan.
+        </p>
+        <h3 className="mt-4 text-sm font-semibold uppercase tracking-[0.1em] text-slate-500">Recommended next steps</h3>
+        <div className="mt-3 flex flex-wrap gap-2 text-sm font-medium">
+          <Link to="/track" className="rounded-full border border-slate-200 px-3 py-1.5 text-slate-700 hover:border-emerald-200 hover:text-emerald-700">Update Inputs</Link>
+          <Link to="/dashboard" className="rounded-full border border-slate-200 px-3 py-1.5 text-slate-700 hover:border-emerald-200 hover:text-emerald-700">Review Analytics</Link>
+          <Link to="/ai-advisor" className="rounded-full border border-slate-200 px-3 py-1.5 text-slate-700 hover:border-emerald-200 hover:text-emerald-700">Ask AI Advisor</Link>
+        </div>
+      </section>
+
+      <section className="sr-only" aria-label="Suggestions SEO content">
+        <h2>AI sustainability suggestions</h2>
+        <p>
+          EcoTrack ranks carbon reduction suggestions by impact so users can improve eco score and lower weekly emissions with measurable actions.
+        </p>
+      </section>
     </div>
   );
 };

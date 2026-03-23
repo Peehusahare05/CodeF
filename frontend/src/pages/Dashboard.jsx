@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useMemo, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
     ArrowRight,
     Car,
@@ -15,6 +15,8 @@ import ChartSection from "../components/dashboard/ChartSection";
 import CategoryCard from "../components/dashboard/CategoryCard";
 import DashboardEmptyState from "../components/dashboard/DashboardEmptyState";
 import DashboardLoading from "../components/dashboard/DashboardLoading";
+import SEO from "../components/SEO";
+import { buildBreadcrumbSchema, buildFaqSchema, buildWebPageSchema } from "../utils/seoSchema";
 import { getCarbonHistory, getCarbonStats } from "../services/carbonService";
 import {
     buildContributions,
@@ -251,6 +253,36 @@ const Dashboard = () => {
 
     return (
         <div className="min-w-0 space-y-3 px-3 sm:space-y-4 sm:px-4 lg:space-y-6 lg:px-6">
+            <SEO
+                title="Dashboard - Carbon Analytics"
+                description="View your weekly carbon breakdown, trend insights, and eco score progression in the EcoTrack dashboard."
+                path="/dashboard"
+                keywords="carbon footprint dashboard, sustainability analytics, eco score tracker, weekly CO2 insights"
+                structuredData={[
+                    buildWebPageSchema({
+                        title: "Dashboard - Carbon Analytics",
+                        description:
+                            "Weekly carbon analytics with breakdowns, trends, and actionable sustainability insights.",
+                        path: "/dashboard",
+                    }),
+                    buildBreadcrumbSchema([
+                        { name: "Home", path: "/" },
+                        { name: "Dashboard", path: "/dashboard" },
+                    ]),
+                    buildFaqSchema([
+                        {
+                            question: "What does a carbon footprint dashboard show?",
+                            answer:
+                                "A carbon footprint dashboard shows weekly total CO2, category-level contributions, and trend patterns so users can prioritize the highest-impact reductions.",
+                        },
+                        {
+                            question: "How is sustainability analytics useful for daily decisions?",
+                            answer:
+                                "Sustainability analytics reveals where emissions are concentrated, helping users reduce electricity, transport, waste, and plastic impact through focused actions.",
+                        },
+                    ]),
+                ]}
+            />
             <section>
                 <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:mb-4 sm:gap-3">
                     <h2 className="text-base font-bold text-slate-900 sm:text-lg lg:text-xl xl:text-2xl">Category Breakdown</h2>
@@ -353,6 +385,26 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 lg:p-6">
+                <h2 className="text-lg font-bold text-slate-900 sm:text-xl">Carbon Footprint Dashboard and Sustainability Analytics</h2>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
+                    EcoTrack turns raw weekly activity into clear sustainability analytics so you can identify your highest-emission category and reduce CO2 with measurable outcomes.
+                </p>
+                <h3 className="mt-4 text-sm font-semibold uppercase tracking-[0.1em] text-slate-500">Related Pages</h3>
+                <div className="mt-3 flex flex-wrap gap-2 text-sm font-medium">
+                    <Link to="/track" className="rounded-full border border-slate-200 px-3 py-1.5 text-slate-700 hover:border-emerald-200 hover:text-emerald-700">Carbon Footprint Tracker</Link>
+                    <Link to="/suggestions" className="rounded-full border border-slate-200 px-3 py-1.5 text-slate-700 hover:border-emerald-200 hover:text-emerald-700">AI Carbon Reduction Tips</Link>
+                    <Link to="/ai-advisor" className="rounded-full border border-slate-200 px-3 py-1.5 text-slate-700 hover:border-emerald-200 hover:text-emerald-700">AI Sustainability Advisor</Link>
+                </div>
+            </section>
+
+            <section className="sr-only" aria-label="Dashboard SEO content">
+                <h2>carbon footprint dashboard</h2>
+                <p>
+                    Use this sustainability analytics dashboard to monitor weekly CO2, compare category contributions, and improve your eco score with data-backed actions.
+                </p>
             </section>
 
             <Suspense fallback={null}>

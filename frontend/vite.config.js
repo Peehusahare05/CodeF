@@ -8,6 +8,19 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            react: ["react", "react-dom", "react-router-dom"],
+            charts: ["react-chartjs-2"],
+            motion: ["framer-motion"],
+            maps: ["leaflet", "react-leaflet"],
+            icons: ["lucide-react"],
+          },
+        },
+      },
+    },
     server: {
       proxy: {
         "/api": {
