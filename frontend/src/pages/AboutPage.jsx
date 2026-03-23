@@ -1,10 +1,51 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Brain, Cloud, Globe, Lock, Users } from "lucide-react";
+import SEO from "../components/SEO";
+import {
+  buildBreadcrumbSchema,
+  buildFaqSchema,
+  buildWebPageSchema,
+} from "../utils/seoSchema";
 
 const AboutPage = () => {
   return (
     <div className="font-sans selection:bg-green-200 selection:text-green-900">
+      <SEO
+        title="About EcoTrack"
+        description="Learn about EcoTrack, our sustainability mission, AI-powered carbon insights, and how our platform helps users reduce emissions with measurable actions."
+        path="/about"
+        keywords="about EcoTrack, sustainability platform, AI carbon tracker, eco score mission"
+        structuredData={[
+          buildWebPageSchema({
+            title: "About EcoTrack",
+            description:
+              "Mission and organization details for EcoTrack, an AI sustainability analytics platform.",
+            path: "/about",
+          }),
+          buildBreadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "About", path: "/about" },
+          ]),
+          buildFaqSchema([
+            {
+              question: "What is EcoTrack?",
+              answer:
+                "EcoTrack is an AI-powered sustainability dashboard that helps users measure carbon footprint, improve eco score, and follow high-impact reduction plans.",
+            },
+            {
+              question: "Who is EcoTrack built for?",
+              answer:
+                "EcoTrack is built for students, professionals, and organizations who want practical sustainability analytics and clear weekly carbon reduction actions.",
+            },
+            {
+              question: "How does EcoTrack improve climate action outcomes?",
+              answer:
+                "EcoTrack combines behavior tracking with AI recommendations, making climate action measurable through trend dashboards and category-level suggestions.",
+            },
+          ]),
+        ]}
+      />
 
       {/* Hero Section */}
       <section className="border-b border-gray-200 bg-white px-4 py-12 sm:px-6 md:py-16">
@@ -111,6 +152,50 @@ const AboutPage = () => {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 pb-4 sm:px-6">
+        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+          <h2 className="text-2xl font-bold text-slate-900">Organization FAQ</h2>
+          <div className="mt-5 space-y-4">
+            <article className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+              <h3 className="text-base font-semibold text-slate-900">What makes EcoTrack different from basic calculators?</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                EcoTrack is not just a one-time calculator. It is a continuous sustainability analytics system with AI guidance, trend tracking,
+                and an eco score framework for long-term behavior improvement.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+              <h3 className="text-base font-semibold text-slate-900">Does EcoTrack support organization-wide sustainability awareness?</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Yes. Teams can use shared principles from EcoTrack recommendations to drive consistent low-carbon decisions and build sustainability-first habits.
+              </p>
+            </article>
+            <article className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+              <h3 className="text-base font-semibold text-slate-900">Where should new users start?</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Start with <Link to="/track" className="font-semibold text-emerald-700 hover:text-emerald-800">Track</Link>, review your
+                <Link to="/dashboard" className="ml-1 font-semibold text-emerald-700 hover:text-emerald-800">Dashboard</Link>, then follow
+                <Link to="/suggestions" className="ml-1 font-semibold text-emerald-700 hover:text-emerald-800">AI Suggestions</Link> for quick wins.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-5xl px-4 pb-4 sm:px-6">
+        <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
+          <h2 className="text-xl font-bold text-slate-900 sm:text-2xl">Explore The EcoTrack SEO Hub</h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
+            Discover all ranking pages, guides, and product entry points from a single topical authority hub.
+          </p>
+          <Link
+            to="/seo-hub"
+            className="mt-4 inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 hover:bg-emerald-100"
+          >
+            Open SEO Hub
+          </Link>
         </div>
       </section>
 

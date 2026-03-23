@@ -16,6 +16,10 @@ const AIAdvisorPage = lazy(() => import("./pages/AIAdvisorPage"));
 const SimulatorPage = lazy(() => import("./pages/SimulatorPage"));
 const SuggestionsPage = lazy(() => import("./pages/SuggestionsPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
+const ReduceCarbonPage = lazy(() => import("./pages/ReduceCarbonPage"));
+const SustainabilityPracticesPage = lazy(() => import("./pages/SustainabilityPracticesPage"));
+const AIClimatePage = lazy(() => import("./pages/AIClimatePage"));
+const SEOHubPage = lazy(() => import("./pages/SEOHubPage"));
 
 function App() {
   return (
@@ -33,6 +37,10 @@ function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/how-to-reduce-carbon-footprint" element={<ReduceCarbonPage />} />
+            <Route path="/best-sustainability-practices" element={<SustainabilityPracticesPage />} />
+            <Route path="/ai-for-climate-change" element={<AIClimatePage />} />
+            <Route path="/seo-hub" element={<SEOHubPage />} />
           </Route>
 
           <Route
