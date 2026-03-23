@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   calculateCarbon as calculateCarbonApi,
@@ -101,8 +101,10 @@ const InputForm = ({ isLoading = false }) => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const requestedFeature = params.get("feature");
+  const requestedFeature = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get("feature");
+  }, [location.search]);
 
   const [form, setForm] = useState({
     transportType: "",
@@ -168,18 +170,18 @@ const InputForm = ({ isLoading = false }) => {
     return {};
   };
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     setErrors((prev) => ({ ...prev, [e.target.name]: undefined }));
     setSubmitError("");
-  };
+  }, []);
 
-  const handlePlastic = (value) => {
+  const handlePlastic = useCallback((value) => {
     setForm((prev) => ({ ...prev, plastic: value }));
     setSubmitError("");
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     const stepErrors = validateStep(currentStep);
     const filteredErrors = Object.fromEntries(
       Object.entries(stepErrors).filter(([, message]) => Boolean(message)),
@@ -192,14 +194,14 @@ const InputForm = ({ isLoading = false }) => {
 
     setDirection(1);
     setCurrentStep((prev) => Math.min(prev + 1, FORM_STEPS.length - 1));
-  };
+  }, [currentStep, validateStep]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setDirection(-1);
     setCurrentStep((prev) => Math.max(prev - 1, 0));
-  };
+  }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     if (e) {
       e.preventDefault();
     }
@@ -263,11 +265,11 @@ const InputForm = ({ isLoading = false }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [form, navigate, requestedFeature]);
 
   const activeStep = FORM_STEPS[currentStep];
 
-  const stepContent = (() => {
+  const stepContent = useMemo(() => {
     if (currentStep === 0) {
       return (
         <TransportationStep
@@ -296,7 +298,7 @@ const InputForm = ({ isLoading = false }) => {
         plasticOptions={PLASTIC_OPTIONS}
       />
     );
-  })();
+  }, [currentStep, form, errors, handleChange, handlePlastic]);
 
   return (
     <section className="relative overflow-hidden">

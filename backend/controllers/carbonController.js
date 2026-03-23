@@ -33,7 +33,13 @@ const saveResult = async (req, res) => {
       insight: insight || "",
       trend: trend || [],
     });
-    res.status(201).json({ message: "Result saved.", data: record });
+    res.status(201).json({
+      message: "Result saved.",
+      data: {
+        id: record._id,
+        createdAt: record.createdAt,
+      },
+    });
   } catch (error) {
     console.error("Save result error:", error);
     res.status(500).json({ message: "Failed to save result." });
@@ -51,13 +57,16 @@ const getHistory = async (req, res) => {
     );
     const skip = (page - 1) * limit;
 
+    const query = { user: req.user._id };
+
     const [records, total] = await Promise.all([
-      CarbonResult.find({ user: req.user._id })
+      CarbonResult.find(query)
+        .select("inputs results insight trend createdAt")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
         .lean(),
-      CarbonResult.countDocuments({ user: req.user._id }),
+      CarbonResult.countDocuments(query),
     ]);
 
     res.status(200).json({
@@ -125,11 +134,32 @@ const getLeaderboard = async (req, res) => {
 // @access Private
 const getStats = async (req, res) => {
   try {
-    const records = await CarbonResult.find({ user: req.user._id })
-      .sort({ createdAt: -1 })
-      .lean();
+    const [summary] = await CarbonResult.aggregate([
+      { $match: { user: req.user._id } },
+      { $sort: { createdAt: -1 } },
+      {
+        $group: {
+          _id: "$user",
+          totalSubmissions: { $sum: 1 },
+          avgEcoScoreRaw: { $avg: "$results.ecoScore" },
+          avgCO2Raw: { $avg: "$results.totalCO2" },
+          latestEcoScore: { $first: "$results.ecoScore" },
+          latestCO2: { $first: "$results.totalCO2" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalSubmissions: 1,
+          avgEcoScore: { $round: ["$avgEcoScoreRaw", 0] },
+          avgCO2: { $round: ["$avgCO2Raw", 2] },
+          latestEcoScore: { $ifNull: ["$latestEcoScore", 0] },
+          latestCO2: { $ifNull: ["$latestCO2", 0] },
+        },
+      },
+    ]).allowDiskUse(false);
 
-    if (records.length === 0) {
+    if (!summary) {
       return res.status(200).json({
         data: {
           totalSubmissions: 0,
@@ -141,29 +171,7 @@ const getStats = async (req, res) => {
       });
     }
 
-    const totalSubmissions = records.length;
-    const avgEcoScore = Math.round(
-      records.reduce((sum, r) => sum + (r.results?.ecoScore ?? 0), 0) /
-        totalSubmissions,
-    );
-    const avgCO2 = parseFloat(
-      (
-        records.reduce((sum, r) => sum + (r.results?.totalCO2 ?? 0), 0) /
-        totalSubmissions
-      ).toFixed(2),
-    );
-    const latestEcoScore = records[0]?.results?.ecoScore ?? 0;
-    const latestCO2 = records[0]?.results?.totalCO2 ?? 0;
-
-    res.status(200).json({
-      data: {
-        totalSubmissions,
-        avgEcoScore,
-        avgCO2,
-        latestEcoScore,
-        latestCO2,
-      },
-    });
+    res.status(200).json({ data: summary });
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch stats." });
   }

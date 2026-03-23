@@ -23,7 +23,7 @@ connectDB();
 
 // Middleware
 app.use(helmet());
-app.use(compression());
+app.use(compression({ threshold: 1024 }));
 app.use(cookieParser());
 if (!env.isProduction) {
   app.use(morgan("dev"));
@@ -44,6 +44,7 @@ app.use(
 );
 
 app.use(express.json({ limit: "16kb" }));
+app.use(express.urlencoded({ extended: false, limit: "16kb" }));
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -57,6 +58,7 @@ const authLimiter = rateLimit({
   max: env.isProduction ? 20 : 200,
   standardHeaders: true,
   legacyHeaders: false,
+  skipSuccessfulRequests: true,
   message: {
     message: "Too many authentication attempts. Please try again later.",
   },

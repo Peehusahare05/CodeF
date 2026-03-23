@@ -18,7 +18,7 @@ const getTokenFromRequest = (req) => {
 
 const attachUserFromToken = async (token) => {
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  return User.findById(decoded.id).select("-password");
+  return User.findById(decoded.id).select("_id name email").lean();
 };
 
 const protect = async (req, res, next) => {
