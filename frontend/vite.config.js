@@ -9,14 +9,27 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     build: {
+      target: "es2020",
+      minify: "esbuild",
+      cssMinify: true,
+      sourcemap: false,
       rollupOptions: {
         output: {
-          manualChunks: {
-            react: ["react", "react-dom", "react-router-dom"],
-            charts: ["react-chartjs-2"],
-            motion: ["framer-motion"],
-            maps: ["leaflet", "react-leaflet"],
-            icons: ["lucide-react"],
+          manualChunks(id) {
+            if (!id.includes("node_modules")) return;
+
+            if (id.includes("react") || id.includes("react-dom"))
+              return "react";
+            if (id.includes("framer-motion")) return "motion";
+            if (id.includes("chart.js") || id.includes("react-chartjs-2")) {
+              return "charts";
+            }
+            if (id.includes("leaflet") || id.includes("react-leaflet")) {
+              return "maps";
+            }
+            if (id.includes("lucide-react")) return "icons";
+
+            return "vendor";
           },
         },
       },
