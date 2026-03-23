@@ -22,6 +22,7 @@ import TransportationStep from "./track/steps/TransportationStep";
 import ElectricityStep from "./track/steps/ElectricityStep";
 import WasteStep from "./track/steps/WasteStep";
 import PlasticStep from "./track/steps/PlasticStep";
+import TrackSkeleton from "./track/TrackSkeleton";
 
 const TRANSPORT_OPTIONS = [
   { value: "car", label: "Car (Petrol)" },
@@ -93,7 +94,11 @@ const generateTrendFromTotal = (totalCO2) => [
   { week: "Week 3", value: Number(totalCO2) },
 ];
 
-const InputForm = () => {
+const InputForm = ({ isLoading = false }) => {
+  if (isLoading) {
+    return <TrackSkeleton />;
+  }
+
   const navigate = useNavigate();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
